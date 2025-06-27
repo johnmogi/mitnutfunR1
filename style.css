@@ -1,0 +1,76 @@
+/*   
+Theme Name: Mitnafun
+*/
+
+
+
+.btn-wrap button[disabled] {
+    opacity: 0.6;
+}
+.price>.amount>bdi{
+	font-size: 22px;
+	color: #000;
+}
+
+.category .content .item .text ul .price{
+	margin: 0!important;
+}
+.cross-sells.content {
+    margin: 0;
+    justify-content: flex-start;
+	padding: 0!important;
+	grid-gap: 20px!important;
+}
+
+.checkout .category {
+    padding: 0;
+}
+
+.checkout .category .content .item .text ul{
+	margin-bottom: 15px;
+}
+
+
+.checkout .category .content .item .text .title{
+	padding-bottom: 15px;
+	margin-bottom: 15px;
+}
+
+.cross-sells.content .item{
+	width: calc(33.33% - 20px);
+}
+
+.category .content .item{
+	overflow: hidden;
+}
+@media (max-width: 1280px){
+	.cross-sells.content .item{
+	width: calc(50% - 10px);
+}
+}
+@media (max-width: 575px){
+	.cross-sells.content .item{
+	width: 100%;
+}
+	.auto-popup{
+		padding-bottom: 90px;
+	}
+}
+
+
+.air-datepicker {
+	font-size: 20px; /* Изменяет размер шрифта в календаре */
+	width: 400px; /* Увеличивает ширину календаря */
+	max-width:100%
+}
+
+.air-datepicker .datepicker--nav-title,
+.air-datepicker .datepicker--nav-action,
+.air-datepicker .datepicker--cell {
+	font-size: 20px; /* Увеличивает размер шрифта для заголовков и ячеек */
+}
+
+.air-datepicker .datepicker--cell-day {
+	width: 50px; /* Увеличивает ширину ячеек дней */
+	height: 50px; /* Увеличивает высоту ячеек дней */
+}
