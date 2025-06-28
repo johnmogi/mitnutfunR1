@@ -9,6 +9,9 @@ include 'inc/bookings.php';
 
 add_action('wp_enqueue_scripts', 'load_style_script');
 function load_style_script(){
+    // Enqueue select2 from CDN (required for some plugins)
+    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
+    
     wp_enqueue_style('my-normalize', get_stylesheet_directory_uri() . '/css/normalize.css');
     wp_enqueue_style('my-Inter', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     wp_enqueue_style('my-Lunasima', 'https://fonts.googleapis.com/css2?family=Lunasima:wght@400;700&display=swap');
@@ -27,8 +30,13 @@ function load_style_script(){
     wp_enqueue_script('jquery.mask', get_stylesheet_directory_uri() . '/js/jquery.mask.min.js', array(), false, true);
     wp_enqueue_script('my-fancybox', get_stylesheet_directory_uri() . '/js/jquery.fancybox.min.js', array(), false, true);
     wp_enqueue_script('my-nice-select', get_stylesheet_directory_uri() . '/js/jquery.nice-select.min.js', array(), false, true);
-    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array(), time(), true);
-    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array(), time(), true);
+    
+    // Enqueue select2 JS from CDN (must be loaded before scripts that depend on it)
+    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), null, true);
+    
+    // Localize script with necessary data for select2 initialization
+    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), time(), true);
+    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), time(), true);
 }
 
 
