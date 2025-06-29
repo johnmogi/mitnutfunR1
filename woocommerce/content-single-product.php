@@ -38,7 +38,7 @@ if ( post_password_required() ) {
     <div class="content-width">
 
         <?php do_action( 'woocommerce_before_single_product' ); ?>
-        <div class="content">
+        <div class="content" data-product-id="<?php echo esc_attr($product_id); ?>">
 
 
             <div class="mob-title">
@@ -58,98 +58,44 @@ if ( post_password_required() ) {
              //   if ($_GET['test']) {
 
                     ?>
-                <div id="datepicker-container"></div>
-                <br>
-                <script>
-
-                    jQuery(document).ready(function($) {
-                        const bookedDates = <?php echo $rental_dates ? json_encode($rental_dates) : '[]'; ?>;
-
-                        function formatDate(date) {
-                            let d = new Date(date);
-                            let month = '' + (d.getMonth() + 1);
-                            let day = '' + d.getDate();
-                            let year = d.getFullYear();
-
-                            if (month.length < 2) month = '0' + month;
-                            if (day.length < 2) day = '0' + day;
-
-                            return [day, month, year].join('.');
-                        }
-
-                        const formattedBookedDates = bookedDates.flatMap(dateRange => {
-                            if (!dateRange || typeof dateRange !== 'string' || !dateRange.includes(' - ')) {
-                                return [];
-                            }
-
-                            const [startDate, endDate] = dateRange.split(' - ');
-                            const dates = [];
-                            let currentDate = new Date(startDate.split('.').reverse().join('-'));
-                            const end = new Date(endDate.split('.').reverse().join('-'));
-
-                            while (currentDate <= end) {
-                                dates.push(formatDate(currentDate));
-                                currentDate.setDate(currentDate.getDate() + 1);
-                            }
-
-                            return dates;
-                        });
-
-                        const tomorrow = new Date();
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-
-                        const datepicker = new AirDatepicker('#datepicker-container', {
-                            inline: true,
-                            range: true,
-                            locale: {
-                                days: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
-                                daysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-                                daysMin: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-                                months: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-                                monthsShort: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
-                                today: 'היום',
-                                clear: 'נקה',
-                                dateFormat: 'dd.MM.yyyy',
-                                timeFormat: 'HH:mm',
-                                firstDay: 0
-                            },
-                            minDate: tomorrow,
-                            onSelect({date, formattedDate}) {
-                                if (date) {
-                                    let diffDays;
-                                    if (date.length === 1) {
-                                        // Single day selected
-                                        $('#rental_dates').val(formattedDate[0]);
-                                    } else {
-                                        // Range selected
-                                        const diffTime = Math.abs(date[1] - date[0]);
-                                        diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Include both start and end dates
-                                        $('#rental_dates').val(formattedDate.join(' - '));
-                                    }
-                                    $('[name="quantity"]').val(diffDays - 1);
-                                    if (diffDays)
-                                        $('.btn-wrap button').prop('disabled', false);
-                                    else
-                                        $('.btn-wrap button').prop('disabled', true);
-                                }
-                            },
-                            onRenderCell({date, cellType}) {
-                                if (cellType === 'day') {
-                                    const formattedDate = formatDate(date);
-                                    if (formattedBookedDates.includes(formattedDate)) {
-                                        return {
-                                            disabled: true
-                                        };
-                                    }
-                                }
-                            }
-                        });
-                    });
-
-
-
-
-                </script>
+                <div class="rental-datepicker-container">
+                    <div id="datepicker-container"></div>
+                    <input type="hidden" id="rental_dates" name="rental_dates" value="">
+                </div>
+                <style>
+                    .rental-datepicker-container {
+                        margin: 20px 0;
+                        max-width: 600px;
+                    }
+                    #datepicker-container {
+                        width: 100%;
+                    }
+                    /* AirDatepicker custom styles */
+                    .air-datepicker {
+                        --adp-font-size: 14px;
+                        --adp-day-name-color: #333;
+                        --adp-cell-background-color-selected: #4CAF50;
+                        --adp-cell-background-color-selected-hover: #45a049;
+                        --adp-cell-background-color-in-range: rgba(76, 175, 80, 0.1);
+                        --adp-cell-background-color-in-range-hover: rgba(76, 175, 80, 0.2);
+                        --adp-cell-border-color-in-range: #4CAF50;
+                    }
+                    /* Disabled dates styling */
+                    .air-datepicker-cell--disabled {
+                        background-color: #f5f5f5;
+                        color: #ccc;
+                        text-decoration: line-through;
+                    }
+                    /* Weekend styling */
+                    .air-datepicker-cell--weekend {
+                        color: #f44336;
+                    }
+                    /* Partially booked dates */
+                    .air-datepicker-cell--partially-booked {
+                        background-color: #fff3e0;
+                        font-weight: bold;
+                    }
+                </style>
                 <?php // } ?>
                 <?php woocommerce_template_single_add_to_cart() ?>
 

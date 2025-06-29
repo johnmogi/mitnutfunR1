@@ -1,0 +1,1790 @@
+jquery-migrate.min.js?ver=3.4.1:2 JQMIGRATE: Migrate is installed, version 3.4.1
+מגה-סלייד-2-5-מ/:931 Uncaught SyntaxError: Unexpected token ':' (at מגה-סלייד-2-5-מ/:931:17)
+מגה-סלייד-2-5-מ/:418 Initializing rental calendar...
+מגה-סלייד-2-5-מ/:428 Loaded booked dates: []
+מגה-סלייד-2-5-מ/:429 Initial stock: 8
+מגה-סלייד-2-5-מ/:487 Formatted booked dates: []
+מגה-סלייד-2-5-מ/:493 Initializing datepicker with min date: Mon Jun 30 2025 00:00:00 GMT+0200 (hora de verano de Europa central)
+מגה-סלייד-2-5-מ/:616 Datepicker initialized successfully
+stock-debugger-new.js?ver=1751145096:441 No rental reservation data available
+initStockDebugger @ stock-debugger-new.js?ver=1751145096:441
+(anonymous) @ stock-debugger-new.js?ver=1751145096:515
+e @ jquery.min.js?ver=3.7.1:2
+t @ jquery.min.js?ver=3.7.1:2
+setTimeout
+(anonymous) @ jquery.min.js?ver=3.7.1:2
+c @ jquery.min.js?ver=3.7.1:2
+fireWith @ jquery.min.js?ver=3.7.1:2
+fire @ jquery.min.js?ver=3.7.1:2
+c @ jquery.min.js?ver=3.7.1:2
+fireWith @ jquery.min.js?ver=3.7.1:2
+ready @ jquery.min.js?ver=3.7.1:2
+P @ jquery.min.js?ver=3.7.1:2
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental Debug Panel Initialized 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: 'empty', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+actions.js?ver=1751186103:9 undefined
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: 'empty', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+מגה-סלייד-2-5-מ/:1217 🛠 Stock Debugger - Calendar Loaded
+מגה-סלייד-2-5-מ/:515 Date selected: {date: Array(1), formattedDate: Array(1)}
+מגה-סלייד-2-5-מ/:564 Single day selected: 30.06.2025
+מגה-סלייד-2-5-מ/:515 Date selected: {date: Array(2), formattedDate: Array(2)}
+מגה-סלייד-2-5-מ/:548 Date range selected: 30.06.2025 - 02.07.2025 Days: 3
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+rental-debug.js?ver=1751186103:109 [RentalDebug] Rental dates input {id: 'rental_dates', value: '30.06.2025 - 02.07.2025', class: 'date-picker-field', disabled: false, readonly: false}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Found stock debug table {rows: 9, visible: true}
+rental-debug.js?ver=1751186103:109 [RentalDebug] Reservation data {count: 9, reservations: Array(3)}
+rental-debug.js?ver=1751186103:109 [RentalDebug] No datepicker elements found 
+
+<html lang="he" dir="rtl"><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-KLXPPMS3"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head><script src="https://mit276.local/wp-includes/js/wp-emoji-release.min.js?ver=6.8.1" defer=""></script></head><body __processed_86b1a3b5-2fef-49f7-a4c1-5b7e551bbced__="true" class="rtl wp-singular product-template-default single single-product postid-584 logged-in admin-bar wp-theme-mitnafun_uproR theme-mitnafun_uproR woocommerce woocommerce-page woocommerce-js customize-support"><br>
+<b>Notice</b>:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>acf</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in <b>C:\Users\USUARIO\Documents\SITES\MIT\mit276\app\public\wp-includes\functions.php</b> on line <b>6121</b><br>
+<br>
+<b>Notice</b>:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>BeRocket_LMP_domain</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in <b>C:\Users\USUARIO\Documents\SITES\MIT\mit276\app\public\wp-includes\functions.php</b> on line <b>6121</b><br>
+<br>
+<b>Notice</b>:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>wp-migrate-db</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in <b>C:\Users\USUARIO\Documents\SITES\MIT\mit276\app\public\wp-includes\functions.php</b> on line <b>6121</b><br>
+<br>
+<b>Notice</b>:  הפונקציה add_theme_support( 'html5' ) נקרא <strong>בצורה לא תקינה</strong>. יש להעביר מערך של סוגים. למידע נוסף כנסו ל<a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">ניפוי תקלות בוורדפרס</a>. (הודעה זו נוספה בגרסה 3.6.1.) in <b>C:\Users\USUARIO\Documents\SITES\MIT\mit276\app\public\wp-includes\functions.php</b> on line <b>6121</b><br>
+
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	
+	<!-- This site is optimized with the Yoast SEO plugin v25.3 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>מגה סלייד דקלים - מתנפחים ונהנים</title>
+	<meta name="description" content="מגה סלייד מגלשת מים גבוהה במיוחד! מגלשה גבוהה במיוחד 2.5 מטרים שתרענן לכם את הקיץ. מתנפח מים גדול ומרשים ביופיו מתאים למגוון רב של גילאים ויהפוך כל אירוע לחוויה מהנה. המתקן עשוי בד חזק במיוחד" class="yoast-seo-meta-tag">
+	<link rel="canonical" href="https://mit276.local/product/מגה-סלייד-2-5-מ/" class="yoast-seo-meta-tag">
+	<meta property="og:locale" content="he_IL" class="yoast-seo-meta-tag">
+	<meta property="og:type" content="article" class="yoast-seo-meta-tag">
+	<meta property="og:title" content="מגה סלייד דקלים - מתנפחים ונהנים" class="yoast-seo-meta-tag">
+	<meta property="og:description" content="מגה סלייד מגלשת מים גבוהה במיוחד! מגלשה גבוהה במיוחד 2.5 מטרים שתרענן לכם את הקיץ. מתנפח מים גדול ומרשים ביופיו מתאים למגוון רב של גילאים ויהפוך כל אירוע לחוויה מהנה. המתקן עשוי בד חזק במיוחד" class="yoast-seo-meta-tag">
+	<meta property="og:url" content="https://mit276.local/product/מגה-סלייד-2-5-מ/" class="yoast-seo-meta-tag">
+	<meta property="og:site_name" content="מתנפחים ונהנים" class="yoast-seo-meta-tag">
+	<meta property="article:modified_time" content="2025-06-29T05:40:05+00:00" class="yoast-seo-meta-tag">
+	<meta property="og:image" content="https://mitnafun.com/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg" class="yoast-seo-meta-tag">
+	<meta property="og:image:width" content="2048" class="yoast-seo-meta-tag">
+	<meta property="og:image:height" content="1536" class="yoast-seo-meta-tag">
+	<meta property="og:image:type" content="image/jpeg" class="yoast-seo-meta-tag">
+	<meta name="twitter:card" content="summary_large_image" class="yoast-seo-meta-tag">
+	<meta name="twitter:label1" content="זמן קריאה מוערך" class="yoast-seo-meta-tag">
+	<meta name="twitter:data1" content="דקה1" class="yoast-seo-meta-tag">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/","url":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/","name":"מגה סלייד דקלים - מתנפחים ונהנים","isPartOf":{"@id":"https://mit276.local/#website"},"primaryImageOfPage":{"@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/#primaryimage"},"image":{"@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/#primaryimage"},"thumbnailUrl":"https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg","datePublished":"2024-06-25T09:36:43+00:00","dateModified":"2025-06-29T05:40:05+00:00","description":"מגה סלייד מגלשת מים גבוהה במיוחד! מגלשה גבוהה במיוחד 2.5 מטרים שתרענן לכם את הקיץ. מתנפח מים גדול ומרשים ביופיו מתאים למגוון רב של גילאים ויהפוך כל אירוע לחוויה מהנה. המתקן עשוי בד חזק במיוחד","breadcrumb":{"@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/#breadcrumb"},"inLanguage":"he-IL","potentialAction":[{"@type":"ReadAction","target":["https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/"]}]},{"@type":"ImageObject","inLanguage":"he-IL","@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/#primaryimage","url":"https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg","contentUrl":"https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg","width":2048,"height":1536},{"@type":"BreadcrumbList","@id":"https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"דף הבית","item":"https://mit276.local/"},{"@type":"ListItem","position":2,"name":"Shop","item":"https://mit276.local/shop/"},{"@type":"ListItem","position":3,"name":"מגה סלייד דקלים"}]},{"@type":"WebSite","@id":"https://mit276.local/#website","url":"https://mit276.local/","name":"מתנפחים ונהנים","description":"מתקנים מתנפחים, מגלשות מים, דוכני מזון, גנרטורים ועוד","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://mit276.local/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"he-IL"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/cart-frontend.js?ver=27713dd06dd798d49233" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-cart-checkout-base-frontend.js?ver=c805309b07586da6f60a" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-cart-checkout-vendors-frontend.js?ver=59277a6dafa851088bd0" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/vendor/react.min.js?ver=18.3.1.1" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/blocks-checkout.js?ver=8675f044a5a4e373bfec" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/vendor/react-dom.min.js?ver=18.3.1.1" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/blocks-components.js?ver=0c39bf995e247714a767" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-data.js?ver=38d3da1666bedcf43575" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-registry.js?ver=cbfeee947018662b965a" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-settings.js?ver=eb5ac71a827c4c81fed8" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/api-fetch.min.js?ver=3623a576c78df404ff20" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/url.min.js?ver=6bf93e90403a1eec6501" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/data.min.js?ver=fe6c4835cd00e12493c3" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.1" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/compose.min.js?ver=84bcf832a5c99203f3db" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/deprecated.min.js?ver=e1f84915c5e8ae38964c" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/dom.min.js?ver=f3a673a30f968c8fa314" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/element.min.js?ver=a4eeeadd23c0d7ab1d2d" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/escape-html.min.js?ver=6561a406d2d232a6fbd2" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/is-shallow-equal.min.js?ver=e0f9f1d78d83f5196979" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/keycodes.min.js?ver=034ff647a54b018581d3" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/priority-queue.min.js?ver=9c21c957c7e50ffdbf48" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/private-apis.min.js?ver=0f8478f1ba7e0eea562b" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/redux-routine.min.js?ver=8bb92d45458b29590f53" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-types.js?ver=bda84b1be3361607d04a" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/data-controls.min.js?ver=49f5587e8b90f9e7cc7e" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/html-entities.min.js?ver=2cd3358363e0675638fb" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/notices.min.js?ver=673a68a7ac2f556ed50b" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-middleware.js?ver=f3c3ad2e0f2ca96a11da" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/a11y.min.js?ver=3156534cc54473497e14" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/dom-ready.min.js?ver=f77871ff7694fffea381" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/primitives.min.js?ver=aef2543ab60c8c9bb609" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/warning.min.js?ver=ed7c8b0940914f4fe44b" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-shared-context.js?ver=c30879d642ea05d65f5a" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-shared-hocs.js?ver=cba59eca47d9101980bf" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/price-format.js?ver=a3e67bb0b09f566d5bdf" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/autop.min.js?ver=9fb50649848277dd318d" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/plugins.min.js?ver=20303a2de19246c83e5a" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/style-engine.min.js?ver=08cc10e9532531e22456" as="script" rel="prefetch">
+<link href="https://mit276.local/wp-includes/js/dist/wordcount.min.js?ver=55d8c2bf3dc99e7ea5ec" as="script" rel="prefetch">
+<link rel="alternate" type="application/rss+xml" title="מתנפחים ונהנים « פיד תגובות של מגה סלייד דקלים" href="https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/feed/">
+<script type="text/javascript">
+/* <![CDATA[ */
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/mit276.local\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.1"}};
+/*! This file is auto-generated */
+!function(i,n){var o,s,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),r=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===r[t]})}function u(e,t,n){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!n(e,"\ud83d\udc26\u200d\ud83d\udd25","\ud83d\udc26\u200b\ud83d\udd25")}return!1}function f(e,t,n){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):i.createElement("canvas"),a=r.getContext("2d",{willReadFrequently:!0}),o=(a.textBaseline="top",a.font="600 32px Arial",{});return e.forEach(function(e){o[e]=t(a,e,n)}),o}function t(e){var t=i.createElement("script");t.src=e,t.defer=!0,i.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",s=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){i.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"}),a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=function(e){c(n=e.data),a.terminate(),t(n)})}catch(e){}c(n=f(s,u,p))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+/* ]]> */
+</script>
+<link rel="stylesheet" id="font-awesome-css" href="https://mit276.local/wp-content/plugins/woocommerce-ajax-filters/berocket/assets/css/font-awesome.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="berocket_aapf_widget-style-css" href="https://mit276.local/wp-content/plugins/woocommerce-ajax-filters/assets/frontend/css/fullmain.min.css?ver=1.6.8.2" type="text/css" media="all">
+<link rel="stylesheet" id="wpcode-admin-bar-css-css" href="https://mit276.local/wp-content/plugins/insert-headers-and-footers/build/admin-bar.css?ver=8afeca4aaad1d56fefb41623b6b7b000" type="text/css" media="all">
+<link rel="stylesheet" id="dashicons-css" href="https://mit276.local/wp-includes/css/dashicons.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-rtl-css" href="https://mit276.local/wp-includes/css/admin-bar-rtl.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="admin-bar-inline-css" type="text/css">
+
+		@media screen { html { margin-top: 32px !important; } }
+		@media screen and ( max-width: 782px ) { html { margin-top: 46px !important; } }
+	
+@media print { #wpadminbar { display:none; } }
+</style>
+<style id="wp-emoji-styles-inline-css" type="text/css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel="stylesheet" id="wp-block-library-rtl-css" href="https://mit276.local/wp-includes/css/dist/block-library/style-rtl.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--inter: "Inter", sans-serif;--wp--preset--font-family--cardo: Cardo;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="contact-form-7-css" href="https://mit276.local/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.0.5" type="text/css" media="all">
+<link rel="stylesheet" id="contact-form-7-rtl-css" href="https://mit276.local/wp-content/plugins/contact-form-7/includes/css/styles-rtl.css?ver=6.0.5" type="text/css" media="all">
+<link rel="stylesheet" id="stock-debugger-css-css" href="https://mit276.local/wp-content/plugins/mitnafun-order-admin/includes/stock-debugger/assets/css/stock-debugger.css?ver=1750813074" type="text/css" media="all">
+<link rel="stylesheet" id="woocommerce-layout-rtl-css" href="https://mit276.local/wp-content/plugins/woocommerce/assets/css/woocommerce-layout-rtl.css?ver=9.7.1" type="text/css" media="all">
+<link rel="stylesheet" id="woocommerce-smallscreen-rtl-css" href="https://mit276.local/wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen-rtl.css?ver=9.7.1" type="text/css" media="only screen and (max-width: 768px)">
+<link rel="stylesheet" id="woocommerce-general-rtl-css" href="https://mit276.local/wp-content/plugins/woocommerce/assets/css/woocommerce-rtl.css?ver=9.7.1" type="text/css" media="all">
+<style id="woocommerce-inline-inline-css" type="text/css">
+.woocommerce form .form-row .required { visibility: visible; }
+</style>
+<link rel="stylesheet" id="form-design-sytle-css" href="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/css/form-design.css?ver=6.7" type="text/css" media="all">
+<link rel="stylesheet" id="meshulam-pay-sytle-css" href="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/css/meshulam_pay_style.css?ver=6.7" type="text/css" media="all">
+<link rel="stylesheet" id="meshulam-sytle-css" href="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/css/meshulam_sytle.css?ver=6.7" type="text/css" media="all">
+<link rel="stylesheet" id="bit_payment_css-css" href="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/css/bit_pay_style.css?ver=6.7" type="text/css" media="all">
+<link rel="stylesheet" id="bit_payment_font_awesome-css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css?ver=6.7" type="text/css" media="all">
+<link rel="stylesheet" id="grw-public-main-css-rtl-css" href="https://mit276.local/wp-content/plugins/widget-google-reviews/assets/css/public-main-rtl.css?ver=5.5" type="text/css" media="all">
+<link rel="stylesheet" id="wp-mail-smtp-admin-bar-css" href="https://mit276.local/wp-content/plugins/wp-mail-smtp/assets/css/admin-bar.min.css?ver=4.4.0" type="text/css" media="all">
+<link rel="stylesheet" id="brands-styles-css" href="https://mit276.local/wp-content/plugins/woocommerce/assets/css/brands.css?ver=9.7.1" type="text/css" media="all">
+<link rel="stylesheet" id="select2-css" href="https://mit276.local/wp-content/plugins/woocommerce-ajax-filters/assets/frontend/css/select2.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-normalize-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/normalize.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-Inter-css" href="https://fonts.googleapis.com/css2?family=Inter%3Awght%40400%3B700&amp;display=swap&amp;ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-Lunasima-css" href="https://fonts.googleapis.com/css2?family=Lunasima%3Awght%40400%3B700&amp;display=swap&amp;ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-fancybox-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/jquery.fancybox.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-nice-select-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/nice-select.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-swiper-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/swiper.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="air-datepicker-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/air-datepicker.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="rental-calendar-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/rental-calendar.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="my-styles-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/styles.css?ver=1751186103" type="text/css" media="all">
+<link rel="stylesheet" id="my-responsive-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/css/responsive.css?ver=1751186103" type="text/css" media="all">
+<link rel="stylesheet" id="my-style-main-css" href="https://mit276.local/wp-content/themes/mitnafun_uproR/style.css?ver=1751186103" type="text/css" media="all">
+<link rel="stylesheet" id="yoast-seo-adminbar-css" href="https://mit276.local/wp-content/plugins/wordpress-seo/css/dist/adminbar-2530-rtl.css" type="text/css" media="all">
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.9.7.1" id="jquery-blockui-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" id="wc-add-to-cart-js-extra">
+/* <![CDATA[ */
+var wc_add_to_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_view_cart":"\u05de\u05e2\u05d1\u05e8 \u05dc\u05e1\u05dc \u05d4\u05e7\u05e0\u05d9\u05d5\u05ea","cart_url":"https:\/\/mit276.local\/basket\/","is_cart":"","cart_redirect_after_add":"no"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=9.7.1" id="wc-add-to-cart-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" id="wc-single-product-js-extra">
+/* <![CDATA[ */
+var wc_single_product_params = {"i18n_required_rating_text":"\u05d1\u05d7\u05e8 \u05d3\u05d9\u05e8\u05d5\u05d2","i18n_rating_options":["1 \u05de\u05ea\u05d5\u05da 5 \u05db\u05d5\u05db\u05d1\u05d9\u05dd","2 \u05de\u05ea\u05d5\u05da 5 \u05db\u05d5\u05db\u05d1\u05d9\u05dd","3 \u05de\u05ea\u05d5\u05da 5 \u05db\u05d5\u05db\u05d1\u05d9\u05dd","4 \u05de\u05ea\u05d5\u05da 5 \u05db\u05d5\u05db\u05d1\u05d9\u05dd","5 \u05de\u05ea\u05d5\u05da 5 \u05db\u05d5\u05db\u05d1\u05d9\u05dd"],"i18n_product_gallery_trigger_text":"\u05dc\u05d4\u05e6\u05d9\u05d2 \u05d0\u05ea \u05d2\u05dc\u05e8\u05d9\u05d9\u05ea \u05d4\u05ea\u05de\u05d5\u05e0\u05d5\u05ea \u05e2\u05dc \u05de\u05e1\u05da \u05de\u05dc\u05d0","review_rating_required":"yes","flexslider":{"rtl":true,"animation":"slide","smoothHeight":true,"directionNav":false,"controlNav":"thumbnails","slideshow":false,"animationSpeed":500,"animationLoop":false,"allowOneSlide":false},"zoom_enabled":"","zoom_options":[],"photoswipe_enabled":"","photoswipe_options":{"shareEl":false,"closeOnScroll":false,"history":false,"hideAnimationDuration":0,"showAnimationDuration":0},"flexslider_enabled":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/frontend/single-product.min.js?ver=9.7.1" id="wc-single-product-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.9.7.1" id="js-cookie-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" id="woocommerce-js-extra">
+/* <![CDATA[ */
+var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_password_show":"\u05dc\u05d4\u05e6\u05d9\u05d2 \u05e1\u05d9\u05e1\u05de\u05d4","i18n_password_hide":"\u05dc\u05d4\u05e1\u05ea\u05d9\u05e8 \u05e1\u05d9\u05e1\u05de\u05d4"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=9.7.1" id="woocommerce-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/js/meshulam_payment.js?ver=6.7" id="meshulam-payment-js-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/meshulam-payment-gateway//assets/js/meshulam_payment_popup.js?ver=6.7" id="meshulam-payment-popup-js-js"></script>
+<script type="text/javascript" defer="defer" src="https://mit276.local/wp-content/plugins/widget-google-reviews/assets/js/public-main.js?ver=5.5" id="grw-public-main-js-js"></script>
+<link rel="https://api.w.org/" href="https://mit276.local/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="https://mit276.local/wp-json/wp/v2/product/584"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://mit276.local/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.8.1">
+<meta name="generator" content="WooCommerce 9.7.1">
+<link rel="shortlink" href="https://mit276.local/?p=584">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://mit276.local/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmit276.local%2Fproduct%2F%25d7%259e%25d7%2592%25d7%2594-%25d7%25a1%25d7%259c%25d7%2599%25d7%2599%25d7%2593-2-5-%25d7%259e%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://mit276.local/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmit276.local%2Fproduct%2F%25d7%259e%25d7%2592%25d7%2594-%25d7%25a1%25d7%259c%25d7%2599%25d7%2599%25d7%2593-2-5-%25d7%259e%2F&amp;format=xml">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KLXPPMS3');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0JZE89J4EW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0JZE89J4EW');
+</script><style></style><style>
+                .lmp_load_more_button.br_lmp_button_settings .lmp_button:hover {
+                    background-color: #ffffff!important;
+                    color: #111111!important;
+                }
+                .lmp_load_more_button.br_lmp_prev_settings .lmp_button:hover {
+                    background-color: #9999ff!important;
+                    color: #111111!important;
+                }div.item.lazy, .berocket_lgv_additional_data.lazy{opacity:0;}</style><style></style>	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+	<style>
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge {
+					padding: 7px 0;
+				}
+
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge a.ab-item {
+					/* Layout  */
+					background-color: #F6F7F7;
+					border-radius: 2px;
+					display: flex;
+					height: 18px;
+					padding: 0px 6px;
+					align-items: center;
+					gap: 8px;
+
+					/* Typography  */
+					color: #3C434A;
+					font-size: 12px;
+					font-style: normal;
+					font-weight: 500;
+					line-height: 16px;
+				}
+
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge a.ab-item:hover,
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge a.ab-item:focus {
+					background-color: #DCDCDE;
+				}
+
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge a.ab-item:focus {
+					outline: var(--wp-admin-border-width-focus) solid var(--wp-admin-theme-color-darker-20);
+				}
+
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge.woocommerce-site-status-badge-live a.ab-item {
+					background-color: #E6F2E8;
+					color: #00450C;
+				}
+
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge.woocommerce-site-status-badge-live a.ab-item:hover,
+				#wpadminbar .quicklinks #wp-admin-bar-woocommerce-site-visibility-badge.woocommerce-site-status-badge-live a.ab-item:focus {
+					background-color: #B8E6BF;
+				}
+			</style><style class="wp-fonts-local" type="text/css">
+@font-face{font-family:Inter;font-style:normal;font-weight:300 900;font-display:fallback;src:url('https://mit276.local/wp-content/plugins/woocommerce/assets/fonts/Inter-VariableFont_slnt,wght.woff2') format('woff2');font-stretch:normal;}
+@font-face{font-family:Cardo;font-style:normal;font-weight:400;font-display:fallback;src:url('https://mit276.local/wp-content/plugins/woocommerce/assets/fonts/cardo_normal_400.woff2') format('woff2');}
+</style>
+<link rel="icon" href="https://mit276.local/wp-content/uploads/2024/03/cropped-365f45_553d1f9af05a4948a6c2acf20454de4emv2-32x32.webp" sizes="32x32">
+<link rel="icon" href="https://mit276.local/wp-content/uploads/2024/03/cropped-365f45_553d1f9af05a4948a6c2acf20454de4emv2-192x192.webp" sizes="192x192">
+<link rel="apple-touch-icon" href="https://mit276.local/wp-content/uploads/2024/03/cropped-365f45_553d1f9af05a4948a6c2acf20454de4emv2-180x180.webp">
+<meta name="msapplication-TileImage" content="https://mit276.local/wp-content/uploads/2024/03/cropped-365f45_553d1f9af05a4948a6c2acf20454de4emv2-270x270.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+
+
+  <script type="text/javascript">
+/* <![CDATA[ */
+
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+				request = true;
+	
+			b[c] = b[c].replace( rcs, ' ' );
+			// The customizer requires postMessage and CORS (if the site is cross domain).
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	
+/* ]]> */
+</script>
+		<div id="wpadminbar" class="nojq">
+						<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="סרגל כלים">
+				<ul role="menu" id="wp-admin-bar-root-default" class="ab-top-menu"><li role="group" id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/about.php"><span class="ab-icon" aria-hidden="true"></span><span class="screen-reader-text">אודות וורדפרס</span></a><div class="ab-sub-wrapper"><ul role="menu" aria-label="אודות וורדפרס" id="wp-admin-bar-wp-logo-default" class="ab-submenu"><li role="group" id="wp-admin-bar-about"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/about.php">אודות וורדפרס</a></li><li role="group" id="wp-admin-bar-contribute"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/contribute.php">Get Involved</a></li></ul><ul role="menu" aria-label="אודות וורדפרס" id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu"><li role="group" id="wp-admin-bar-wporg"><a class="ab-item" role="menuitem" href="https://he.wordpress.org/">WordPress.org</a></li><li role="group" id="wp-admin-bar-documentation"><a class="ab-item" role="menuitem" href="https://wordpress.org/documentation/">תיעוד</a></li><li role="group" id="wp-admin-bar-learn"><a class="ab-item" role="menuitem" href="https://learn.wordpress.org/">Learn WordPress</a></li><li role="group" id="wp-admin-bar-support-forums"><a class="ab-item" role="menuitem" href="https://wordpress.org/support/forums/">תמיכה</a></li><li role="group" id="wp-admin-bar-feedback"><a class="ab-item" role="menuitem" href="https://wordpress.org/support/forum/requests-and-feedback">משוב</a></li></ul></div></li><li role="group" id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/">מתנפחים ונהנים</a><div class="ab-sub-wrapper"><ul role="menu" aria-label="מתנפחים ונהנים" id="wp-admin-bar-site-name-default" class="ab-submenu"><li role="group" id="wp-admin-bar-dashboard"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/">לוח בקרה</a></li><li role="group" id="wp-admin-bar-plugins"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/plugins.php">תוספים</a></li></ul><ul role="menu" aria-label="מתנפחים ונהנים" id="wp-admin-bar-appearance" class="ab-submenu"><li role="group" id="wp-admin-bar-themes"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/themes.php">תבניות</a></li><li role="group" id="wp-admin-bar-menus"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/nav-menus.php">תפריטים</a></li></ul></div></li><li role="group" id="wp-admin-bar-woocommerce-site-visibility-badge" class="woocommerce-site-status-badge-live"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wc-settings&amp;tab=site-visibility">בזמן אמת</a></li><li role="group" id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/customize.php?url=https%3A%2F%2Fmit276.local%2Fproduct%2F%25d7%259e%25d7%2592%25d7%2594-%25d7%25a1%25d7%259c%25d7%2599%25d7%2599%25d7%2593-2-5-%25d7%259e%2F">התאמה אישית</a></li><li role="group" id="wp-admin-bar-updates"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/update-core.php"><span class="ab-icon" aria-hidden="true"></span><span class="ab-label" aria-hidden="true">25</span><span class="screen-reader-text updates-available-text">קיימים 25 עדכונים זמינים</span></a></li><li role="group" id="wp-admin-bar-comments"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/edit-comments.php"><span class="ab-icon" aria-hidden="true"></span><span class="ab-label awaiting-mod pending-count count-1" aria-hidden="true">1</span><span class="screen-reader-text comments-in-moderation-text">תגובה 1 בהמתנה</span></a></li><li role="group" id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/post-new.php"><span class="ab-icon" aria-hidden="true"></span><span class="ab-label">חדש</span></a><div class="ab-sub-wrapper"><ul role="menu" aria-label="חדש" id="wp-admin-bar-new-content-default" class="ab-submenu"><li role="group" id="wp-admin-bar-new-post"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php">פוסט</a></li><li role="group" id="wp-admin-bar-new-media"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/media-new.php">מדיה</a></li><li role="group" id="wp-admin-bar-new-page"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=page">עמוד</a></li><li role="group" id="wp-admin-bar-new-faq"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=faq">FAQ</a></li><li role="group" id="wp-admin-bar-new-product"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=product">מוצר</a></li><li role="group" id="wp-admin-bar-new-shop_order"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=shop_order">הזמנה</a></li><li role="group" id="wp-admin-bar-new-shop_coupon"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=shop_coupon">קופון</a></li><li role="group" id="wp-admin-bar-new-br_product_filter"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=br_product_filter">Product Filter</a></li><li role="group" id="wp-admin-bar-new-br_filters_group"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post-new.php?post_type=br_filters_group">Product Filter Group</a></li><li role="group" id="wp-admin-bar-new-user"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/user-new.php">משתמש</a></li></ul></div></li><li role="group" id="wp-admin-bar-edit"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/post.php?post=584&amp;action=edit">עריכת מוצר</a></li><li role="group" id="wp-admin-bar-wpseo-menu" class="menupop"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/admin.php?page=wpseo_dashboard"><div id="yoast-ab-icon" class="ab-item yoast-logo svg"><span class="screen-reader-text">SEO</span></div><div aria-hidden="true" title="ביטוי מפתח לא הוגדר" class="wpseo-score-icon bad adminbar-seo-score"><span class="wpseo-score-text screen-reader-text">ביטוי מפתח לא הוגדר</span></div></a><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpseo-menu-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpseo-seo-focus-keyword"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem">ביטוי מפתח למיקוד: <span class="wpseo-focus-keyword">לא הוגדר</span></div></li><li role="group" id="wp-admin-bar-wpseo-seo-score"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem">ציון SEO: <div aria-hidden="true" title="ביטוי מפתח לא הוגדר" class="wpseo-score-icon bad adminbar-sub-menu-score"><span class="wpseo-score-text screen-reader-text">ביטוי מפתח לא הוגדר</span></div></div></li><li role="group" id="wp-admin-bar-wpseo-readability-score"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem">קריאוּת: <div aria-hidden="true" title="תקין" class="wpseo-score-icon ok adminbar-sub-menu-score"><span class="wpseo-score-text screen-reader-text">תקין</span></div></div></li><li role="group" id="wp-admin-bar-wpseo-frontend-inspector"><a class="ab-item" tabindex="0" role="menuitem" href="https://yoa.st/admin-bar-frontend-inspector?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">בודק SEO קדמי (Front-end).<span class="yoast-badge yoast-premium-badge" id="wpseo-frontend-inspector-badge-premium-badge">Premium</span></a></li><li role="group" id="wp-admin-bar-wpseo-analysis" class="menupop"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem" aria-expanded="false"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>נתח עמוד זה</div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpseo-analysis-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpseo-inlinks"><a class="ab-item" role="menuitem" href="https://search.google.com/search-console/links/drilldown?resource_id=https%3A%2F%2Fmit276.local&amp;type=EXTERNAL&amp;target=https%3A%2F%2Fmit276.local%2Fproduct%2F%D7%9E%D7%92%D7%94-%D7%A1%D7%9C%D7%99%D7%99%D7%93-2-5-%D7%9E%2F&amp;domain=" target="_blank">בדיקת קישורים בכתובת זו</a></li><li role="group" id="wp-admin-bar-wpseo-structureddata"><a class="ab-item" role="menuitem" href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fmit276.local%2Fproduct%2F%D7%9E%D7%92%D7%94-%D7%A1%D7%9C%D7%99%D7%99%D7%93-2-5-%D7%9E%2F" target="_blank">בדיקת תוצאות עשירות בגוגל</a></li><li role="group" id="wp-admin-bar-wpseo-facebookdebug"><a class="ab-item" role="menuitem" href="//developers.facebook.com/tools/debug/?q=https%3A%2F%2Fmit276.local%2Fproduct%2F%D7%9E%D7%92%D7%94-%D7%A1%D7%9C%D7%99%D7%99%D7%93-2-5-%D7%9E%2F" target="_blank">פייסבוק דבאגר</a></li><li role="group" id="wp-admin-bar-wpseo-pagespeed"><a class="ab-item" role="menuitem" href="//developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fmit276.local%2Fproduct%2F%D7%9E%D7%92%D7%94-%D7%A1%D7%9C%D7%99%D7%99%D7%93-2-5-%D7%9E%2F" target="_blank">בדיקת מהירות טעינת עמוד</a></li></ul></div></li><li role="group" id="wp-admin-bar-wpseo-sub-tools" class="menupop"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem" aria-expanded="false"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>כלי SEO</div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpseo-sub-tools-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpseo-semrush"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-semrush?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">Semrush</a></li><li role="group" id="wp-admin-bar-wpseo-wincher"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-wincher?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">Wincher</a></li><li role="group" id="wp-admin-bar-wpseo-google-trends"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-gtrends?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">Google trends</a></li></ul></div></li><li role="group" id="wp-admin-bar-wpseo-sub-howto" class="menupop"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem" aria-expanded="false"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>איך</div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpseo-sub-howto-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpseo-learn-seo"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-learn-more-seo?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">למד עוד על SEO</a></li><li role="group" id="wp-admin-bar-wpseo-improve-blogpost"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-improve-blog-post?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">שפר את הפוסט שלך בבלוג</a></li><li role="group" id="wp-admin-bar-wpseo-write-better-content"><a class="ab-item" role="menuitem" href="https://yoa.st/admin-bar-write-better?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank">כתוב תוכן טוב יותר</a></li></ul></div></li><li role="group" id="wp-admin-bar-wpseo-sub-get-help"><a class="ab-item" tabindex="0" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpseo_page_support">עזרה</a></li><li role="group" id="wp-admin-bar-wpseo-settings" class="menupop"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem" aria-expanded="false"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>הגדרות SEO</div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpseo-settings-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpseo-page-settings"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpseo_page_settings">הגדרות</a></li><li role="group" id="wp-admin-bar-wpseo-tools"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpseo_tools">כלים</a></li><li role="group" id="wp-admin-bar-wpseo-licenses"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpseo_licenses">שדרוגים</a></li></ul></div></li><li role="group" id="wp-admin-bar-wpseo-get-premium"><div class="ab-item ab-empty-item" tabindex="0" role="menuitem"><a href="https://yoa.st/admin-bar-get-premium?php_version=7.4&amp;platform=wordpress&amp;platform_version=6.8.1&amp;software=free&amp;software_version=25.3&amp;days_active=18&amp;user_language=en_US" target="_blank" data-action="load-nfd-ctb" data-ctb-id="f6a84663-465f-4cb5-8ba5-f7a6d72224b2" style="padding:0;">קבל Yoast SEO Premium » </a></div></li></ul></div></li><li role="group" id="wp-admin-bar-stock-debugger"><a class="ab-item" role="menuitem" href="#stock-debugger" title="Jump to Stock Debugger">🛠 Stock Debugger</a></li><li role="group" id="wp-admin-bar-wpcode-admin-bar-info" class="menupop wpcode-admin-bar-info menupop"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/admin.php?page=wpcode">WPCode</a><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpcode-admin-bar-info-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpcode-description" class="wpcode-admin-bar-info-submenu wpcode-admin-bar-description"><div class="ab-item ab-empty-item" role="menuitem">Loaded on this page</div></li><li role="group" id="wp-admin-bar-wpcode-global-scripts" class="menupop wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/admin.php?page=wpcode-headers-footers"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>Global Scripts (2)</a><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpcode-global-scripts-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpcode-global-header" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpcode-headers-footers#wpcode-global-header">Global Header (1)</a></li><li role="group" id="wp-admin-bar-wpcode-global-body" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpcode-headers-footers#wpcode-global-body">Global Body (1)</a></li><li role="group" id="wp-admin-bar-wpcode-global-footer" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpcode-headers-footers#wpcode-global-footer">Global Footer (0)</a></li></ul></div></li><li role="group" id="wp-admin-bar-wpcode-loaded-on-this-page" class="menupop wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/admin.php?page=wpcode"><span class="wp-admin-bar-arrow" aria-hidden="true" style="display: none;"></span>Code Snippets (0)</a><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpcode-loaded-on-this-page-default" class="ab-submenu"></ul></div></li><li role="group" id="wp-admin-bar-wpcode-page-scripts" class="menupop wpcode-admin-bar-has-upsell-submenu"><div class="ab-item ab-empty-item" role="menuitem" aria-expanded="false"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>Page Scripts <span class="wpcode-pro-indicator">PRO</span></div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-wpcode-page-scripts-default" class="ab-submenu"><li role="group" id="wp-admin-bar-wpcode-page-scripts-upgrade" class="wpcode-admin-bar-upsell-submenu"><div class="ab-item ab-empty-item" role="menuitem"></div><div class="wpcode-admin-bar-submenu-upsell"><span class="wpcode-heading">Page Scripts is a Pro Feature</span><p>While you can always use global snippets, in the PRO version you can easily add page-specific scripts and snippets directly from the post edit screen.</p><a class="wpcode-button" href="https://wpcode.com/lite/?utm_source=liteplugin&amp;utm_medium=admin-bar&amp;utm_campaign=page-scripts" target="_blank" rel="noopener noreferrer">Upgrade to Pro and Unlock Page Scripts</a></div></li></ul></div></li><li role="group" id="wp-admin-bar-wpcode-admin-bar-info-add-new" class="wpcode-admin-bar-info-submenu wpcode-admin-bar-info-separator-top"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpcode-snippet-manager">+ Add Snippet</a></li><li role="group" id="wp-admin-bar-wpcode-admin-bar-info-settings" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/admin.php?page=wpcode-settings">הגדרות</a></li><li role="group" id="wp-admin-bar-wpcode-admin-bar-info-help" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://wpcode.com/docs/?utm_source=liteplugin&amp;utm_medium=admin-bar&amp;utm_campaign=help" target="_blank" rel="noopener noreferrer">Help Docs</a></li><li role="group" id="wp-admin-bar-wpcode-upgrade" class="wpcode-admin-bar-info-submenu"><a class="ab-item" role="menuitem" href="https://wpcode.com/lite/?utm_source=liteplugin&amp;utm_medium=admin-bar&amp;utm_campaign=upgrade-to-pro" target="_blank" rel="noopener noreferrer">Upgrade to Pro</a></li></ul></div></li><li role="group" id="wp-admin-bar-bapf_debug_bar" class="menupop"><div class="ab-item ab-empty-item" role="menuitem" aria-expanded="false"><img style="width:22px;height:22px;display:inline;" src="https://mit276.local/wp-content/plugins/woocommerce-ajax-filters/berocket/includes/ico.png" alt="">Product Filters</div><div class="ab-sub-wrapper"><ul role="menu" id="wp-admin-bar-bapf_debug_bar-default" class="ab-submenu"><li role="group" id="wp-admin-bar-bapf_debug_bar_content"><div class="ab-item ab-empty-item" role="menuitem"><div class="bapf_wp_admin_bar_replace">Filters cannot be detected</div></div></li></ul></div></li></ul><ul role="menu" id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu"><li role="group" id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" role="menuitem" aria-expanded="false" href="https://mit276.local/wp-admin/profile.php">שלום, <span class="display-name">נתנאל איתן</span><img alt="" src="https://secure.gravatar.com/avatar/b749eb66f62ed97f7baaa3c71d608ed34bf4c011751a5b4a5b2201b2f1ead057?s=26&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b749eb66f62ed97f7baaa3c71d608ed34bf4c011751a5b4a5b2201b2f1ead057?s=52&amp;d=mm&amp;r=g 2x" class="avatar avatar-26 photo" height="26" width="26" decoding="async"></a><div class="ab-sub-wrapper"><ul role="menu" aria-label="שלום, נתנאל איתן" id="wp-admin-bar-user-actions" class="ab-submenu"><li role="group" id="wp-admin-bar-user-info"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-admin/profile.php"><img alt="" src="https://secure.gravatar.com/avatar/b749eb66f62ed97f7baaa3c71d608ed34bf4c011751a5b4a5b2201b2f1ead057?s=64&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b749eb66f62ed97f7baaa3c71d608ed34bf4c011751a5b4a5b2201b2f1ead057?s=128&amp;d=mm&amp;r=g 2x" class="avatar avatar-64 photo" height="64" width="64" decoding="async"><span class="display-name">נתנאל איתן</span><span class="username">testihrt_admin</span><span class="display-name edit-profile">עריכת פרופיל</span></a></li><li role="group" id="wp-admin-bar-logout"><a class="ab-item" role="menuitem" href="https://mit276.local/wp-login.php?action=logout&amp;_wpnonce=c811e0f184">יציאה</a></li></ul></div></li><li role="group" id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1" role="menuitem"><form action="https://mit276.local/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150"><label for="adminbar-search" class="screen-reader-text">חיפוש</label><input type="submit" class="adminbar-button" value="חיפוש"></form></div></li></ul>			</div>
+		</div>
+
+		<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KLXPPMS3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->  <header>
+    <div class="top-line">
+      <div class="content-width">
+
+                  <div class="logo-wrap">
+            <a href="https://mit276.local">
+              <img width="166" height="76" src="https://mit276.local/wp-content/uploads/2024/03/logo.svg" class="attachment-full size-full" alt="" decoding="async">            </a>
+          </div>
+        
+        <div class="top-menu">
+
+          <ul><li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-24"><a href="https://mit276.local/">עמוד הבית</a></li>
+<li id="menu-item-416" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-416"><a href="https://mit276.local/product-category/%d7%9e%d7%aa%d7%a0%d7%a4%d7%97%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">מתנפחים</a></li>
+<li id="menu-item-561" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-561"><a href="https://mit276.local/product-category/%d7%9e%d7%92%d7%9c%d7%a9%d7%95%d7%aa-%d7%9e%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">מתנפחי מים</a></li>
+<li id="menu-item-563" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-563"><a href="https://mit276.local/product-category/%d7%93%d7%95%d7%9b%d7%a0%d7%99-%d7%9e%d7%96%d7%95%d7%9f-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">דוכני מזון</a></li>
+<li id="menu-item-562" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-562"><a href="https://mit276.local/product-category/%d7%92%d7%a0%d7%a8%d7%98%d7%95%d7%a8%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">גנרטורים וציוד נלווה</a></li>
+<li id="menu-item-25" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-25"><a href="https://mit276.local/blog/">בלוג</a></li>
+</ul>
+          <div class="open-menu">
+            <a href="#">
+              <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/menu.svg" alt="">
+            </a>
+          </div>
+          <div class="btn-wrap">
+            <a href="#check-popup" class="fancybox-check"><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-1.svg" alt=""></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu-responsive" id="menu-responsive" style="display: none">
+    <div class="top">
+      <div class="close-menu">
+        <a href="#"><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-close.svg" alt=""></a>
+      </div>
+    </div>
+    <div class="wrap">
+
+              <div class="logo-wrap">
+          <a href="https://mit276.local">
+            <img width="166" height="76" src="https://mit276.local/wp-content/uploads/2024/03/logo.svg" class="attachment-full size-full" alt="" decoding="async">          </a>
+        </div>
+      
+      <nav class="mob-menu">
+
+        <ul><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-24"><a href="https://mit276.local/">עמוד הבית</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-416"><a href="https://mit276.local/product-category/%d7%9e%d7%aa%d7%a0%d7%a4%d7%97%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">מתנפחים</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-561"><a href="https://mit276.local/product-category/%d7%9e%d7%92%d7%9c%d7%a9%d7%95%d7%aa-%d7%9e%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">מתנפחי מים</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-563"><a href="https://mit276.local/product-category/%d7%93%d7%95%d7%9b%d7%a0%d7%99-%d7%9e%d7%96%d7%95%d7%9f-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">דוכני מזון</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-562"><a href="https://mit276.local/product-category/%d7%92%d7%a0%d7%a8%d7%98%d7%95%d7%a8%d7%99%d7%9d-%d7%9c%d7%94%d7%a9%d7%9b%d7%a8%d7%94/">גנרטורים וציוד נלווה</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-25"><a href="https://mit276.local/blog/">בלוג</a></li>
+</ul>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+
+
+
+					
+			
+
+<section class="product-info">
+    <div class="bg">
+        <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/after-7.svg" alt="">
+    </div>
+    <div class="content-width">
+
+        <div class="woocommerce-notices-wrapper"></div>        <div class="content">
+
+
+            <div class="mob-title">
+                <h2 class="title">מגה סלייד דקלים</h2>
+            </div>
+
+            
+<div class="slider-wrap">
+    <div class="swiper product-slider swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl swiper-backface-hidden">
+        <div class="swiper-wrapper" id="swiper-wrapper-dbb3641799483e8a" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
+                        <div class="swiper-slide swiper-slide-active" style="width: 653px;" role="group" aria-label="1 / 2">
+                <a href="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg" data-fancybox="gallery">
+                    <img width="1024" height="768" src="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-1024x768.jpg" class="attachment-large size-large" alt="" decoding="async" fetchpriority="high" srcset="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-1024x768.jpg 1024w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-600x450.jpg 600w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-300x225.jpg 300w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-768x576.jpg 768w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-1536x1152.jpg 1536w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg 2048w" sizes="(max-width: 1024px) 100vw, 1024px">                </a>
+            </div>
+                                            <div class="swiper-slide swiper-slide-next" style="width: 653px;" role="group" aria-label="2 / 2">
+                        <a href="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים.jpg" data-fancybox="gallery">
+                            <img src="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-1024x768.jpg" alt="">
+                        </a>
+                    </div>
+                    
+        </div>
+        <div class="swiper-button-next product-next product-btn" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-dbb3641799483e8a" aria-disabled="false"><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-7.svg" alt=""></div>
+        <div class="swiper-button-prev product-prev product-btn swiper-button-disabled" tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-dbb3641799483e8a" aria-disabled="true"><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-7.svg" alt=""></div>
+    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+</div>
+
+
+
+
+
+            <div class="text-wrap">
+                <h1>מגה סלייד דקלים</h1>
+                <ul class="list-info">
+                    <li><span class="woocommerce-Price-amount amount"><bdi>700.00&nbsp;<span class="woocommerce-Price-currencySymbol">₪</span></bdi></span></li>
+                    <li>הסדנה 1, כפר סבא</li>
+                </ul>
+                                <div id="datepicker-container"><div class="air-datepicker -inline-"><i class="air-datepicker--pointer"></i><div class="air-datepicker--navigation"><nav class="air-datepicker-nav"><div class="air-datepicker-nav--action" data-action="prev"><svg><path d="M 17,12 l -5,5 l 5,5"></path></svg></div><div class="air-datepicker-nav--title">יולי, <i>2025</i></div><div class="air-datepicker-nav--action" data-action="next"><svg><path d="M 14,12 l 5,5 l -5,5"></path></svg></div></nav></div><div class="air-datepicker--content"><div class="air-datepicker-body -days-"><div class="air-datepicker-body--day-names"><div class="air-datepicker-body--day-name -weekend-" data-day-index="0">א</div><div class="air-datepicker-body--day-name" data-day-index="1">ב</div><div class="air-datepicker-body--day-name" data-day-index="2">ג</div><div class="air-datepicker-body--day-name" data-day-index="3">ד</div><div class="air-datepicker-body--day-name" data-day-index="4">ה</div><div class="air-datepicker-body--day-name" data-day-index="5">ו</div><div class="air-datepicker-body--day-name -weekend-" data-day-index="6">ש</div></div><div class="air-datepicker-body--cells -days-"><div class="air-datepicker-cell -day- -current- -weekend- -other-month- -disabled-" data-year="2025" data-month="5" data-date="29">29</div><div class="air-datepicker-cell -day- -min-date- -other-month- -selected- -range-from-" data-year="2025" data-month="5" data-date="30">30</div><div class="air-datepicker-cell -day- -in-range-" data-year="2025" data-month="6" data-date="1">1</div><div class="air-datepicker-cell -day- -selected- -range-to-" data-year="2025" data-month="6" data-date="2">2</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="3">3</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="4">4</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="5">5</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="6">6</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="7">7</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="8">8</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="9">9</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="10">10</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="11">11</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="12">12</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="13">13</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="14">14</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="15">15</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="16">16</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="17">17</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="18">18</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="19">19</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="20">20</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="21">21</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="22">22</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="23">23</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="24">24</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="25">25</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="26">26</div><div class="air-datepicker-cell -day- -weekend-" data-year="2025" data-month="6" data-date="27">27</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="28">28</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="29">29</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="30">30</div><div class="air-datepicker-cell -day-" data-year="2025" data-month="6" data-date="31">31</div><div class="air-datepicker-cell -day- -other-month-" data-year="2025" data-month="7" data-date="1">1</div><div class="air-datepicker-cell -day- -weekend- -other-month-" data-year="2025" data-month="7" data-date="2">2</div></div></div></div></div></div>
+                <br>
+                <style>
+                    #datepicker-container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 20px 0;
+                    }
+                    .air-datepicker {
+                        --adp-font-size: 14px;
+                        --adp-day-name-color: #333;
+                        --adp-cell-background-color-selected: #4CAF50;
+                        --adp-cell-background-color-selected-hover: #45a049;
+                    }
+                </style>
+                <script>
+                jQuery(document).ready(function($) {
+                    console.log('Initializing rental calendar...');
+                    
+                    // Check if AirDatepicker is available
+                    if (typeof AirDatepicker === 'undefined') {
+                        console.error('AirDatepicker is not loaded!');
+                        return;
+                    }
+
+                    const initialStock = 8;
+                    const bookedDates = [];
+                    console.log('Loaded booked dates:', bookedDates);
+                    console.log('Initial stock:', initialStock);
+
+                    // Track reservation counts per date
+                    const reservationCounts = {};
+                    
+                    // Process the booked dates to count reservations
+                    bookedDates.forEach(dateStr => {
+                        if (!reservationCounts[dateStr]) {
+                            reservationCounts[dateStr] = 0;
+                        }
+                        reservationCounts[dateStr]++;
+                    });
+
+                    function formatDate(date) {
+                        if (!(date instanceof Date) || isNaN(date)) {
+                            console.error('Invalid date in formatDate:', date);
+                            return '';
+                        }
+                        
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                        
+                        return `${day}.${month}.${year}`;
+                    }
+
+
+                    const formattedBookedDates = bookedDates.flatMap(dateRange => {
+                        if (!dateRange || typeof dateRange !== 'string' || !dateRange.includes(' - ')) {
+                            return [];
+                        }
+
+                        const [startDate, endDate] = dateRange.split(' - ');
+                        const dates = [];
+                        
+                        try {
+                            const startParts = startDate.split('.');
+                            const endParts = endDate.split('.');
+                            
+                            let currentDate = new Date(`${startParts[2]}-${startParts[1]}-${startParts[0]}`);
+                            const end = new Date(`${endParts[2]}-${endParts[1]}-${endParts[0]}`);
+                            
+                            if (isNaN(currentDate.getTime()) || isNaN(end.getTime())) {
+                                console.error('Invalid date range:', { startDate, endDate });
+                                return [];
+                            }
+                            
+                            while (currentDate <= end) {
+                                dates.push(formatDate(currentDate));
+                                currentDate.setDate(currentDate.getDate() + 1);
+                            }
+                        } catch (error) {
+                            console.error('Error processing date range:', error);
+                        }
+                        
+                        return dates;
+                    });
+                    
+                    console.log('Formatted booked dates:', formattedBookedDates);
+
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    
+                    console.log('Initializing datepicker with min date:', tomorrow);
+                    
+                    try {
+                        const datepicker = new AirDatepicker('#datepicker-container', {
+                            inline: true,
+                            range: true,
+                            minDate: tomorrow,
+                            locale: {
+                                days: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
+                                daysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+                                daysMin: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+                                months: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+                                monthsShort: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
+                                today: 'היום',
+                                clear: 'נקה',
+                                dateFormat: 'dd.MM.yyyy',
+                                timeFormat: 'HH:mm',
+                                firstDay: 0,
+                            weekends: [6] // Only block Saturdays as weekends
+                            },
+                            onSelect({date, formattedDate}) {
+                                try {
+                                    console.log('Date selected:', { date, formattedDate });
+                                    
+                                    if (date) {
+                                        // Check if any date in the range is fully booked
+                                        let isRangeValid = true;
+                                        const selectedDates = [];
+                                        
+                                        // For range selection
+                                        if (date.length === 2) {
+                                            const start = new Date(date[0]);
+                                            const end = new Date(date[1]);
+                                            
+                                            // Check each day in the range
+                                            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                                                const formattedDate = formatDate(d);
+                                                const count = reservationCounts[formattedDate] || 0;
+                                                
+                                                if (count >= initialStock) {
+                                                    isRangeValid = false;
+                                                    alert('One or more selected dates are fully booked. Please select different dates.');
+                                                    return false;
+                                                }
+                                                selectedDates.push(formattedDate);
+                                            }
+                                            
+                                            const diffTime = Math.abs(date[1] - date[0]);
+                                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Include both start and end dates
+                                            const dateRange = formattedDate.join(' - ');
+                                            
+                                            if (isRangeValid) {
+                                                $('#rental_dates').val(dateRange);
+                                                $('[name="quantity"]').val(diffDays);
+                                                $('.btn-wrap button').prop('disabled', false);
+                                                console.log('Date range selected:', dateRange, 'Days:', diffDays);
+                                            }
+                                        } 
+                                        // For single day selection
+                                        else if (date.length === 1) {
+                                            const formattedDate = formatDate(date[0]);
+                                            const count = reservationCounts[formattedDate] || 0;
+                                            
+                                            if (count >= initialStock) {
+                                                alert('This date is fully booked. Please select a different date.');
+                                                return false;
+                                            }
+                                            
+                                            $('#rental_dates').val(formattedDate);
+                                            $('[name="quantity"]').val(1);
+                                            $('.btn-wrap button').prop('disabled', false);
+                                            console.log('Single day selected:', formattedDate);
+                                        }
+                                    } else {
+                                        console.log('No date selected');
+                                        $('.btn-wrap button').prop('disabled', true);
+                                    }
+                                } catch (error) {
+                                    console.error('Error in date selection:', error);
+                                }
+                            },
+                            onRenderCell({date, cellType}) {
+                                try {
+                                    if (cellType === 'day') {
+                                        const formattedDate = formatDate(date);
+                                        const reservationCount = reservationCounts[formattedDate] || 0;
+                                        const isFullyBooked = reservationCount >= initialStock;
+                                        const isPartiallyBooked = reservationCount > 0 && !isFullyBooked;
+                                        
+                                        if (isFullyBooked) {
+                                            console.log('Date is fully booked:', formattedDate, 'Reservations:', reservationCount);
+                                            return {
+                                                disabled: true,
+                                                classes: 'is-fully-booked',
+                                                title: 'No availability - fully booked'
+                                            };
+                                        } else if (isPartiallyBooked) {
+                                            console.log('Date is partially booked:', formattedDate, 'Reservations:', reservationCount, 'of', initialStock);
+                                            return {
+                                                disabled: false,
+                                                classes: 'is-partially-booked',
+                                                title: `Limited availability (${initialStock - reservationCount} left)`
+                                            };
+                                        }
+                                    }
+                                } catch (error) {
+                                    console.error('Error rendering cell:', error);
+                                }
+                                
+                                return {};
+                            },
+                            onShow(isFinished) {
+                                if (isFinished) {
+                                    console.log('Datepicker shown');
+                                }
+                            },
+                            onHide(isFinished) {
+                                if (isFinished) {
+                                    console.log('Datepicker hidden');
+                                }
+                            }
+                        });
+                        
+                        console.log('Datepicker initialized successfully');
+                        
+                        // Store datepicker instance for debugging
+                        window.rentalDatepicker = datepicker;
+                        
+                    } catch (error) {
+                        console.error('Error initializing datepicker:', error);
+                    }
+                });
+
+
+
+
+                </script>
+                                <p class="stock in-stock">8 במלאי</p>
+
+	<div class="mitnafun-stock-debug" style="margin: 15px 0; padding: 10px; background: #f8f8f8; border: 1px solid #ddd;"><h4>Stock Information</h4><ul style="list-style: none; padding: 0; margin: 0;"><li><strong>Current Stock:</strong> 8</li><li><strong>Initial Stock:</strong> 2</li><li><strong>Total Stock:</strong> 0</li></ul></div>
+	<form class="cart" action="https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/" method="post" enctype="multipart/form-data">
+		<div class="mitnafun-stock-debug" style="margin: 15px 0; padding: 10px; background: #f8f8f8; border: 1px solid #ddd;"><h4>Stock Information</h4><ul style="list-style: none; padding: 0; margin: 0;"><li><strong>Current Stock:</strong> 8</li><li><strong>Initial Stock:</strong> 2</li><li><strong>Total Stock:</strong> 0</li></ul></div><input type="hidden" id="rental_dates" name="rental_dates" class="date-picker-field" value="30.06.2025 - 02.07.2025">
+        <div style="display: none">
+		<div class="quantity">
+		<label class="screen-reader-text" for="quantity_6860fab7e326d">כמות של מגה סלייד דקלים</label>
+	<input type="number" id="quantity_6860fab7e326d" class="input-text qty text" name="quantity" value="1" aria-label="כמות המוצר" size="4" min="1" max="8" step="1" placeholder="" inputmode="numeric" autocomplete="off">
+	</div>
+        </div>
+        <div class="btn-wrap">
+
+		    <button type="submit" name="add-to-cart" value="584" class="btn-default btn-blue btn-mini">הוסף לסל</button>
+		    <button type="submit" name="add-to-cart" value="584" class="btn-redirect btn-default btn-yellow btn-mini">הזמן</button>
+        </div>
+		        <input type="hidden" name="redirect" value="">
+	</form>
+
+	
+
+<!--                <h6 class="sub-title">תיאור המתקן:</h6>-->
+                
+
+
+            </div>
+        </div><div class="lmp_load_more_button br_lmp_button_settings" style="display: none;"><a class="lmp_button link-wrap" style="font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" href="#load_next_page">טען עוד</a></div>
+    </div>
+</section>
+
+
+    <section class="item-2x-text">
+        <div class="content-width">
+            <h2 class="title-h3">פרטי המוצר</h2>
+            <div class="content">
+
+                
+                    <div class="item berocket_lmp_first_on_page" data-url="https://mit276.local/product/מגה-סלייד-2-5-מ/">
+
+                                                    <h6 class="title">תיאור המתקן:</h6>
+                                                
+                        <p>מגה סלייד מגלשת מים גבוהה במיוחד! מגלשה גבוהה במיוחד 2.5 מטרים שתרענן לכם את הקיץ. מתנפח מים גדול ומרשים ביופיו מתאים למגוון רב של גילאים ויהפוך כל אירוע לחוויה מהנה. המתקן עשוי בד חזק במיוחד ומסוגל להכיל מספר רב של ילדים.</p>
+<p>בקצה המתנפח ישנה בריכה, אותה ממלאים בתחילת האירוע כך שתהיה נחיתה רכה ונעימה.</p>
+<p><strong>חשוב לוודא!</strong> מגלשות מים מצריכות חשמל ומקור מים קבוע עם צינור גינה פשוט, לפני ההזמנה בדקו שיש חיבורים אלו. את צינור הגינה ניתן לחבר באחת הלולאות בתחילת המגלשה.</p>
+                        
+                    </div>
+
+                
+                    <div class="item">
+
+                                                    <h6 class="title">לאיזה גילאים מתאים?</h6>
+                                                
+                        <p>המתקן מתאים עד גיל 16</p>
+                        
+                    </div>
+
+                
+                    <div class="item">
+
+                                                    <h6 class="title">כמה ילדים יכולים להיות במתקן באותו הזמן?</h6>
+                                                
+                        <p>מגלשת המים יכולה להכיל עד 3 ילדים באותו הזמן. הילדים מתחלפים כל הזמן.</p>
+                        
+                    </div>
+
+                
+                    <div class="item">
+
+                                                    <h6 class="title">כמה ילדים באירוע?</h6>
+                                                
+                        <p>למתנפח מגלשת המים מגה סלייד אנו ממליצים יחס של עד 15 ילדים באירוע,<br>
+הילדים יתחלפו במהלך הזמן.</p>
+                        
+                    </div>
+
+                
+                    <div class="item">
+
+                                                    <h6 class="title">מידות:</h6>
+                                                
+                        <p>אורך- 9 מטרים<br>
+רוחב-4&nbsp; מטרים<br>
+גובה מגלשה-2.5 מטרים<br>
+גובה מתנפח- 4 מטרים</p>
+<p>משקל: 70 ק"ג</p>
+                        
+                    </div>
+
+                
+                    <div class="item">
+
+                                                    <h6 class="title">עם איזה רכב להגיע?</h6>
+                                                
+                        <p data-start="42" data-end="249"><strong data-start="42" data-end="53">שימו לב</strong> – מדובר במתקן גדול!<br data-start="73" data-end="76">כדי לאסוף אותו תצטרכו להגיע עם רכב מתאים כמו <strong data-start="121" data-end="152">ג'יפ 7 מקומות, טנדר או נגרר</strong> (בלי כסאות ילדים ובלי ציוד מיותר).<br data-start="187" data-end="190">בנוסף, חשוב שתגיעו עם <strong data-start="212" data-end="246" data-is-only-node="">שני אנשים שיכולים לעזור להעמיס</strong>.</p>
+<p data-start="251" data-end="268">תודה על ההבנה! ????</p>
+                        
+                    </div>
+
+                
+            </div><div class="lmp_load_more_button br_lmp_button_settings" style="display: none;"><a class="lmp_button link-wrap" style="font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" href="#load_next_page">טען עוד</a></div>
+        </div>
+    </section>
+
+
+<section class="title-border-block">
+    <div class="bg">
+        <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/after-8.svg" alt="" class="img-1">
+        <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/after-9.svg" alt="" class="img-2">
+        <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/after-10.svg" alt="" class="img-3">
+    </div>
+    <div class="content-width">
+
+                    <h2 class="title-h3">מדיניות ביטולים</h2>
+                
+        <div class="content">
+
+                            <div class="text"><p>ביטול הזמנה ו/או השכרה של ציוד תעשה <a href="#">עד 72</a> <a href="#">שעות</a> לפני תקופת ההשכרה, ובלבד שניתן אישור על ידי מתנפחים ונהנים.</p>
+<p>למען הסר ספק, לא יוחזר תשלום בעת ביטול הזמנה או השכרה <a href="#">במסגרת 72</a> השעות לפני תקופת ההשכרה.</p>
+</div>
+            
+            <div class="img-wrap">
+
+                                    <figure>
+                                                    <img src="https://mit276.local/wp-content/uploads/2024/04/icon-8.svg">
+                                            </figure>
+                
+                                    <div class="wrap">
+
+                                                    <p>יש ליצור קשר בטלפון </p>
+                                                
+                                                    <p>
+                                <a href="tel:+0505544516">050-5544516</a>
+                            </p>
+                                                
+
+                    </div>
+                
+            </div>
+        </div><div class="lmp_load_more_button br_lmp_button_settings" style="display: none;"><a class="lmp_button link-wrap" style="font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" href="#load_next_page">טען עוד</a></div>
+    </div>
+</section>
+
+
+
+		
+
+
+</main>
+
+<footer>
+  <div class="content-width">
+    <div class="content">
+      <div class="item item-1">
+        <ul>
+
+                      <li>
+              <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-f1.svg" alt="">
+              <a href="#" target="_blank">הסדנה 1, כפר סבא ליד קניון G</a>
+            </li>
+          
+                      <li>
+              <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-f2.svg" alt="">
+              <a href="tel:+0505544516">050-5544516</a>
+            </li>
+          
+                      <li>
+              <img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-f3.svg" alt="">
+              <a href="mailto:Mitnafun@gmail.com">Mitnafun@gmail.com</a>
+            </li>
+          
+        </ul>
+      </div>
+      <div class="item item-2">
+
+        
+          <ul>
+
+            
+              
+              <li>
+
+                                  <img width="21" height="21" src="https://mit276.local/wp-content/uploads/2024/03/icon-f5.svg" class="attachment-full size-full" alt="" decoding="async" loading="lazy">                
+                                  <a href="https://www.facebook.com/mitnafun" target="_blank">Mitnafun</a>
+                
+              </li>
+            
+          
+        </ul>
+
+      
+    </div>
+    <div class="item item-3">
+
+      <ul><li id="menu-item-39" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-39"><a rel="privacy-policy" href="https://mit276.local/privacy-policy/">מדיניות פרטיות</a></li>
+</ul>
+    </div>
+    <div class="item item-4">
+
+      
+        <ul>
+
+          
+                          <li>
+                <p>שעות פעילות לאיסוף והחזרת ציוד:</p>
+              </li>
+            
+          
+                          <li>
+                <p>ראשון עד חמישי: 08:00-15:00</p>
+              </li>
+            
+          
+                          <li>
+                <p>שישי:  08:00-12:00</p>
+              </li>
+            
+          
+                          <li>
+                <p>ניתן לשנות בתיאום מראש</p>
+              </li>
+            
+          
+        </ul>
+
+      
+    </div>
+  </div><div class="lmp_load_more_button br_lmp_button_settings" style="display: none;"><a class="lmp_button link-wrap" style="font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" href="#load_next_page">טען עוד</a></div>
+
+      <div class="bottom">
+      <p>כל הזכויות שמורות למתנפחים ונהנים ©2024</p>
+    </div>
+  
+</div>
+</footer>
+
+<div id="default-popup " style="display:none;">
+  <div class="popup-main">
+  </div>
+</div>
+
+
+<div id="check-popup" class="check-popup" style="display: none;" dir="rtl">
+    <div class="main">
+        <h2 class="title">ההזמנה שלך</h2>
+        <div class="close-wrap">
+            <a href="#" class="close-check"><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/icon-19.svg" alt=""></a>
+        </div>
+        <div class="content">
+
+            
+
+ 		
+                <div class="item">
+                    <figure>
+                                                    <a href="https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/">
+                                <img width="300" height="300" src="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-300x300.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="" decoding="async" loading="lazy" srcset="https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-300x300.jpg 300w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-100x100.jpg 100w, https://mit276.local/wp-content/uploads/2024/06/מגלשת-מים-דקלים-150x150.jpg 150w" sizes="auto, (max-width: 300px) 100vw, 300px">                            </a>
+                                            </figure>
+                    <div class="text">
+                        <div class="info">
+                            <p class="name"><a href="https://mit276.local/product/%d7%9e%d7%92%d7%94-%d7%a1%d7%9c%d7%99%d7%99%d7%93-2-5-%d7%9e/">מגה סלייד דקלים</a></p>
+                            <p>06.07.2025 - 08.07.2025</p>
+
+                        </div>
+                        <div class="cost">
+                            <p><span class="woocommerce-Price-amount amount"><bdi>700.00&nbsp;<span class="woocommerce-Price-currencySymbol">₪</span></bdi></span> x 3</p>
+                        </div>
+                        <div class="delete">
+                            <a href="https://mit276.local/basket/?remove_item=3a44eb6fa271e43cdf575e2204e2f1ef&amp;_wpnonce=656980aab6" class="remove remove_from_cart_button" aria-label="להסיר את מגה סלייד דקלים מעגלת הקניות" data-product_id="584" data-cart_item_key="3a44eb6fa271e43cdf575e2204e2f1ef" data-product_sku=""><img src="https://mit276.local/wp-content/themes/mitnafun_uproR/img/del.svg" alt=""></a>                        </div>
+                    </div>
+                </div>
+
+
+ 				
+
+
+                <div class="btn-wrap">
+            <a href="https://mit276.local/checkout/" class="btn-default btn-blue btn-mini">להזמנה</a>
+        </div>
+        
+
+
+
+        </div><div class="lmp_load_more_button br_lmp_button_settings" style="display: none;"><a class="lmp_button link-wrap" style="font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" href="#load_next_page">טען עוד</a></div>
+    </div>
+</div>
+
+<script>//<![CDATA[\nwindow.rentalReservedData = {"product_id":584,"product_name":"\u05de\u05d2\u05d4 \u05e1\u05dc\u05d9\u05d9\u05d3 \u05d3\u05e7\u05dc\u05d9\u05dd","initial_stock":2,"current_stock":8,"current_date":"2025-06-29 00:00:00","reservations":[{"start":"30.06.2025","end":"03.07.2025","formatted_start":"2025-06-30","formatted_end":"2025-07-03","status":"wc-processing","order_id":"941","item_id":"417","quantity":3,"raw_dates":"30.06.2025 - 03.07.2025"},{"start":"30.06.2025","end":"03.07.2025","formatted_start":"2025-06-30","formatted_end":"2025-07-03","status":"wc-processing","order_id":"941","item_id":"417","quantity":3,"raw_dates":"30.06.2025 - 03.07.2025"},{"start":"27.06.2025","end":"29.06.2025","formatted_start":"2025-06-27","formatted_end":"2025-06-29","status":"wc-processing","order_id":"910","item_id":"382","quantity":1,"raw_dates":"27.06.2025 - 29.06.2025"},{"start":"27.06.2025","end":"29.06.2025","formatted_start":"2025-06-27","formatted_end":"2025-06-29","status":"wc-processing","order_id":"910","item_id":"382","quantity":1,"raw_dates":"27.06.2025 - 29.06.2025"},{"start":"01.06.2025","end":"02.06.2025","formatted_start":"2025-06-01","formatted_end":"2025-06-02","status":"wc-processing","order_id":"873","item_id":"353","quantity":1,"raw_dates":"01.06.2025 - 02.06.2025"},{"start":"14.06.2025","end":"15.06.2025","formatted_start":"2025-06-14","formatted_end":"2025-06-15","status":"wc-processing","order_id":"872","item_id":"351","quantity":1,"raw_dates":"14.06.2025 - 15.06.2025"},{"start":"11.05.2025","end":"16.05.2025","formatted_start":"2025-05-11","formatted_end":"2025-05-16","status":"wc-on-hold","order_id":"859","item_id":"338","quantity":1,"raw_dates":"11.05.2025 - 16.05.2025"},{"start":"12.09.2024","end":"13.09.2024","formatted_start":"2024-09-12","formatted_end":"2024-09-13","status":"wc-processing","order_id":"693","item_id":"133","quantity":1,"raw_dates":"12.09.2024 - 13.09.2024"},{"start":"26.08.2024","end":"27.08.2024","formatted_start":"2024-08-26","formatted_end":"2024-08-27","status":"wc-processing","order_id":"673","item_id":"94","quantity":1,"raw_dates":"26.08.2024 - 27.08.2024"},{"start":"19.07.2024","end":"20.07.2024","formatted_start":"2024-07-19","formatted_end":"2024-07-20","status":"wc-processing","order_id":"608","item_id":"62","quantity":1,"raw_dates":"19.07.2024 - 20.07.2024"},{"start":"05.07.2024","end":"06.07.2024","formatted_start":"2024-07-05","formatted_end":"2024-07-06","status":"wc-processing","order_id":"599","item_id":"58","quantity":1,"raw_dates":"05.07.2024 - 06.07.2024"}],"date_availability":{"2025-06-29":{"reserved":1,"available":1,"is_available":true,"is_fully_booked":false,"initial_stock":2},"2025-06-30":{"reserved":3,"available":0,"is_available":false,"is_fully_booked":true,"initial_stock":2},"2025-07-01":{"reserved":3,"available":0,"is_available":false,"is_fully_booked":true,"initial_stock":2},"2025-07-02":{"reserved":3,"available":0,"is_available":false,"is_fully_booked":true,"initial_stock":2},"2025-07-03":{"reserved":3,"available":0,"is_available":false,"is_fully_booked":true,"initial_stock":2}},"summary":{"total_reserved_dates":11,"fully_booked_dates":4,"available_dates":1}};\nconsole.groupCollapsed("Stock Debugger: Reservation Data");\nconsole.log({
+    "product_id": 584,
+    "product_name": "\u05de\u05d2\u05d4 \u05e1\u05dc\u05d9\u05d9\u05d3 \u05d3\u05e7\u05dc\u05d9\u05dd",
+    "initial_stock": 2,
+    "current_stock": 8,
+    "current_date": "2025-06-29 00:00:00",
+    "reservations": [
+        {
+            "start": "30.06.2025",
+            "end": "03.07.2025",
+            "formatted_start": "2025-06-30",
+            "formatted_end": "2025-07-03",
+            "status": "wc-processing",
+            "order_id": "941",
+            "item_id": "417",
+            "quantity": 3,
+            "raw_dates": "30.06.2025 - 03.07.2025"
+        },
+        {
+            "start": "30.06.2025",
+            "end": "03.07.2025",
+            "formatted_start": "2025-06-30",
+            "formatted_end": "2025-07-03",
+            "status": "wc-processing",
+            "order_id": "941",
+            "item_id": "417",
+            "quantity": 3,
+            "raw_dates": "30.06.2025 - 03.07.2025"
+        },
+        {
+            "start": "27.06.2025",
+            "end": "29.06.2025",
+            "formatted_start": "2025-06-27",
+            "formatted_end": "2025-06-29",
+            "status": "wc-processing",
+            "order_id": "910",
+            "item_id": "382",
+            "quantity": 1,
+            "raw_dates": "27.06.2025 - 29.06.2025"
+        },
+        {
+            "start": "27.06.2025",
+            "end": "29.06.2025",
+            "formatted_start": "2025-06-27",
+            "formatted_end": "2025-06-29",
+            "status": "wc-processing",
+            "order_id": "910",
+            "item_id": "382",
+            "quantity": 1,
+            "raw_dates": "27.06.2025 - 29.06.2025"
+        },
+        {
+            "start": "01.06.2025",
+            "end": "02.06.2025",
+            "formatted_start": "2025-06-01",
+            "formatted_end": "2025-06-02",
+            "status": "wc-processing",
+            "order_id": "873",
+            "item_id": "353",
+            "quantity": 1,
+            "raw_dates": "01.06.2025 - 02.06.2025"
+        },
+        {
+            "start": "14.06.2025",
+            "end": "15.06.2025",
+            "formatted_start": "2025-06-14",
+            "formatted_end": "2025-06-15",
+            "status": "wc-processing",
+            "order_id": "872",
+            "item_id": "351",
+            "quantity": 1,
+            "raw_dates": "14.06.2025 - 15.06.2025"
+        },
+        {
+            "start": "11.05.2025",
+            "end": "16.05.2025",
+            "formatted_start": "2025-05-11",
+            "formatted_end": "2025-05-16",
+            "status": "wc-on-hold",
+            "order_id": "859",
+            "item_id": "338",
+            "quantity": 1,
+            "raw_dates": "11.05.2025 - 16.05.2025"
+        },
+        {
+            "start": "12.09.2024",
+            "end": "13.09.2024",
+            "formatted_start": "2024-09-12",
+            "formatted_end": "2024-09-13",
+            "status": "wc-processing",
+            "order_id": "693",
+            "item_id": "133",
+            "quantity": 1,
+            "raw_dates": "12.09.2024 - 13.09.2024"
+        },
+        {
+            "start": "26.08.2024",
+            "end": "27.08.2024",
+            "formatted_start": "2024-08-26",
+            "formatted_end": "2024-08-27",
+            "status": "wc-processing",
+            "order_id": "673",
+            "item_id": "94",
+            "quantity": 1,
+            "raw_dates": "26.08.2024 - 27.08.2024"
+        },
+        {
+            "start": "19.07.2024",
+            "end": "20.07.2024",
+            "formatted_start": "2024-07-19",
+            "formatted_end": "2024-07-20",
+            "status": "wc-processing",
+            "order_id": "608",
+            "item_id": "62",
+            "quantity": 1,
+            "raw_dates": "19.07.2024 - 20.07.2024"
+        },
+        {
+            "start": "05.07.2024",
+            "end": "06.07.2024",
+            "formatted_start": "2024-07-05",
+            "formatted_end": "2024-07-06",
+            "status": "wc-processing",
+            "order_id": "599",
+            "item_id": "58",
+            "quantity": 1,
+            "raw_dates": "05.07.2024 - 06.07.2024"
+        }
+    ],
+    "date_availability": {
+        "2025-06-29": {
+            "reserved": 1,
+            "available": 1,
+            "is_available": true,
+            "is_fully_booked": false,
+            "initial_stock": 2
+        },
+        "2025-06-30": {
+            "reserved": 3,
+            "available": 0,
+            "is_available": false,
+            "is_fully_booked": true,
+            "initial_stock": 2
+        },
+        "2025-07-01": {
+            "reserved": 3,
+            "available": 0,
+            "is_available": false,
+            "is_fully_booked": true,
+            "initial_stock": 2
+        },
+        "2025-07-02": {
+            "reserved": 3,
+            "available": 0,
+            "is_available": false,
+            "is_fully_booked": true,
+            "initial_stock": 2
+        },
+        "2025-07-03": {
+            "reserved": 3,
+            "available": 0,
+            "is_available": false,
+            "is_fully_booked": true,
+            "initial_stock": 2
+        }
+    },
+    "summary": {
+        "total_reserved_dates": 11,
+        "fully_booked_dates": 4,
+        "available_dates": 1
+    }
+});\nconsole.groupEnd();\n//]]></script><div id="error"><p class="wpdberror"><strong>שגיאה במסד הנתונים של וורדפרס:</strong> [Unknown column 'o.date_created' in 'field list']<br><code>SELECT 
+                oi.order_id,
+                o.status,
+                oim.meta_value as rental_dates,
+                oim_qty.meta_value as quantity,
+                o.date_created
+            FROM wp_woocommerce_order_items oi
+            INNER JOIN wp_wc_orders o ON oi.order_id = o.id
+            INNER JOIN wp_woocommerce_order_itemmeta oim ON oi.order_item_id = oim.order_item_id
+            INNER JOIN wp_woocommerce_order_itemmeta oim_pid ON oi.order_item_id = oim_pid.order_item_id
+            LEFT JOIN wp_woocommerce_order_itemmeta oim_qty ON oi.order_item_id = oim_qty.order_item_id AND oim_qty.meta_key = '_qty'
+            WHERE oim.meta_key = 'Rental Dates'
+            AND oim_pid.meta_key = '_product_id' 
+            AND oim_pid.meta_value = 584
+            AND o.status IN ('wc-processing', 'wc-completed', 'wc-rental-confirmed')
+            ORDER BY o.date_created DESC
+            LIMIT 10</code></p></div><div id="error"><p class="wpdberror"><strong>שגיאה במסד הנתונים של וורדפרס:</strong> [Unknown column 'o.date_created' in 'field list']<br><code>SELECT 
+                oi.order_id,
+                o.status,
+                oim.meta_value as rental_dates,
+                oim_qty.meta_value as quantity,
+                o.date_created
+            FROM wp_woocommerce_order_items oi
+            INNER JOIN wp_wc_orders o ON oi.order_id = o.id
+            INNER JOIN wp_woocommerce_order_itemmeta oim ON oi.order_item_id = oim.order_item_id
+            INNER JOIN wp_woocommerce_order_itemmeta oim_pid ON oi.order_item_id = oim_pid.order_item_id
+            LEFT JOIN wp_woocommerce_order_itemmeta oim_qty ON oi.order_item_id = oim_qty.order_item_id AND oim_qty.meta_key = '_qty'
+            WHERE oim.meta_key = 'Rental Dates'
+            AND oim_pid.meta_key = '_product_id' 
+            AND oim_pid.meta_value = 584
+            AND o.status IN ('wc-processing', 'wc-completed', 'wc-rental-confirmed')
+            ORDER BY o.date_created DESC
+            LIMIT 10</code></p></div><div id="stock-debugger" class="stock-debugger-panel"><div class="debug-header"><h3>🛠 Stock Debugger</h3><button class="debug-close">×</button></div><div class="debug-content"><div class="debug-section"><h4>Basic Information</h4><div class="debug-grid"><div class="debug-item"><span class="label">Product ID:</span> <span class="value">584</span></div><div class="debug-item"><span class="label">Initial Stock:</span> <span class="value">2 <small>(from _initial_stock meta)</small></span></div><div class="debug-item"><span class="label">Current Stock:</span> <span class="value">8 <small>(from WooCommerce)</small></span></div><div class="debug-item"><span class="label">Manage Stock:</span> <span class="value">Yes</span></div><div class="debug-item"><span class="label">Stock Status:</span> <span class="value">instock</span></div></div><div class="debug-section"><h4>Reserved Dates <span class="debug-count">(0)</span></h4><div class="debug-scrollable"><table class="debug-table"><thead><tr><th>Order ID</th><th>Status</th><th>Start Date</th><th>End Date</th><th>Quantity</th></tr></thead><tbody><tr><td><a href="https://mit276.local/wp-admin/post.php?post=941&amp;action=edit" target="_blank">#941</a></td><td><span class="status-badge status-processing">Processing</span></td><td>30.06.2025</td><td>03.07.2025</td><td>3</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=910&amp;action=edit" target="_blank">#910</a></td><td><span class="status-badge status-processing">Processing</span></td><td>27.06.2025</td><td>29.06.2025</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=873&amp;action=edit" target="_blank">#873</a></td><td><span class="status-badge status-processing">Processing</span></td><td>01.06.2025</td><td>02.06.2025</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=872&amp;action=edit" target="_blank">#872</a></td><td><span class="status-badge status-processing">Processing</span></td><td>14.06.2025</td><td>15.06.2025</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=859&amp;action=edit" target="_blank">#859</a></td><td><span class="status-badge status-on-hold">On-hold</span></td><td>11.05.2025</td><td>16.05.2025</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=693&amp;action=edit" target="_blank">#693</a></td><td><span class="status-badge status-processing">Processing</span></td><td>12.09.2024</td><td>13.09.2024</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=673&amp;action=edit" target="_blank">#673</a></td><td><span class="status-badge status-processing">Processing</span></td><td>26.08.2024</td><td>27.08.2024</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=608&amp;action=edit" target="_blank">#608</a></td><td><span class="status-badge status-processing">Processing</span></td><td>19.07.2024</td><td>20.07.2024</td><td>1</td></tr><tr><td><a href="https://mit276.local/wp-admin/post.php?post=599&amp;action=edit" target="_blank">#599</a></td><td><span class="status-badge status-processing">Processing</span></td><td>05.07.2024</td><td>06.07.2024</td><td>1</td></tr></tbody></table></div></div><div class="debug-section"><h4>Buffer Dates <span class="debug-count">(0)</span></h4><p class="no-data">Buffer dates are not currently in use.</p></div><div class="debug-section"><h4>Active Rentals <span class="debug-count">(0)</span></h4><p class="no-data">No active rentals found for this product.</p></div><div class="debug-section"><h4>Debug Controls</h4><div class="debug-controls"><button id="toggle-debug-mode" class="debug-button"><span class="dashicons dashicons-admin-generic"></span> Toggle Debug Mode</button><button id="refresh-debug-data" class="debug-button primary"><span class="dashicons dashicons-update"></span> Refresh Data</button></div></div><div class="debug-section"><h4>Legend</h4><div class="debug-legend"><div><span class="legend-box fully-booked"></span> Fully Booked</div><div><span class="legend-box partially-booked"></span> יש הזמנה קודמת</div></div></div></div></div> <!-- BEGIN Simple Chat Button Plugin --> <style> #simple-chat-button--container { position: fixed; bottom: 20px; right: 20px; z-index: 999999999; } #simple-chat-button--button { display: block; position: relative; text-decoration: none; width: 60px; height: 60px; border-radius: 50%; -webkit-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; -webkit-transform: scale(1); transform: scale(1); box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .15); background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjU2IiB3aWR0aD0iMjU2IiB2aWV3Qm94PSItMjMgLTIxIDY4MiA2ODIuNjY3IiBmaWxsPSIjZmZmIiB4bWxuczp2PSJodHRwczovL3ZlY3RhLmlvL25hbm8iPjxwYXRoIGQ9Ik01NDQuMzg3IDkzLjAwOEM0ODQuNTEyIDMzLjA2MyA0MDQuODgzLjAzNSAzMjAuMDUxIDAgMTQ1LjI0NiAwIDIuOTggMTQyLjI2MiAyLjkxIDMxNy4xMTNjLS4wMjMgNTUuODk1IDE0LjU3OCAxMTAuNDU3IDQyLjMzMiAxNTguNTUxTC4yNSA2NDBsMTY4LjEyMS00NC4xMDJjNDYuMzI0IDI1LjI3IDk4LjQ3NyAzOC41ODYgMTUxLjU1MSAzOC42MDJoLjEzM2MxNzQuNzg1IDAgMzE3LjA2Ni0xNDIuMjczIDMxNy4xMzMtMzE3LjEzMy4wMzUtODQuNzQyLTMyLjkyMi0xNjQuNDE4LTkyLjgwMS0yMjQuMzU5ek0zMjAuMDUxIDU4MC45NDFoLS4xMDljLTQ3LjI5Ny0uMDItOTMuNjg0LTEyLjczLTEzNC4xNi0zNi43NDJsLTkuNjIxLTUuNzE1LTk5Ljc2NiAyNi4xNzIgMjYuNjI5LTk3LjI3LTYuMjctOS45NzNjLTI2LjM4Ny00MS45NjktNDAuMzItOTAuNDc3LTQwLjI5Ny0xNDAuMjgxLjA1NS0xNDUuMzMyIDExOC4zMDUtMjYzLjU3IDI2My42OTktMjYzLjU3IDcwLjQwNi4wMjMgMTM2LjU5IDI3LjQ3NyAxODYuMzU1IDc3LjMwMXM3Ny4xNTYgMTE2LjA1MSA3Ny4xMzMgMTg2LjQ4NGMtLjA2MiAxNDUuMzQ0LTExOC4zMDUgMjYzLjU5NC0yNjMuNTk0IDI2My41OTR6bTE0NC41ODYtMTk3LjQxOGMtNy45MjItMy45NjktNDYuODgzLTIzLjEzMy01NC4xNDgtMjUuNzgxLTcuMjU4LTIuNjQ1LTEyLjU0Ny0zLjk2MS0xNy44MjQgMy45NjktNS4yODUgNy45My0yMC40NjkgMjUuNzgxLTI1LjA5NCAzMS4wNjZzLTkuMjQyIDUuOTUzLTE3LjE2OCAxLjk4NC0zMy40NTctMTIuMzM2LTYzLjcyNy0zOS4zMzJjLTIzLjU1NS0yMS4wMTItMzkuNDU3LTQ2Ljk2MS00NC4wODItNTQuODkxLTQuNjE3LTcuOTM3LS4wMzktMTEuODEyIDMuNDc3LTE2LjE3MiA4LjU3OC0xMC42NTIgMTcuMTY4LTIxLjgyIDE5LjgwOS0yNy4xMDVzMS4zMi05LjkxOC0uNjY0LTEzLjg4M2MtMS45NzctMy45NjUtMTcuODI0LTQyLjk2OS0yNC40MjYtNTguODQtNi40MzctMTUuNDQ1LTEyLjk2NS0xMy4zNTktMTcuODMyLTEzLjYwMi00LjYxNy0uMjMtOS45MDItLjI3Ny0xNS4xODctLjI3N3MtMTMuODY3IDEuOTgtMjEuMTMzIDkuOTE4LTI3LjczIDI3LjEwMi0yNy43MyA2Ni4xMDUgMjguMzk1IDc2LjY4NCAzMi4zNTUgODEuOTczIDU1Ljg3OSA4NS4zMjggMTM1LjM2NyAxMTkuNjQ4YzE4LjkwNiA4LjE3MiAzMy42NjQgMTMuMDQzIDQ1LjE3NiAxNi42OTUgMTguOTg0IDYuMDMxIDM2LjI1NCA1LjE4IDQ5LjkxIDMuMTQxIDE1LjIyNy0yLjI3NyA0Ni44NzktMTkuMTcyIDUzLjQ4OC0zNy42OCA2LjYwMi0xOC41MTIgNi42MDItMzQuMzc1IDQuNjE3LTM3LjY4NC0xLjk3Ny0zLjMwNS03LjI2Mi01LjI4NS0xNS4xODQtOS4yNTR6bTAgMCIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+") center/44px 44px no-repeat #25D366; } #simple-chat-button--text { display: block; position: absolute; width: max-content; background-color: #fff; bottom: 15px; right: 70px; border-radius: 5px; padding: 5px 10px; color: #000; font-size: 13px; font-weight: 700; letter-spacing: -0.03em; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; word-break: keep-all; line-height: 1em; text-overflow: ellipsis; vertical-align: middle; box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .15); } #simple-chat-button--button:before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; right: 0; border-radius: 50%; -webkit-animation: scb-shockwave-animation 2s 5.3s ease-out infinite; animation: scb-shockwave-animation 2s 5.3s ease-out infinite; z-index: -1; } #simple-chat-button--button:hover { -webkit-transform: scale(1.06); transform: scale(1.06); -webkit-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; } @media only screen and (max-width: 1024px) { #simple-chat-button--container { bottom: 20px; } } @media only screen and (max-width: 768px) { #simple-chat-button--container { bottom: 20px; } } @-webkit-keyframes scb-shockwave-animation { 0% { -webkit-transform: scale(1); transform: scale(1); box-shadow: 0 0 2px rgba(0, 100, 0, .5), inset 0 0 1px rgba(0, 100, 0, .5); } 95% { box-shadow: 0 0 50px transparent, inset 0 0 30px transparent; } 100% { -webkit-transform: scale(1.2); transform: scale(1.2); } } @keyframes scb-shockwave-animation { 0% { -webkit-transform: scale(1); transform: scale(1); box-shadow: 0 0 2px rgba(0, 100, 0, .5), inset 0 0 1px rgba(0, 100, 0, .5); } 95% { box-shadow: 0 0 50px transparent, inset 0 0 30px transparent; } 100% { -webkit-transform: scale(1.2); transform: scale(1.2); } } </style> <div id="simple-chat-button--container"> <a id="simple-chat-button--button" href="https://api.whatsapp.com/send?phone=+972505544516&amp;text=Hello" target="_blank" rel="nofollow" aria-label="WhatsApp Chat Button"></a> <span id="simple-chat-button--text">להזמנות דברו איתנו בצ׳אט</span> </div> <!-- END Simple Chat Button Plugin --> 	<script type="text/javascript">
+		(function () {
+			var c = document.body.className;
+			c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+			document.body.className = c;
+		})();
+	</script>
+			<script>
+			var wpcode_admin_bar_info = [];
+			var wpcode_admin_bar_info_count = 0;
+		</script>
+		<link rel="stylesheet" id="berocket_lmp_style-css" href="https://mit276.local/wp-content/plugins/load-more-products-for-woocommerce/css/load_products.css?ver=1.2" type="text/css" media="all">
+<link rel="stylesheet" id="wc-blocks-style-rtl-css" href="https://mit276.local/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-rtl.css?ver=wc-9.7.1" type="text/css" media="all">
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/insert-headers-and-footers/build/admin-bar.js?ver=8afeca4aaad1d56fefb41623b6b7b000" id="wpcode-admin-bar-js-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/hoverintent-js.min.js?ver=2.2.1" id="hoverintent-js-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/admin-bar.min.js?ver=6.8.1" id="admin-bar-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'rtl' ] } );
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.0.5" id="swv-js"></script>
+<script type="text/javascript" id="contact-form-7-js-before">
+/* <![CDATA[ */
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/mit276.local\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    }
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.0.5" id="contact-form-7-js"></script>
+<script type="text/javascript" id="stock-debugger-js-js-extra">
+/* <![CDATA[ */
+var stockDebugger = {"ajax_url":"https:\/\/mit276.local\/wp-admin\/admin-ajax.php","product_id":"584","nonce":"30822983dc","stock":"8","isAdmin":"yes","error":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/mitnafun-order-admin/includes/stock-debugger/assets/js/stock-debugger-new.js?ver=1751145096" id="stock-debugger-js-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/swiper.js?ver=6.8.1" id="my-swiper-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/air-datepicker.js?ver=6.8.1" id="air-datepicker-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/cuttr.min.js?ver=6.8.1" id="cuttr-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/jquery.mask.min.js?ver=6.8.1" id="jquery.mask-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/jquery.fancybox.min.js?ver=6.8.1" id="my-fancybox-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/jquery.nice-select.min.js?ver=6.8.1" id="my-nice-select-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce-ajax-filters/assets/frontend/js/select2.min.js?ver=6.8.1" id="select2-js" data-wp-strategy="defer"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/script.js?ver=1751186103" id="my-script-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/actions.js?ver=1751186103" id="my-actions-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/themes/mitnafun_uproR/js/rental-debug.js?ver=1751186103" id="rental-debug-js"></script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js?ver=9.7.1" id="sourcebuster-js-js"></script>
+<script type="text/javascript" id="wc-order-attribution-js-extra">
+/* <![CDATA[ */
+var wc_order_attribution = {"params":{"lifetime":1.0000000000000001e-5,"session":30,"base64":false,"ajaxurl":"https:\/\/mit276.local\/wp-admin\/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min.js?ver=9.7.1" id="wc-order-attribution-js"></script>
+<script type="text/javascript" id="berocket_lmp_js-js-extra">
+/* <![CDATA[ */
+var the_lmp_js_data = {"type":"more_button","update_url":"1","use_mobile":"","mobile_type":"","mobile_width":"","is_AAPF":"","buffer":"50","use_prev_btn":"","load_image":"<div class=\"lmp_products_loading\"><i class=\"fa fa-spinner lmp_rotate\"><\/i><span class=\"\"><\/span><\/div>","load_img_class":".lmp_products_loading","load_more":"<div class=\"lmp_load_more_button br_lmp_button_settings\"><a class=\"lmp_button link-wrap\" style=\"font-size: 22px;color: #333333;background-color: #ffffff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;\" href=\"#load_next_page\">\u05d8\u05e2\u05df \u05e2\u05d5\u05d3<\/a><\/div>","load_prev":"<div class=\"lmp_load_more_button br_lmp_prev_settings\"><a class=\"lmp_button \" style=\"font-size: 22px;color: #333333;background-color: #aaaaff;padding-top:15px;padding-right:25px;padding-bottom:15px;padding-left:25px;margin-top:px;margin-right:px;margin-bottom:px;margin-left:px; border-top: 0px solid #000; border-bottom: 0px solid #000; border-left: 0px solid #000; border-right: 0px solid #000; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;\" href=\"#load_next_page\">Load Previous<\/a><\/div>","lazy_load":"","lazy_load_m":"","LLanimation":"","end_text":"<div class=\"lmp_products_loading\"><span class=\"\"><\/span><\/div>","javascript":{"before_update":"","after_update":""},"products":"div.content","item":"div.item","pagination":"nav.woocommerce-pagination","next_page":"a.next.page-numbers","prev_page":"a.prev.page-numbers"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://mit276.local/wp-content/plugins/load-more-products-for-woocommerce/js/load_products.js?ver=1.2" id="berocket_lmp_js-js"></script>
+<div id="error"><p class="wpdberror"><strong>שגיאה במסד הנתונים של וורדפרס:</strong> [Unknown column 'o.date_created' in 'field list']<br><code>SELECT 
+                oi.order_id,
+                o.status,
+                oim.meta_value as rental_dates,
+                oim_qty.meta_value as quantity,
+                o.date_created
+            FROM wp_woocommerce_order_items oi
+            INNER JOIN wp_wc_orders o ON oi.order_id = o.id
+            INNER JOIN wp_woocommerce_order_itemmeta oim ON oi.order_item_id = oim.order_item_id
+            INNER JOIN wp_woocommerce_order_itemmeta oim_pid ON oi.order_item_id = oim_pid.order_item_id
+            LEFT JOIN wp_woocommerce_order_itemmeta oim_qty ON oi.order_item_id = oim_qty.order_item_id AND oim_qty.meta_key = '_qty'
+            WHERE oim.meta_key = 'Rental Dates'
+            AND oim_pid.meta_key = '_product_id' 
+            AND oim_pid.meta_value = 584
+            AND o.status IN ('wc-processing', 'wc-completed', 'wc-rental-confirmed')
+            ORDER BY o.date_created DESC
+            LIMIT 10</code></p></div><script id="calendar-availability-data" type="application/json">{"stock":2,"reservations":[]}</script>    <script>
+        jQuery(document).ready(function($) {
+            // Wait for calendar to be fully loaded
+            setTimeout(function() {
+                console.log('🛠 Stock Debugger - Calendar Loaded');
+                
+                // Extract initial stock from global variable
+                if (window.initialStock !== undefined) {
+                    console.log('🛠 Stock Debugger - Initial Stock from global:', window.initialStock);
+                }
+                
+                // Extract stock quantity from global variable
+                if (window.stockQuantity !== undefined) {
+                    console.log('🛠 Stock Debugger - Stock Quantity from global:', window.stockQuantity);
+                }
+                
+                // Extract reserved dates from global variable
+                if (window.reservedDates !== undefined) {
+                    console.log('🛠 Stock Debugger - Reserved Dates from global:', window.reservedDates);
+                }
+                
+                // Extract reserved dates counts from global variable
+                if (window.reservedDatesCounts !== undefined) {
+                    console.log('🛠 Stock Debugger - Reserved Dates Counts from global:', window.reservedDatesCounts);
+                }
+                
+                // Extract buffer dates from global variable
+                if (window.bufferDates !== undefined) {
+                    console.log('🛠 Stock Debugger - Buffer Dates from global:', window.bufferDates);
+                }
+                
+                // Add click handler to calendar cells to show debug info
+                $(document).on('click', '.fallback-calendar .day-cell, .air-datepicker-cell', function(e) {
+                    // Don't interfere with normal calendar operation
+                    if (!e.ctrlKey) {
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Get date from cell
+                    const date = $(this).data('date');
+                    if (!date) {
+                        return;
+                    }
+                    
+                    // Get cell status
+                    const isDisabled = $(this).hasClass('disabled') || $(this).hasClass('-disabled-');
+                    const isWeekend = $(this).hasClass('weekend') || $(this).hasClass('-weekend-');
+                    const isSelected = $(this).hasClass('selected') || $(this).hasClass('-selected-');
+                    
+                    // Check if date is in reserved dates
+                    let reservedCount = 0;
+                    if (window.reservedDatesCounts && window.reservedDatesCounts[date]) {
+                        reservedCount = window.reservedDatesCounts[date];
+                    }
+                    
+                    // Check if date is in buffer dates
+                    const isBuffer = window.bufferDates && window.bufferDates.includes(date);
+                    
+                    // Calculate available stock
+                    const initialStock = window.initialStock || 0;
+                    const availableStock = initialStock - reservedCount;
+                    
+                    // Show debug info
+                    alert(`Date: ${date}
+Status: ${isDisabled ? 'Disabled' : 'Enabled'}
+Weekend: ${isWeekend ? 'Yes' : 'No'}
+Selected: ${isSelected ? 'Yes' : 'No'}
+Reserved Count: ${reservedCount}
+Buffer Date: ${isBuffer ? 'Yes' : 'No'}
+Initial Stock: ${initialStock}
+Available Stock: ${availableStock}`);
+                });
+                
+                // Add keyboard shortcut to toggle debug mode
+                $(document).on('keydown', function(e) {
+                    // Ctrl+Shift+D to toggle debug mode
+                    if (e.ctrlKey && e.shiftKey && e.keyCode === 68) {
+                        $('#toggle-debug-mode').click();
+                    }
+                });
+            }, 2000);
+        });
+    </script>
+    
+
+</div><button style="position: absolute; top: -30px; right: 0px; padding: 5px 10px; background: rgb(51, 51, 51); color: white; border: none; border-radius: 3px; cursor: pointer;">Toggle Debug</button><div id="rental-debug-panel" style="position: fixed; bottom: 20px; right: 20px; width: 400px; max-height: 300px; overflow-y: auto; background: rgba(255, 255, 255, 0.95); border: 1px solid rgb(221, 221, 221); border-radius: 4px; padding: 15px; box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px; z-index: 9999; font-family: monospace; font-size: 12px;"><span style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 18px; line-height: 1;">×</span><div id="rental-debug-content"><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:43] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:43] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:43] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:43] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:41] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:41] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:41] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:41] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:39] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:39] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:39] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:39] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:37] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:37] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:37] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:37] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:35] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:35] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:35] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:35] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:33] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:33] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:33] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:33] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:31] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:31] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:31] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:31] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:29] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:29] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:29] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:29] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:27] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:27] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:27] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:27] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:25] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:25] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:25] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:25] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:23] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:23] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:23] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:23] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:21] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:21] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:21] Found stock debug table</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "rows": 9,
+  "visible": true
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:21] Rental dates input</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "id": "rental_dates",
+  "value": "30.06.2025 - 02.07.2025",
+  "class": "date-picker-field",
+  "disabled": false,
+  "readonly": false
+}</pre></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:19] No datepicker elements found</div></div><div style="margin: 5px 0px; padding: 5px; border-bottom: 1px solid rgb(238, 238, 238);"><div>[10:35:19] Reservation data</div><pre style="margin: 5px 0px 0px; white-space: pre-wrap; font-size: 11px; color: rgb(102, 102, 102);">{
+  "count": 9,
+  "reservations": [
+    {
+      "order_id": "#941",
+      "status": "Processing",
+      "start_date": "30.06.2025",
+      "end_date": "03.07.2025",
+      "quantity": "3"
+    },
+    {
+      "order_id": "#910",
+      "status": "Processing",
+      "start_date": "27.06.2025",
+      "end_date": "29.06.2025",
+      "quantity": "1"
+    },
+    {
+      "order_id": "#873",
+      "status": "Processing",
+      "start_date": "01.06.2025",
+      "end_date": "02.06.2025",
+      "quantity": "1"
+    }
+  ]
+}</pre></div></div></div><div style="position:fixed;bottom:10px;right:10px;z-index:10000;background:white;padding:10px;border:1px solid #ccc;border-radius:4px;"><button id="refresh-debug" style="margin-right:5px;">Refresh Debug</button><button id="clear-debug">Clear Log</button></div><div class="widget_shopping_cart_live_region screen-reader-text" role="status"></div></body></html>

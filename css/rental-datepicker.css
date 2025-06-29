@@ -1,0 +1,193 @@
+/**
+ * Rental Datepicker Styles
+ * Custom styles for the AirDatepicker calendar in rental products
+ */
+
+.rental-datepicker-container {
+    margin: 20px 0;
+    max-width: 600px;
+    direction: rtl;
+}
+
+#datepicker-container {
+    width: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Base AirDatepicker styles */
+.air-datepicker {
+    --adp-font-size: 14px;
+    --adp-font-family: inherit;
+    --adp-day-name-color: #333;
+    --adp-cell-background-color-selected: #4CAF50;
+    --adp-cell-background-color-selected-hover: #45a049;
+    --adp-cell-background-color-in-range: rgba(76, 175, 80, 0.1);
+    --adp-cell-background-color-in-range-hover: rgba(76, 175, 80, 0.2);
+    --adp-cell-border-color-in-range: #4CAF50;
+    --adp-cell-border-radius: 4px;
+    --adp-border-color: #e0e0e0;
+    --adp-border-color-inner: #f0f0f0;
+    --adp-accent-color: #4CAF50;
+    --adp-background-color: #fff;
+    --adp-background-color-hover: #f5f5f5;
+    --adp-background-color-active: #e0e0e0;
+    --adp-color: #333;
+    --adp-color-secondary: #757575;
+    --adp-padding: 10px;
+    --adp-nav-height: 40px;
+    --adp-day-cell-width: calc(100% / 7);
+    --adp-day-cell-height: 36px;
+    --adp-month-cell-height: 60px;
+    --adp-year-cell-height: 60px;
+}
+
+/* Disabled dates styling */
+.air-datepicker-cell--disabled {
+    background-color: #f9f9f9;
+    color: #ccc !important;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+/* Weekend styling */
+.air-datepicker-cell--weekend {
+    color: #f44336;
+    font-weight: bold;
+}
+
+/* Partially booked dates */
+.air-datepicker-cell--partially-booked {
+    background-color: #fff3e0;
+    font-weight: bold;
+    position: relative;
+}
+
+.air-datepicker-cell--partially-booked:after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: #ff9800;
+    border-radius: 50%;
+}
+
+/* Fully booked dates */
+.air-datepicker-cell--fully-booked {
+    background-color: #ffebee;
+    color: #d32f2f;
+    text-decoration: line-through;
+}
+
+/* Navigation */
+.air-datepicker-nav {
+    border-bottom: 1px solid var(--adp-border-color-inner);
+    padding: 10px;
+}
+
+.air-datepicker-nav--title {
+    font-weight: 600;
+}
+
+.air-datepicker-nav--action {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.air-datepicker-nav--action:hover {
+    background-color: var(--adp-background-color-hover);
+}
+
+/* Days of week */
+.air-datepicker--day-names {
+    margin: 8px 0 4px;
+}
+
+.air-datepicker--day-name {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* Cells */
+.air-datepicker-cell {
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.air-datepicker-cell.-day-:not(.-disabled-):hover {
+    background-color: var(--adp-background-color-hover);
+}
+
+/* Selected range */
+.air-datepicker-cell.-range-from-,
+.air-datepicker-cell.-range-to-,
+.air-datepicker-cell.-in-range- {
+    background-color: var(--adp-cell-background-color-in-range);
+}
+
+.air-datepicker-cell.-range-from- {
+    border-top-right-radius: var(--adp-cell-border-radius);
+    border-bottom-right-radius: var(--adp-cell-border-radius);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.air-datepicker-cell.-range-to- {
+    border-top-left-radius: var(--adp-cell-border-radius);
+    border-bottom-left-radius: var(--adp-cell-border-radius);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Today */
+.air-datepicker-cell.-current- {
+    color: var(--adp-accent-color);
+    font-weight: bold;
+}
+
+.air-datepicker-cell.-current-.-in-range- {
+    color: var(--adp-accent-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .air-datepicker {
+        --adp-font-size: 13px;
+        --adp-day-cell-width: calc(100% / 7);
+        --adp-day-cell-height: 32px;
+        --adp-padding: 8px;
+    }
+    
+    .air-datepicker-nav {
+        padding: 8px;
+    }
+    
+    .air-datepicker--day-name {
+        font-size: 11px;
+    }
+    
+    .air-datepicker-cell {
+        font-size: 13px;
+    }
+}
+
+/* RTL support */
+.rtl .air-datepicker {
+    direction: rtl;
+}
+
+.rtl .air-datepicker--navigation {
+    flex-direction: row-reverse;
+}
+
+.rtl .air-datepicker--buttons {
+    flex-direction: row-reverse;
+}

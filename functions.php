@@ -19,6 +19,7 @@ function load_style_script(){
     wp_enqueue_style('my-nice-select', get_stylesheet_directory_uri() . '/css/nice-select.css');
     wp_enqueue_style('my-swiper', get_stylesheet_directory_uri() . '/css/swiper.min.css');
     wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
+    wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
     wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), time());
     wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), time());
     wp_enqueue_style('my-style-main', get_stylesheet_directory_uri() . '/style.css', array(), time());
@@ -37,6 +38,28 @@ function load_style_script(){
     // Localize script with necessary data for select2 initialization
     wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), time(), true);
     wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), time(), true);
+    
+    // Enqueue rental datepicker script on product pages
+    if (is_product()) {
+        wp_enqueue_script('rental-datepicker', 
+            get_stylesheet_directory_uri() . '/js/rental-datepicker.js', 
+            array('jquery', 'air-datepicker'), 
+            filemtime(get_stylesheet_directory() . '/js/rental-datepicker.js'), 
+            true
+        );
+        
+        // Localize script with WooCommerce AJAX URL
+        wp_localize_script('rental-datepicker', 'rentalDatepickerVars', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('rental-datepicker-nonce')
+        ));
+        
+        // Localize script with necessary data
+        wp_localize_script('rental-datepicker', 'wc_add_to_cart_params', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('rental_dates_nonce')
+        ));
+    }
 }
 
 
@@ -138,42 +161,134 @@ add_filter('get_the_archive_title_prefix','__return_false');
 remove_filter('the_excerpt', 'wpautop');
 
 
+/**
+ * Get rental dates for a product
+ * 
+ * @param int $product_id The product ID
+ * @return array Array of booked dates with their reservation counts
+ */
 function get_rental_dates_for_product($product_id) {
     // Ensure WooCommerce is available
     if (!class_exists('WooCommerce')) {
-        return;
+        return [];
     }
 
-    // Initialize the dates array
+    // Initialize the dates array with counts
     $rental_dates = [];
+    $date_counts = [];
 
-    // Get all orders
-    $args = array(
-        'limit' => -1, // Get all orders
-        'status' => 'any', // Any status
-    );
-    $orders = wc_get_orders($args);
+    // Get all orders with any status
+    $orders = wc_get_orders([
+        'limit' => -1,
+        'status' => array_keys(wc_get_order_statuses()),
+        'date_created' => '>' . (time() - YEAR_IN_SECONDS), // Only check orders from the last year
+        'return' => 'ids',
+    ]);
+
+    // Get initial stock level
+    $product = wc_get_product($product_id);
+    $initial_stock = $product ? (int) $product->get_stock_quantity() : 1;
 
     // Loop through each order
-    foreach ($orders as $order) {
-        // Loop through each item in the order
-        foreach ($order->get_items() as $item_id => $item) {
-            // Check if the item is the product we're interested in
+    foreach ($orders as $order_id) {
+        $order = wc_get_order($order_id);
+        if (!$order) continue;
+
+        // Skip failed/cancelled/refunded orders
+        if (in_array($order->get_status(), ['cancelled', 'refunded', 'failed'])) {
+            continue;
+        }
+
+        // Check order items for this product
+        foreach ($order->get_items() as $item) {
             if ($item->get_product_id() == $product_id) {
-                $product = new WC_Product($product_id);
-                $inventory = $product->get_stock_quantity();
-                if ($inventory > 1)
-                    continue;
-                // Get the rental dates (assuming they are stored as item meta)
-                $dates = wc_get_order_item_meta($item_id, 'Rental Dates', true);
-                if ($dates) {
-                    $rental_dates[] = $dates;
+                // Get rental dates from order item meta
+                $dates_meta = wc_get_order_item_meta($item->get_id(), 'Rental Dates', true);
+                
+                if ($dates_meta) {
+                    // If it's a date range (format: YYYY-MM-DD - YYYY-MM-DD)
+                    if (strpos($dates_meta, ' - ') !== false) {
+                        list($start_date, $end_date) = array_map('trim', explode(' - ', $dates_meta));
+                        $start = new DateTime($start_date);
+                        $end = new DateTime($end_date);
+                        $end->modify('+1 day'); // Include end date in range
+                        
+                        $interval = new DateInterval('P1D');
+                        $period = new DatePeriod($start, $interval, $end);
+                        
+                        // Add each date in the range to our counts
+                        foreach ($period as $date) {
+                            $date_str = $date->format('Y-m-d');
+                            if (!isset($date_counts[$date_str])) {
+                                $date_counts[$date_str] = 0;
+                            }
+                            $date_counts[$date_str]++;
+                        }
+                    } else {
+                        // Single date
+                        $date_str = date('Y-m-d', strtotime($dates_meta));
+                        if (!isset($date_counts[$date_str])) {
+                            $date_counts[$date_str] = 0;
+                        }
+                        $date_counts[$date_str]++;
+                    }
                 }
             }
         }
     }
 
+    // Convert to the format expected by the datepicker
+    foreach ($date_counts as $date => $count) {
+        if ($count >= $initial_stock) {
+            $rental_dates[] = [
+                'date' => $date,
+                'status' => 'fully_booked',
+                'count' => $count
+            ];
+        } else {
+            $rental_dates[] = [
+                'date' => $date,
+                'status' => 'partially_booked',
+                'count' => $count,
+                'available' => $initial_stock - $count
+            ];
+        }
+    }
+
     return $rental_dates;
+}
+
+/**
+ * AJAX handler for getting rental dates
+ */
+add_action('wp_ajax_get_rental_dates', 'ajax_get_rental_dates');
+add_action('wp_ajax_nopriv_get_rental_dates', 'ajax_get_rental_dates');
+function ajax_get_rental_dates() {
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'rental-datepicker-nonce')) {
+        wp_send_json_error(array('message' => 'Invalid nonce'));
+        wp_die();
+    }
+    
+    // Get and validate product ID
+    $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
+    
+    if ($product_id <= 0) {
+        wp_send_json_error(array('message' => 'Invalid product ID'));
+        wp_die();
+    }
+    
+    // Get the dates
+    $dates = get_rental_dates_for_product($product_id);
+    
+    // Send success response
+    wp_send_json_success(array(
+        'dates' => $dates,
+        'product_id' => $product_id,
+        'message' => 'Dates retrieved successfully'
+    ));
+    
+    wp_die();
 }
 
 

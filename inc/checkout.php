@@ -140,11 +140,17 @@ function bbloomer_remove_optional_checkout_fields( $field ) {
 }
 
 add_action('template_redirect', function(){
-    if (is_cart() || $_GET['add-to-cart'])
+    // Check if we're on the cart page or if add-to-cart parameter exists
+    if (is_cart() || (isset($_GET['add-to-cart']) && !empty($_GET['add-to-cart']))) {
         wp_redirect(get_permalink(12));
+        exit;
+    }
 
-    if ($_POST['redirect'])
+    // Check if redirect parameter exists in POST
+    if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
         wp_redirect(get_permalink(12));
+        exit;
+    }
 });
 
 
