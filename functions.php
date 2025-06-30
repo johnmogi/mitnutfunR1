@@ -382,6 +382,21 @@ function enqueue_enhanced_rental_display() {
             wp_enqueue_script('calendar-booking-fix', get_template_directory_uri() . '/js/calendar-booking-fix.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/calendar-booking-fix.js'), 
                             true);
+            
+            // Add join bookings logic
+            wp_enqueue_script('calendar-join-bookings', get_template_directory_uri() . '/js/calendar-join-bookings.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
+                            true);
+            
+            // Add enhanced styling for AirDatepicker
+            wp_enqueue_script('air-datepicker-enhanced-style', get_template_directory_uri() . '/js/air-datepicker-enhanced-style.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/air-datepicker-enhanced-style.js'), 
+                            true);
+            
+            // Add join booking notice
+            wp_enqueue_script('join-booking-notice', get_template_directory_uri() . '/js/join-booking-notice.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/join-booking-notice.js'), 
+                            true);
         }    
         
         // Add debug flag for development
