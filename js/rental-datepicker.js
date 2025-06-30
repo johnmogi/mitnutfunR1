@@ -334,9 +334,16 @@
                 };
             },
             onSelect: function({date, formattedDate}) {
+                const $rentalDisplay = $('#rental-dates-display');
+                const $startDateElement = $('#selected-start-date');
+                const $endDateElement = $('#selected-end-date');
+                const $daysCountElement = $('#rental-days-count');
+                
+                // Hide display if no dates selected
                 if (!date || date.length === 0) {
                     $dateInput.val('');
                     $('.btn-wrap button').prop('disabled', true);
+                    $rentalDisplay.hide();
                     return;
                 }
                 
@@ -345,17 +352,53 @@
                     const startDate = new Date(date[0]);
                     const endDate = new Date(date[1]);
                     
-                    // Calculate number of days, excluding Saturdays
-                    let days = 0;
+                    // Calculate raw days first (excluding Saturdays)
+                    let rawDays = 0;
                     let currentDate = new Date(startDate);
+                    let hasFriday = false;
+                    let hasSunday = false;
                     
+                    // Check for Friday-Sunday pattern (weekend special case)
                     while (currentDate <= endDate) {
-                        // Skip Saturdays (day 6, 0-indexed)
-                        if (currentDate.getDay() !== 6) {
-                            days++;
+                        const dayOfWeek = currentDate.getDay();
+                        // Check if the range contains Friday (5) and Sunday (0)
+                        if (dayOfWeek === 5) hasFriday = true;
+                        if (dayOfWeek === 0) hasSunday = true;
+                        
+                        // Skip Saturdays (day 6, 0-indexed) in the count
+                        if (dayOfWeek !== 6) {
+                            rawDays++;
                         }
                         currentDate.setDate(currentDate.getDate() + 1);
                     }
+                    
+                    // Apply the rental day calculation rule
+                    // Rule: 2 days are 1, 3 are 2, 4 are 3, etc.
+                    // Special case: Friday-Sunday counts as 1 regardless
+                    let days;
+                    
+                    // Special case: Friday to Sunday counts as 1 day
+                    if (hasFriday && hasSunday && rawDays <= 3) {
+                        debugLog('Special weekend case detected (Fri-Sun)', { rawDays });
+                        days = 1; // Override for special weekend case
+                    } else {
+                        // Standard calculation: 2 days = 1, 3 days = 2, 4 days = 3, etc.
+                        if (rawDays <= 1) {
+                            days = rawDays; // 1 day remains 1
+                        } else {
+                            days = rawDays - 1; // 2→1, 3→2, 4→3, etc.
+                        }
+                        debugLog('Applied standard rental day calculation', { rawDays, calculatedDays: days });
+                    }
+                    
+                    debugLog('Day calculation', {
+                        startDate: startDate,
+                        endDate: endDate,
+                        rawDays: rawDays,
+                        hasFriday: hasFriday,
+                        hasSunday: hasSunday,
+                        calculatedDays: days
+                    });
                     
                     // Update the quantity field
                     $('[name="quantity"]').val(days);
@@ -365,12 +408,33 @@
                     const formattedEnd = endDate.toLocaleDateString('he-IL');
                     $dateInput.val(`${formattedStart} - ${formattedEnd}`);
                     
+                    // Update visible date display elements
+                    $startDateElement.text(formattedStart);
+                    $endDateElement.text(formattedEnd);
+                    $daysCountElement.text(days);
+                    $rentalDisplay.show();
+                    
                     // Enable/disable add to cart button
                     $('.btn-wrap button').prop('disabled', days === 0);
+                    
+                    // Log for debugging
+                    debugLog('Dates selected:', {
+                        start: formattedStart,
+                        end: formattedEnd,
+                        days: days
+                    });
                 } else if (date.length === 1) {
                     // Single date selected
-                    $dateInput.val(formattedDate[0]);
+                    const singleDate = date[0].toLocaleDateString('he-IL');
+                    $dateInput.val(singleDate);
                     $('[name="quantity"]').val(1);
+                    
+                    // Update visible date display elements for single date
+                    $startDateElement.text(singleDate);
+                    $endDateElement.text(singleDate);
+                    $daysCountElement.text('1');
+                    $rentalDisplay.show();
+                    
                     $('.btn-wrap button').prop('disabled', false);
                 }
             }

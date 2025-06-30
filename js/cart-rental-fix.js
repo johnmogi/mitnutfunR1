@@ -84,6 +84,27 @@
             if (!dateText || dateText === 'null') {
                 debugLog('Empty date found, attempting to fix', $item);
                 
+                // Check if our enhanced template left data to use
+                const $rentalContainer = $item.find('.rental-dates-container');
+                if ($rentalContainer.length) {
+                    try {
+                        // Try to parse the cart item data
+                        const cartItemData = $rentalContainer.data('cart-item');
+                        if (cartItemData) {
+                            debugLog('Found cart item data', cartItemData);
+                            
+                            // Process any rental info we can find
+                            if (cartItemData.rental_dates) {
+                                $dateContainer.html('<div class="rental-dates-display"><strong>תאריכי השכרה:</strong> ' + 
+                                    cartItemData.rental_dates + '</div>');
+                                debugLog('Fixed date display from data attribute', cartItemData.rental_dates);
+                            }
+                        }
+                    } catch (err) {
+                        debugLog('Error parsing cart item data', err);
+                    }
+                }
+                
                 // Try to find the rental dates in any data attributes
                 const $cartItem = $item.closest('.cart_item');
                 if ($cartItem.length) {
@@ -94,7 +115,8 @@
                         // Use session storage as a temporary fix if we stored dates there
                         const storedDates = sessionStorage.getItem('rental_dates_' + itemKey);
                         if (storedDates) {
-                            $dateContainer.text(storedDates);
+                            $dateContainer.html('<div class="rental-dates-display"><strong>תאריכי השכרה:</strong> ' + 
+                                storedDates + '</div>');
                             debugLog('Fixed date display from session storage', storedDates);
                         }
                     }
@@ -112,17 +134,32 @@
         $('.single_add_to_cart_button').on('click', function() {
             const rentalDates = $('input[name="rental_dates"]').val();
             if (rentalDates) {
-                const productId = $('input[name="add-to-cart"]').val();
-                const tempKey = 'rental_dates_' + productId + '_' + Date.now();
-                sessionStorage.setItem(tempKey, rentalDates);
-                debugLog('Stored rental dates for recovery', rentalDates);
-                
-                // Clean up old entries after 10 minutes
-                setTimeout(function() {
-                    sessionStorage.removeItem(tempKey);
-                }, 600000);
+                // Get product ID from different possible sources
+                const productId = $('input[name="add-to-cart"]').val() || 
+                                 $('[name="product_id"]').val() ||
+                                 $('.content').data('product-id');
+                                 
+                if (productId) {
+                    // Store dates both by product ID and with timestamp
+                    sessionStorage.setItem('rental_dates_' + productId, rentalDates);
+                    const tempKey = 'rental_dates_' + productId + '_' + Date.now();
+                    sessionStorage.setItem(tempKey, rentalDates);
+                    debugLog('Stored rental dates for recovery', {productId, rentalDates});
+                    
+                    // Clean up old entries after 10 minutes
+                    setTimeout(function() {
+                        sessionStorage.removeItem(tempKey);
+                    }, 600000);
+                } else {
+                    debugLog('Could not find product ID for date storage');
+                }
             }
         });
     }
+    
+    // Initialize date recovery
+    $(document).ready(function() {
+        setupDateRecovery();
+    });
 
 })(jQuery);

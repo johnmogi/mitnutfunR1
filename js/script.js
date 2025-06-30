@@ -192,16 +192,15 @@ jQuery(document).ready(function ($) {
     e.preventDefault();
 
     $.fancybox.open( $('#check-popup'), {
-      touch:false,
-      autoFocus:false,
-		trapFocus: true,
-clickSlide: false,
-clickOutside: false,
-autoDimensions: false,
-touch: false,
-		 mobile: {
-     clickSlide: false,
-   },
+      autoFocus: false,
+      trapFocus: true,
+      clickSlide: false,
+      clickOutside: false,
+      autoDimensions: false,
+      touch: false,
+      mobile: {
+        clickSlide: false
+      },
     });
     setTimeout(function() {
       $('body').addClass('is-active');

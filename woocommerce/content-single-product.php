@@ -59,8 +59,20 @@ if ( post_password_required() ) {
 
                     ?>
                 <div class="rental-datepicker-container">
+                    <h3 class="rental-dates-heading">בחר תאריכי השכרה</h3>
                     <div id="datepicker-container"></div>
                     <input type="hidden" id="rental_dates" name="rental_dates" value="">
+                    
+                    <!-- Visible Rental Dates Display -->
+                    <div id="rental-dates-display" class="rental-dates-display" style="display: none; margin: 15px 0; padding: 15px; background-color: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 4px;">
+                        <h4 style="margin-top: 0; color: #2d3748; font-size: 16px; font-weight: bold;">תאריכי ההשכרה שנבחרו:</h4>
+                        <div class="dates-content" style="margin-top: 8px;">
+                            <span id="selected-start-date" style="font-weight: bold;"></span> - <span id="selected-end-date" style="font-weight: bold;"></span>
+                        </div>
+                        <div class="rental-days" style="margin-top: 8px;">
+                            <span>מספר ימי השכרה: </span><span id="rental-days-count" style="font-weight: bold;"></span>
+                        </div>
+                    </div>
                 </div>
                 <style>
                     .rental-datepicker-container {

@@ -30,6 +30,11 @@
                         // Display the rental dates if available
                         if (!empty($rental_dates)) {
                             echo '<p class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</p>';
+                            
+                            // Display rental days if available
+                            if (!empty($cart_item['rental_days'])) {
+                                echo '<p class="rental-days"><strong>ימי השכרה:</strong> ' . intval($cart_item['rental_days']) . '</p>';
+                            }
                         }
                         ?>
                     </div>
@@ -38,8 +43,9 @@
                         // Always show the total price for rental items
                         $is_rental = !empty($rental_dates);
                         if ($is_rental) {
+                            // Use the filtered subtotal which includes our discount info
                             $price = apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key);
-                            echo $price;
+                            echo '<div class="checkout-review rental-price">' . $price . '</div>';
                         } else {
                             echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
                             echo ' x ' . $cart_item['quantity'];

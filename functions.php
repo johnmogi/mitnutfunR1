@@ -19,6 +19,7 @@ include 'inc/checkout.php';
 include 'inc/ajax-actions.php';
 include 'inc/kama_pagenavi.php';
 include 'inc/bookings.php';
+include 'inc/rental-pricing.php';
 
 // show_admin_bar( false );
 
@@ -35,6 +36,7 @@ function load_style_script(){
     wp_enqueue_style('my-swiper', get_stylesheet_directory_uri() . '/css/swiper.min.css');
     wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
     wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
+    wp_enqueue_style('rental-pricing', get_stylesheet_directory_uri() . '/css/rental-pricing.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-pricing.css'));
     wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), time());
     wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), time());
     wp_enqueue_style('main-style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
@@ -304,41 +306,8 @@ add_action('wp_ajax_nopriv_get_rental_dates', 'ajax_get_rental_dates');
  * Fix rental product display in cart
  * Makes rental products display as 1 item in cart regardless of days selected
  */
-add_filter('woocommerce_cart_item_subtotal', 'fix_rental_cart_subtotal', 10, 3);
-add_filter('woocommerce_cart_item_price', 'fix_rental_cart_price', 10, 3);
+// Rental cart pricing is now handled in inc/rental-pricing.php
 
-function fix_rental_cart_price($price, $cart_item, $cart_item_key) {
-    // Check if this is a rental product by looking for rental dates
-    if (!empty($cart_item['rental_dates']) || !empty($cart_item['Rental Dates']) || !empty($cart_item['rental_date'])) {
-        // Get the product
-        $_product = $cart_item['data'];
-        
-        // Calculate the total price (quantity * price)
-        $total_price = $_product->get_price() * $cart_item['quantity'];
-        
-        // Format and return as a single price
-        return wc_price($total_price);
-    }
-    
-    return $price;
-}
-
-function fix_rental_cart_subtotal($subtotal, $cart_item, $cart_item_key) {
-    // Check if this is a rental product by looking for rental dates
-    if (!empty($cart_item['rental_dates']) || !empty($cart_item['Rental Dates']) || !empty($cart_item['rental_date'])) {
-        // The subtotal is already calculated correctly, we just need to modify the displayed quantity
-        // Get the product
-        $_product = $cart_item['data'];
-        
-        // Calculate the total price (quantity * price)
-        $total_price = $_product->get_price() * $cart_item['quantity'];
-        
-        // Format and return as a single price
-        return wc_price($total_price);
-    }
-    
-    return $subtotal;
-}
 function ajax_get_rental_dates() {
     // Verify nonce
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'rental-datepicker-nonce')) {

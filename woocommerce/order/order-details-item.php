@@ -45,14 +45,65 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 
 		do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, false );
 
+		// Display standard item meta
 		wc_display_item_meta( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		// Check if this is a rental product by looking for rental dates in the meta
+		$is_rental = false;
+		$rental_dates = '';
+		$rental_days = 0;
+
+		// Get the item meta data
+		$item_meta = $item->get_meta_data();
+		foreach ($item_meta as $meta) {
+			$data = $meta->get_data();
+			$key = $data['key'];
+			$value = $data['value'];
+			
+			// Look for rental dates in meta
+			if (strpos(strtolower($key), 'rental') !== false && strpos(strtolower($key), 'date') !== false) {
+				$is_rental = true;
+				$rental_dates = $value;
+				
+				// Calculate rental days if dates are found
+				if (function_exists('mitnafun_calculate_rental_days') && strpos($value, ' - ') !== false) {
+					$date_parts = explode(' - ', $value);
+					if (count($date_parts) === 2) {
+						$rental_days = mitnafun_calculate_rental_days($date_parts[0], $date_parts[1]);
+					}
+				}
+			}
+		}
+
+		// Display rental days if available
+		if ($is_rental && $rental_days > 0) {
+			echo '<div class="rental-order-days"><strong>ימי השכרה:</strong> ' . intval($rental_days) . '</div>';
+		}
 
 		do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, false );
 		?>
 	</td>
 
 	<td class="woocommerce-table__product-total product-total">
-		<?php echo $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php 
+		// Standard subtotal display
+		$subtotal = $order->get_formatted_line_subtotal( $item );
+		
+		// If this is a rental item with multiple days, add discount explanation
+		if (isset($is_rental) && $is_rental && isset($rental_days) && $rental_days > 1) {
+			$product_id = $item->get_product_id();
+			
+			// Check if this product gets the discount (excluded products: 150, 153)
+			$excluded_products = array(150, 153);
+			
+			if (!in_array($product_id, $excluded_products)) {
+				// Show discount info
+				$subtotal = $subtotal . '<div class="rental-discount-info">יום ראשון: 100%, ימים נוספים: 50%</div>';
+			}
+		}
+		
+		echo $subtotal;
+		?>
 	</td>
 
 </tr>

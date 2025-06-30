@@ -1,0 +1,62 @@
+/**
+ * Rental Pricing CSS
+ * Styling for rental pricing display in cart and checkout
+ */
+
+/* Rental days info */
+dt.variation-ימיהשכרה {
+    font-weight: bold;
+    color: #333;
+    margin-top: 6px;
+}
+
+dd.variation-ימיהשכרה {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+/* Discount info in cart */
+.rental-discount-info {
+    font-size: 0.85em;
+    margin-top: 4px;
+    color: #007bff;
+    background-color: #f8f9fa;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border-left: 3px solid #007bff;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Original price and savings */
+.rental-savings {
+    font-size: 0.85em;
+    margin-top: 4px;
+    color: #28a745;
+    background-color: #f8f9fa;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border-left: 3px solid #28a745;
+    direction: rtl;
+    text-align: right;
+}
+
+.rental-savings .original-price {
+    text-decoration: line-through;
+    color: #dc3545;
+}
+
+/* Mini cart styling */
+.mini-cart .rental-discount-info,
+.mini-cart .rental-savings {
+    font-size: 0.75em;
+    padding: 2px 5px;
+    margin-top: 2px;
+}
+
+/* Checkout review styling */
+.woocommerce-checkout-review-order-table .rental-discount-info,
+.woocommerce-checkout-review-order-table .rental-savings {
+    font-size: 0.8em;
+    margin-top: 3px;
+}
