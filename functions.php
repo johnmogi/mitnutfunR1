@@ -1,4 +1,11 @@
 <?php
+// Suppress PHP notices and deprecation warnings in debug.log
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', 'Off');
+
+// Include rental cart processing functions
+include_once 'inc/rental-cart-processing.php';
+
 /**
  * Custom error handler to suppress specific notices
  */
@@ -44,9 +51,11 @@ function load_style_script(){
     // Enqueue admin-only CSS to hide debug elements
     wp_enqueue_style('admin-only', get_template_directory_uri() . '/css/admin-only.css', array(), filemtime(get_stylesheet_directory() . '/css/admin-only.css'));
     
-    // Add checkout fix script on checkout page
+    // Add checkout fix scripts on checkout page
     if (is_checkout()) {
         wp_enqueue_script('checkout-fix', get_template_directory_uri() . '/js/checkout-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-fix.js'), true);
+        wp_enqueue_script('checkout-price-fix', get_template_directory_uri() . '/js/checkout-price-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-price-fix.js'), true);
+        wp_enqueue_script('checkout-robust-fix', get_template_directory_uri() . '/js/checkout-robust-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-robust-fix.js'), true);
     }
 
     wp_enqueue_script('jquery');
@@ -66,6 +75,12 @@ function load_style_script(){
     
     // Add the cart rental fix script
     wp_enqueue_script('cart-rental-fix', get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/cart-rental-fix.js'), true);
+    
+    // Add the final aggressive fix for rental dates in cart
+    wp_enqueue_script('rental-form-final-fix', get_stylesheet_directory_uri() . '/js/rental-form-final-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/rental-form-final-fix.js'), true);
+    
+    // Add fix for mini-cart floating popup
+    wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/mini-cart-fix.js'), true);
     
     // Enqueue rental datepicker script on product pages
     if (is_product()) {
@@ -307,6 +322,71 @@ add_action('wp_ajax_nopriv_get_rental_dates', 'ajax_get_rental_dates');
  * Makes rental products display as 1 item in cart regardless of days selected
  */
 // Rental cart pricing is now handled in inc/rental-pricing.php
+
+/**
+ * Enqueue enhanced rental display script
+ * This script improves the display of rental dates and price breakdown throughout the site
+ */
+function enqueue_enhanced_rental_display() {
+    // Only enqueue on front-end pages where rentals might be displayed
+    if (!is_admin()) {
+        // Add debugging script in header
+        wp_enqueue_script(
+            'debug-rental',
+            get_template_directory_uri() . '/js/debug-rental.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/debug-rental.js'),
+            false // Load in header
+        );
+        
+        // Add critical rental form fix - must load very early
+        wp_enqueue_script(
+            'rental-form-fix',
+            get_template_directory_uri() . '/js/rental-form-fix.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/rental-form-fix.js'),
+            false // Load in header to ensure it loads before other scripts
+        );
+        
+        // Add rental datepicker fix - must load before datepicker
+        wp_enqueue_script(
+            'rental-datepicker-fix',
+            get_template_directory_uri() . '/js/rental-datepicker-fix.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/rental-datepicker-fix.js'),
+            false // Load in header to ensure it loads before other scripts
+        );
+        
+        // Define the rental debug constant if not already defined
+        if (!defined('RENTAL_DEBUG')) {
+            define('RENTAL_DEBUG', true);
+        }
+        
+        // Add rental fixer script in footer (after all other scripts)
+        wp_enqueue_script(
+            'rental-fixer', 
+            get_template_directory_uri() . '/js/rental-fixer.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/rental-fixer.js'),
+            true
+        );
+        
+        wp_enqueue_script(
+            'enhanced-rental-display',
+            get_template_directory_uri() . '/js/enhanced-rental-display.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/enhanced-rental-display.js'),
+            true
+        );
+        
+        // Add debug flag for development
+        wp_localize_script('enhanced-rental-display', 'rentalConfig', array(
+            'debug' => true,
+            'rentalDebug' => true
+        ));
+    }
+}
+add_action('wp_enqueue_scripts', 'enqueue_enhanced_rental_display', 20);
 
 function ajax_get_rental_dates() {
     // Verify nonce

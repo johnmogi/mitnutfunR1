@@ -355,40 +355,75 @@
                     // Calculate raw days first (excluding Saturdays)
                     let rawDays = 0;
                     let currentDate = new Date(startDate);
-                    let hasFriday = false;
-                    let hasSunday = false;
                     
-                    // Check for Friday-Sunday pattern (weekend special case)
+                    // First pass: Count days by type and identify patterns
+                    let daysByType = {};
+                    let datesByDay = [];
+                    
                     while (currentDate <= endDate) {
                         const dayOfWeek = currentDate.getDay();
-                        // Check if the range contains Friday (5) and Sunday (0)
-                        if (dayOfWeek === 5) hasFriday = true;
-                        if (dayOfWeek === 0) hasSunday = true;
+                        const dateStr = formatDate(currentDate);
                         
-                        // Skip Saturdays (day 6, 0-indexed) in the count
-                        if (dayOfWeek !== 6) {
+                        if (dayOfWeek !== 6) { // Skip Saturdays
                             rawDays++;
+                            daysByType[dayOfWeek] = (daysByType[dayOfWeek] || 0) + 1;
+                            datesByDay.push({
+                                date: new Date(currentDate),
+                                dayOfWeek: dayOfWeek,
+                                dateStr: dateStr
+                            });
                         }
                         currentDate.setDate(currentDate.getDate() + 1);
                     }
                     
+                    // Detect weekend pattern (Friday + Sunday, possibly with days in between)
+                    const hasFriday = daysByType[5] > 0;
+                    const hasSunday = daysByType[0] > 0;
+                    const hasWeekendPattern = hasFriday && hasSunday;
+                    
+                    debugLog('Day counts by type:', { daysByType, datesByDay, hasWeekendPattern });
+                    
                     // Apply the rental day calculation rule
-                    // Rule: 2 days are 1, 3 are 2, 4 are 3, etc.
+                    // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
                     // Special case: Friday-Sunday counts as 1 regardless
                     let days;
                     
-                    // Special case: Friday to Sunday counts as 1 day
-                    if (hasFriday && hasSunday && rawDays <= 3) {
-                        debugLog('Special weekend case detected (Fri-Sun)', { rawDays });
-                        days = 1; // Override for special weekend case
+                    if (hasWeekendPattern) {
+                        // Find the first Friday and last Sunday in the range
+                        let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
+                        let lastSundayIndex = -1;
+                        for (let i = datesByDay.length - 1; i >= 0; i--) {
+                            if (datesByDay[i].dayOfWeek === 0) {
+                                lastSundayIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        if (fridayIndex >= 0 && lastSundayIndex >= 0) {
+                            // Count days in the weekend period (Friday to Sunday)
+                            let weekendDays = lastSundayIndex - fridayIndex + 1;
+                            
+                            // Count days after the weekend pattern
+                            let regularDays = datesByDay.length - lastSundayIndex - 1;
+                            
+                            // Apply special weekend rule
+                            days = 1 + regularDays; // Weekend counts as 1 + any additional days
+                            
+                            debugLog('Weekend pattern calculation:', {
+                                fridayIndex,
+                                lastSundayIndex,
+                                weekendDays,
+                                regularDays,
+                                totalCalculatedDays: days
+                            });
+                        } else {
+                            // Standard calculation as fallback
+                            days = Math.max(1, rawDays - 1); // 2→1, 3→2, 4→3, etc.
+                        }
                     } else {
                         // Standard calculation: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                        if (rawDays <= 1) {
-                            days = rawDays; // 1 day remains 1
-                        } else {
-                            days = rawDays - 1; // 2→1, 3→2, 4→3, etc.
-                        }
-                        debugLog('Applied standard rental day calculation', { rawDays, calculatedDays: days });
+                        days = rawDays <= 1 ? rawDays : rawDays - 1;
+                        debugLog('Standard day calculation:', { rawDays, calculatedDays: days });
                     }
                     
                     debugLog('Day calculation', {
@@ -399,7 +434,7 @@
                         hasSunday: hasSunday,
                         calculatedDays: days
                     });
-                    
+                
                     // Update the quantity field
                     $('[name="quantity"]').val(days);
                     
@@ -408,20 +443,75 @@
                     const formattedEnd = endDate.toLocaleDateString('he-IL');
                     $dateInput.val(`${formattedStart} - ${formattedEnd}`);
                     
+                    // Calculate pricing based on rental days
+                    const productPrice = parseFloat($('.list-info .woocommerce-Price-amount').first().text().replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+                    const productId = $('input[name="add-to-cart"]').val() || 0;
+                    
+                    // Check if product should have discount (all except 150 and 153)
+                    const hasDiscount = productId != 150 && productId != 153;
+                    
+                    // Calculate pricing
+                    let basePrice = productPrice;
+                    let totalPrice = productPrice;
+                    let discountedPrice = 0;
+                    
+                    if (hasDiscount && days > 1) {
+                        // First day full price, additional days 50% off
+                        basePrice = productPrice;
+                        discountedPrice = (days - 1) * (productPrice * 0.5);
+                        totalPrice = basePrice + discountedPrice;
+                    } else {
+                        // No discount or just one day
+                        totalPrice = days * productPrice;
+                    }
+                    
+                    // Format prices
+                    const formatter = new Intl.NumberFormat('he-IL', {
+                        style: 'currency',
+                        currency: 'ILS'
+                    });
+                    
                     // Update visible date display elements
                     $startDateElement.text(formattedStart);
                     $endDateElement.text(formattedEnd);
                     $daysCountElement.text(days);
+                    
+                    // Add price breakdown if applicable
+                    let priceBreakdownHtml = '';
+                    
+                    if (hasDiscount && days > 1) {
+                        priceBreakdownHtml = `
+                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
+                                <div style="margin-left: 15px;">יום 1: ${formatter.format(basePrice)}</div>
+                                <div style="margin-left: 15px;">${days-1} ימים נוספים (50% הנחה): ${formatter.format(discountedPrice)}</div>
+                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
+                            </div>
+                        `;
+                    } else {
+                        priceBreakdownHtml = `
+                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
+                                <div style="margin-left: 15px;">${days} ימים: ${formatter.format(totalPrice)}</div>
+                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    // Update the display
+                    $('.price-breakdown').remove();
+                    $rentalDisplay.append(priceBreakdownHtml);
                     $rentalDisplay.show();
                     
-                    // Enable/disable add to cart button
+                    // Enable add to cart button
                     $('.btn-wrap button').prop('disabled', days === 0);
                     
                     // Log for debugging
-                    debugLog('Dates selected:', {
+                    debugLog('Rental date selection complete', {
                         start: formattedStart,
                         end: formattedEnd,
-                        days: days
+                        days: days,
+                        price: totalPrice
                     });
                 } else if (date.length === 1) {
                     // Single date selected

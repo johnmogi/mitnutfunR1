@@ -59,6 +59,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 <?php 
                                 // Try different meta keys where rental dates might be stored
                                 $rental_dates = '';
+                                $rental_days = 0;
                                 
                                 // Debug to check all cart item data
                                 $debug_data = [];
@@ -73,6 +74,11 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 } elseif (!empty($cart_item['rental_date'])) {
                                     $rental_dates = $cart_item['rental_date'];
                                     $debug_data['source'] = 'rental_date';
+                                }
+                                
+                                // Get rental days if available
+                                if (!empty($cart_item['rental_days'])) {
+                                    $rental_days = intval($cart_item['rental_days']);
                                 }
                                 
                                 // Look in item meta data
@@ -119,18 +125,28 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                     }
                                 }
                                 
-                                // Display the rental dates if found
+                                // Output the rental dates if found
                                 if (!empty($rental_dates)) {
-                                    echo '<div class="rental-dates-display"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
+                                    echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
                                     
                                     // Display rental days if available
-                                    if (!empty($cart_item['rental_days'])) {
-                                        echo '<div class="rental-days-display"><strong>ימי השכרה:</strong> ' . intval($cart_item['rental_days']) . '</div>';
+                                    if ($rental_days > 0) {
+                                        echo '<div class="rental-days"><strong>ימי השכרה:</strong> ' . $rental_days . '</div>';
                                     }
+                                    
+                                    $debug_data['found'] = true;
+                                    $debug_data['dates'] = $rental_dates;
+                                    $debug_data['days'] = $rental_days;
                                 } else {
-                                    // Add hidden data attribute for JS to possibly fix later
-                                    echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode(array_slice($cart_item, 0, 3))) . '"></div>';
+                                    // Only show missing dates in debug mode
+                                    if (current_user_can('manage_options')) {
+                                        echo '<div class="missing-dates" style="color:#999;font-size:0.9em;">(No dates)</div>';
+                                    }
+                                    $debug_data['found'] = false;
                                 }
+                                
+                                // Add data attributes for JS to fix if needed
+                                echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode($debug_data)) . '" data-rental-dates="' . esc_attr($rental_dates) . '" data-rental-days="' . esc_attr($rental_days) . '"></div>';
                                 ?>
                             </p>
                         </div>
