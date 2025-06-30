@@ -357,27 +357,32 @@ function enqueue_enhanced_rental_display() {
             false // Load in header to ensure it loads before other scripts
         );
         
-        // Define the rental debug constant if not already defined
-        if (!defined('RENTAL_DEBUG')) {
-            define('RENTAL_DEBUG', true);
-        }
-        
-        // Add rental fixer script in footer (after all other scripts)
-        wp_enqueue_script(
-            'rental-fixer', 
-            get_template_directory_uri() . '/js/rental-fixer.js',
-            array('jquery'),
-            filemtime(get_template_directory() . '/js/rental-fixer.js'),
-            true
-        );
-        
-        wp_enqueue_script(
-            'enhanced-rental-display',
-            get_template_directory_uri() . '/js/enhanced-rental-display.js',
-            array('jquery'),
-            filemtime(get_template_directory() . '/js/enhanced-rental-display.js'),
-            true
-        );
+        // Enqueue rental datepicker script on product pages
+        if (is_product()) {
+            wp_enqueue_script('rental-datepicker', 
+                             get_template_directory_uri() . '/js/rental-datepicker.js', 
+                             array('jquery', 'rental-datepicker-base'), 
+                             filemtime(get_template_directory() . '/js/rental-datepicker.js'), 
+                             true);
+            
+            // Add rental display and debugging scripts
+            wp_enqueue_script('debug-rental', get_template_directory_uri() . '/js/debug-rental.js', 
+                             array('jquery'), filemtime(get_template_directory() . '/js/debug-rental.js'), 
+                             true);
+            
+            wp_enqueue_script('rental-datepicker-fix', get_template_directory_uri() . '/js/rental-datepicker-fix.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/rental-datepicker-fix.js'), 
+                            true);
+            
+            wp_enqueue_script('enhanced-rental-display', get_template_directory_uri() . '/js/enhanced-rental-display.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/enhanced-rental-display.js'), 
+                            true);
+            
+            // Add calendar booking status fix
+            wp_enqueue_script('calendar-booking-fix', get_template_directory_uri() . '/js/calendar-booking-fix.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-booking-fix.js'), 
+                            true);
+        }    
         
         // Add debug flag for development
         wp_localize_script('enhanced-rental-display', 'rentalConfig', array(
