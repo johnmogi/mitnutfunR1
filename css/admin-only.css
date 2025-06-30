@@ -1,0 +1,16 @@
+/**
+ * Admin-only styles
+ * Hide elements that should only be visible to admin users
+ */
+
+/* Hide stock debug information for non-admin users */
+body:not(.administrator) .stock-debug-info,
+body:not(.administrator) .stock.in-stock {
+    display: none !important;
+}
+
+/* Alternatively, you can use this to hide for all users */
+.stock-debug-info,
+.stock.in-stock {
+    display: none !important;
+}

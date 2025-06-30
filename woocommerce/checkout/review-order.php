@@ -3,10 +3,54 @@
 
     <?php
     do_action( 'woocommerce_before_mini_cart_contents' );
+    
+    // Modified mini_cart function to ensure rental dates appear
+    foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+        $_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+        $product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
-
-    woocommerce_mini_cart();
-
+        if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 ) {
+            $product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
+            ?>
+            <div class="item">
+                <div class="text">
+                    <div class="info">
+                        <p class="name"><?php echo esc_html($product_name); ?></p>
+                        <?php 
+                        // Try different meta keys where rental dates might be stored
+                        $rental_dates = '';
+                        if (!empty($cart_item['rental_dates'])) {
+                            $rental_dates = $cart_item['rental_dates'];
+                        } elseif (!empty($cart_item['Rental Dates'])) {
+                            $rental_dates = $cart_item['Rental Dates'];
+                        } elseif (!empty($cart_item['rental_date'])) {
+                            $rental_dates = $cart_item['rental_date'];
+                        }
+                        
+                        // Display the rental dates if available
+                        if (!empty($rental_dates)) {
+                            echo '<p class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</p>';
+                        }
+                        ?>
+                    </div>
+                    <div class="cost">
+                        <?php 
+                        // Always show the total price for rental items
+                        $is_rental = !empty($rental_dates);
+                        if ($is_rental) {
+                            $price = apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key);
+                            echo $price;
+                        } else {
+                            echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+                            echo ' x ' . $cart_item['quantity'];
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+    }
     ?>
 
 <div class="text">

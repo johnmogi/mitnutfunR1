@@ -55,11 +55,51 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                     <div class="text">
                         <div class="info">
                             <p class="name"><a href="<?= $product_permalink ?>"><?= $product_name ?></a></p>
-                            <p><?= $cart_item['rental_dates'] ?: $cart_item['rental_dates'] ?></p>
-
+                            <p>
+                                <?php 
+                                // Try different meta keys where rental dates might be stored
+                                $rental_dates = '';
+                                
+                                // Look in the cart item meta array
+                                if (!empty($cart_item['rental_dates'])) {
+                                    $rental_dates = $cart_item['rental_dates'];
+                                } elseif (!empty($cart_item['Rental Dates'])) {
+                                    $rental_dates = $cart_item['Rental Dates'];
+                                } elseif (!empty($cart_item['rental_date'])) {
+                                    $rental_dates = $cart_item['rental_date'];
+                                }
+                                
+                                // Look for meta data in the product
+                                if (empty($rental_dates)) {
+                                    foreach ($cart_item as $key => $value) {
+                                        if (strpos(strtolower($key), 'rental') !== false && strpos(strtolower($key), 'date') !== false) {
+                                            $rental_dates = $value;
+                                            break;
+                                        }
+                                    }
+                                }
+                                
+                                // Display the rental dates if found
+                                if (!empty($rental_dates)) {
+                                    echo '<strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates);
+                                }
+                                ?>
+                            </p>
                         </div>
                         <div class="cost">
-                            <p ><?= $_product->get_price_html() ?> x <?=  $cart_item['quantity'] ?></p>
+                            <?php 
+                            // Check if this is a rental product
+                            $is_rental = !empty($cart_item['rental_dates']) || !empty($cart_item['Rental Dates']) || !empty($cart_item['rental_date']);
+                            
+                            if ($is_rental) {
+                                // For rentals, show the total price without multiplier
+                                $total_price = $_product->get_price() * $cart_item['quantity'];
+                                echo '<p>' . wc_price($total_price) . '</p>';
+                            } else {
+                                // For regular products, show price × quantity
+                                echo '<p>' . $_product->get_price_html() . ' x ' . $cart_item['quantity'] . '</p>';
+                            }
+                            ?>
                         </div>
                         <div class="delete">
                             <?php

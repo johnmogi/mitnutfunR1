@@ -6,38 +6,75 @@
 (function($) {
     'use strict';
 
+    // Debug logging helper
+    function debugLog(...args) {
+        console.log('[Rental Datepicker]', ...args);
+    }
+
     // Initialize the rental date picker
     function initRentalDatePicker() {
+        debugLog('Initializing rental date picker...');
+        
         // Only run on product pages with our datepicker container
-        if (!$('body').hasClass('single-product') || $('#datepicker-container').length === 0) {
+        if (!$('body').hasClass('single-product')) {
+            debugLog('Not a single product page');
+            return;
+        }
+        
+        if ($('#datepicker-container').length === 0) {
+            debugError('Datepicker container (#datepicker-container) not found on page');
             return;
         }
 
         console.log('Initializing rental date picker...');
 
         // Get product ID from the data attribute we added to the content div
-        let productId = $('.content[data-product-id]').data('product-id');
+        debugLog('Looking for product ID...');
         
-        // Fallback to other selectors if needed
-        if (!productId) {
-            productId = $('input[name="add-to-cart"]').val();
-            
-            // If not found, try getting from the product container data attribute
-            if (!productId) {
-                productId = $('div[data-product_id]').data('product_id');
+        // Try to get product ID from various sources
+        const productSources = [
+            { selector: '.content[data-product-id]', type: 'data-product-id' },
+            { selector: 'input[name="add-to-cart"]', type: 'value' },
+            { selector: 'div[data-product_id]', type: 'data-product_id' },
+            { selector: 'form.cart[data-product_id]', type: 'form-data' }
+        ];
+        
+        let productId = null;
+        for (const source of productSources) {
+            const $el = $(source.selector);
+            if ($el.length) {
+                if (source.type === 'data-product-id') {
+                    productId = $el.data('product-id');
+                } else if (source.type === 'data-product_id') {
+                    productId = $el.data('product_id');
+                } else if (source.type === 'form-data') {
+                    productId = $el.data('product_id') || $el.find('input[name="add-to-cart"]').val();
+                } else {
+                    productId = $el.val();
+                }
+                
+                if (productId) {
+                    debugLog(`Found product ID: ${productId} from ${source.selector} (${source.type})`);
+                    break;
+                }
             }
-            
-            // If still not found, try to parse from the URL
-            if (!productId && window.location.href.indexOf('post_type=product') > -1) {
-                const urlParams = new URLSearchParams(window.location.search);
-                productId = urlParams.get('p') || urlParams.get('post');
+        }
+        
+        // Last resort: try to parse from URL
+        if (!productId && window.location.href.indexOf('post_type=product') > -1) {
+            const urlParams = new URLSearchParams(window.location.search);
+            productId = urlParams.get('p') || urlParams.get('post');
+            if (productId) {
+                debugLog(`Found product ID from URL: ${productId}`);
             }
         }
         
         if (!productId) {
-            console.error('Could not find product ID. Selectors checked:', {
+            debugError('Could not find product ID. Selectors checked:', {
+                '.content[data-product-id]': $('.content[data-product-id]').length,
                 'input[name="add-to-cart"]': $('input[name="add-to-cart"]').length,
                 'div[data-product_id]': $('div[data-product_id]').length,
+                'form.cart[data-product_id]': $('form.cart[data-product_id]').length,
                 'URL params': window.location.href
             });
             return;
@@ -46,15 +83,30 @@
         console.log('Found product ID:', productId);
 
         // Get initial stock level
-        const initialStock = parseInt($('.stock').text().match(/\d+/) || '1');
+        let initialStock = 1;
+        const $stockElement = $('.stock');
+        if ($stockElement.length) {
+            const stockMatch = $stockElement.text().match(/\d+/);
+            if (stockMatch) {
+                initialStock = parseInt(stockMatch[0], 10);
+            }
+        } else {
+            debugLog('Stock element not found, using default initial stock: 1');
+        }
+        
+        debugLog(`Initial stock: ${initialStock}`);
         
         // Get booked dates via AJAX
         if (typeof rentalDatepickerVars === 'undefined') {
-            console.error('rentalDatepickerVars is not defined');
+            debugError('rentalDatepickerVars is not defined. Make sure it is localized in PHP.');
             return;
         }
 
-        console.log('Fetching rental dates for product ID:', productId);
+        debugLog(`Fetching rental dates for product ID: ${productId}`);
+        debugLog('AJAX URL:', rentalDatepickerVars.ajax_url);
+        
+        // Add loading state
+        $('#datepicker-container').addClass('loading').html('<div class="loading-spinner">Loading availability...</div>');
         
         $.ajax({
             url: rentalDatepickerVars.ajax_url,
@@ -66,47 +118,143 @@
             },
             dataType: 'json',
             success: function(response) {
+                debugLog('AJAX response received:', response);
+                
                 if (response.success && response.data && response.data.dates) {
+                    debugLog(`Received ${response.data.dates.length} date entries`);
+                    
+                    // Log first few dates for debugging
+                    if (response.data.dates.length > 0) {
+                        debugLog('Sample date entries:', response.data.dates.slice(0, 5));
+                    }
+                    
                     initializeDatePicker(response.data.dates, initialStock);
                 } else {
-                    console.error('Failed to load rental dates', response);
+                    debugError('Failed to load rental dates', {
+                        success: response.success,
+                        hasData: !!response.data,
+                        hasDates: !!(response.data && response.data.dates),
+                        response: response
+                    });
                     // Initialize with empty dates if API fails
                     initializeDatePicker([], initialStock);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error loading rental dates:', error);
+                debugError('Error loading rental dates:', {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText
+                });
                 // Initialize with empty dates if API fails
                 initializeDatePicker([], initialStock);
+            },
+            complete: function() {
+                $('#datepicker-container').removeClass('loading');
             }
         });
     }
 
 
+    // Helper function to format date as YYYY-MM-DD
+    function formatDate(date) {
+        const d = new Date(date);
+        return d.toISOString().split('T')[0];
+    }
+    
+    // Helper function to get date string from Date object
+    function getDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
     // Initialize the AirDatepicker with the given dates
     function initializeDatePicker(bookedDates, initialStock) {
+        debugLog('Initializing date picker with params:', { 
+            bookedDatesCount: bookedDates.length, 
+            initialStock: initialStock 
+        });
+        
         const $container = $('#datepicker-container');
         const $dateInput = $('#rental_dates');
         
-        // Prepare disabled dates for the datepicker
-        const disabledDates = [];
+        // Clear any existing datepicker
+        $container.empty();
+        
+        debugLog('Container element:', $container[0]);
+        debugLog('Date input element:', $dateInput[0] || 'Not found');
+        
+        // Prepare date status tracking
         const dateStatus = {};
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
         
         // Process the booked dates
+        debugLog('Processing booked dates...');
         bookedDates.forEach(function(item) {
-            if (item.status === 'fully_booked' || item.count >= initialStock) {
-                disabledDates.push(item.date);
+            const dateStr = formatDate(item.date);
+            const date = new Date(item.date);
+            
+            // Skip past dates
+            if (date < today) {
+                debugLog(`Skipping past date: ${dateStr}`);
+                return;
             }
-            dateStatus[item.date] = item;
+            
+            // Determine status
+            const isFullyBooked = item.status === 'fully_booked' || item.count >= initialStock;
+            const status = isFullyBooked ? 'fully_booked' : 'partially_booked';
+            
+            // Store status
+            dateStatus[dateStr] = {
+                ...item,
+                status: status,
+                count: item.count || 0,
+                date: dateStr
+            };
+            
+            debugLog(`Processed date: ${dateStr}`, {
+                status: status,
+                count: item.count,
+                initialStock: initialStock,
+                isFullyBooked: isFullyBooked
+            });
         });
         
-        // Helper to format date as YYYY-MM-DD
-        function formatDate(date) {
-            return date.toISOString().split('T')[0];
+        // Log summary of processed dates
+        const statusCounts = Object.values(dateStatus).reduce((acc, item) => {
+            acc[item.status] = (acc[item.status] || 0) + 1;
+            return acc;
+        }, {});
+        
+        debugLog('Date processing complete. Summary:', {
+            totalDates: Object.keys(dateStatus).length,
+            ...statusCounts,
+            initialStock: initialStock
+        });
+        
+        // Trigger custom event for other scripts to use the date data
+        $(document).trigger('rentalDatesLoaded', {
+            bookedDates: Object.values(dateStatus),
+            initialStock: initialStock,
+            currentStock: initialStock, // No current stock value available here
+            productId: $('input[name="product_id"]').val() || null
+        });
+        debugLog('Custom event triggered: rentalDatesLoaded');
+        
+        // Check if AirDatepicker is available
+        if (typeof AirDatepicker === 'undefined') {
+            debugError('AirDatepicker is not loaded. Make sure the script is properly enqueued.');
+            $container.html('<div class="error">Error: Date picker library not loaded</div>');
+            return null;
         }
         
-        // Initialize the datepicker
-        const datepicker = new AirDatepicker('#datepicker-container', {
+        debugLog('Initializing AirDatepicker...');
+        
+        try {
+            const datepicker = new AirDatepicker('#datepicker-container', {
             inline: true,
             range: true,
             multipleDatesSeparator: ' - ',
@@ -124,33 +272,66 @@
                 firstDay: 0
             },
             onRenderCell: function({date, cellType}) {
-                if (cellType === 'day') {
-                    const dateStr = formatDate(date);
-                    const status = dateStatus[dateStr];
-                    
-                    // Skip if no status for this date
-                    if (!status) return;
-                    
-                    // Add appropriate CSS class based on status
-                    if (status.status === 'fully_booked' || status.count >= initialStock) {
-                        return {
-                            disabled: true,
-                            classes: 'air-datepicker-cell--disabled -disabled-'
-                        };
-                    } else if (status.status === 'partially_booked') {
-                        return {
-                            classes: 'air-datepicker-cell--partially-booked'
-                        };
-                    }
+                const dateStr = getDateString(date);
+                
+                // Skip if not a day cell
+                if (cellType !== 'day') return;
+                
+                const status = dateStatus[dateStr];
+                const dayOfWeek = date.getDay();
+                const isSaturday = dayOfWeek === 6; // 6 = Saturday
+                
+                // Skip if date is in the past
+                if (date < today) {
+                    return {
+                        disabled: true,
+                        classes: 'air-datepicker-cell--past -past-'
+                    };
                 }
                 
-                // Disable Saturdays (day 6, 0-indexed)
-                if (date.getDay() === 6) { // 6 = Saturday
+                // Handle Saturday (non-working day)
+                if (isSaturday) {
                     return {
                         disabled: true,
                         classes: 'air-datepicker-cell--weekend -weekend-'
                     };
                 }
+                
+                // Handle booked dates
+                if (status) {
+                    const isFullyBooked = status.status === 'fully_booked' || status.count >= initialStock;
+                    
+                    debugLog(`Rendering cell for ${dateStr}:`, {
+                        status: status.status,
+                        count: status.count,
+                        isFullyBooked: isFullyBooked,
+                        initialStock: initialStock
+                    });
+                    
+                    if (isFullyBooked) {
+                        return {
+                            disabled: true,
+                            classes: 'air-datepicker-cell--disabled -disabled-',
+                            attributes: {
+                                'title': `Fully booked (${status.count}/${initialStock})`
+                            }
+                        };
+                    } else {
+                        return {
+                            classes: 'air-datepicker-cell--partially-booked',
+                            attributes: {
+                                'title': `Partially booked (${status.count}/${initialStock})`
+                            }
+                        };
+                    }
+                }
+                
+                // Default available date
+                return {
+                    attributes: {
+                        'title': 'Available for booking'
+                    }
+                };
             },
             onSelect: function({date, formattedDate}) {
                 if (!date || date.length === 0) {
@@ -195,13 +376,99 @@
             }
         });
         
-        console.log('Rental date picker initialized');
-        return datepicker;
+            debugLog('AirDatepicker initialized successfully');
+            return datepicker;
+            
+        } catch (error) {
+            debugError('Error initializing AirDatepicker:', error);
+            $container.html(`<div class="error">Error initializing date picker: ${error.message}</div>`);
+            return null;
+        }
     }
 
+    // Error logging helper
+    function debugError(...args) {
+        console.error('[Rental Datepicker]', ...args);
+    }
+    
     // Initialize when document is ready
     $(document).ready(function() {
-        initRentalDatePicker();
+        try {
+            debugLog('Document ready, initializing...');
+            initRentalDatePicker();
+        } catch (error) {
+            debugError('Unhandled error during initialization:', error);
+            
+            // Show error message in the container if it exists
+            const $container = $('#datepicker-container');
+            if ($container.length) {
+                $container.html(`
+                    <div class="error">
+                        <p>Error initializing date picker. Please check the console for details.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `);
+            }
+        }
     });
     
+    // Make debug functions available globally for console access
+    window.rentalDatepickerDebug = {
+        reload: function() {
+            debugLog('Manually reloading date picker...');
+            initRentalDatePicker();
+        },
+        getStatus: function() {
+            const $container = $('#datepicker-container');
+            return {
+                containerExists: $container.length > 0,
+                containerHtml: $container.html(),
+                productId: $('.content[data-product-id]').data('product-id') || 'Not found',
+                initialStock: parseInt($('.stock').text().match(/\d+/) || '1')
+            };
+        }
+    };
+    
+    // Add some basic styles for the debug UI
+    const style = document.createElement('style');
+    style.textContent = `
+        #datepicker-container.loading {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-spinner {
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-style: italic;
+            color: #666;
+        }
+        .air-datepicker-cell--partially-booked {
+            background: #fff3e0 !important;
+            color: #e65100 !important;
+        }
+        .air-datepicker-cell--disabled {
+            background: #ffebee !important;
+            color: #b71c1c !important;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .air-datepicker-cell--weekend {
+            background: #f5f5f5 !important;
+            color: #9e9e9e !important;
+        }
+        .air-datepicker-cell--past {
+            opacity: 0.5;
+        }
+        .error {
+            color: #d32f2f;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    `;
+    document.head.appendChild(style);
 })(jQuery);
