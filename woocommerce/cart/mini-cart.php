@@ -157,9 +157,18 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                             
                             if ($is_rental) {
                                 // For rentals, show the price with any discounts
-                                // The price is already calculated by the rental-pricing.php code
                                 $price = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+                                
+                                // Get rental days from cart session
+                                $rental_days = !empty($cart_item['rental_days']) ? $cart_item['rental_days'] : 0;
+                                
+                                // Just show the simple price without breakdown
                                 echo '<div class="mini-cart rental-price">' . $price . '</div>';
+                                
+                                // Clear any previous breakdown HTML
+                                if (isset($GLOBALS['rental_breakdown_html'][$cart_item_key])) {
+                                    unset($GLOBALS['rental_breakdown_html'][$cart_item_key]);
+                                }
                             } else {
                                 // For regular products, show price × quantity
                                 echo '<p>' . $_product->get_price_html() . ' x ' . $cart_item['quantity'] . '</p>';
@@ -168,24 +177,20 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                         </div>
                         <div class="delete">
                             <?php
-                            echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                                'woocommerce_cart_item_remove_link',
-                                sprintf(
-                                    '<a href="%s" class="remove remove_from_cart_button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">%s</a>',
-                                    esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-                                    /* translators: %s is the product name */
-                                    esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
-                                    esc_attr( $product_id ),
-                                    esc_attr( $cart_item_key ),
-                                    esc_attr( $_product->get_sku() ),
-                                    '<img src="'. get_template_directory_uri().'/img/del.svg" alt="">'
-                                ),
-                                $cart_item_key
-                            );
+                            // Use a simpler remove link to avoid JS conflicts
+                            $remove_url = esc_url(wc_get_cart_remove_url($cart_item_key));
+                            echo '<a href="' . $remove_url . '" class="remove remove_from_cart_button" onclick="window.location.href=this.href; return false;" data-product_id="' . esc_attr($product_id) . '" data-cart_item_key="' . esc_attr($cart_item_key) . '">' . 
+                                 '<img src="'. get_template_directory_uri().'/img/del.svg" alt="">' . 
+                                 '</a>';
                             ?>
                         </div>
                     </div>
-                </div>
+                </div><?php
+                // Display rental breakdown if available for this item
+                if (!empty($GLOBALS['rental_breakdown_html'][$cart_item_key])) {
+                    echo $GLOBALS['rental_breakdown_html'][$cart_item_key];
+                }
+                ?>
 
 
  				<?php
@@ -195,7 +200,13 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 		do_action( 'woocommerce_mini_cart_contents' );
 		?>
 
-
+        <!-- Cart Subtotal Section -->
+        <div class="mini-cart-subtotal">
+            <div class="subtotal-row">
+                <span class="subtotal-label">סך הכל:</span>
+                <span class="subtotal-value"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
+            </div>
+        </div>
 
         <?php if (!is_checkout()) { ?>
         <div class="btn-wrap">

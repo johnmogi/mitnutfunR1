@@ -380,6 +380,9 @@ function rental_dates_value_fix() {
 }
 add_action('wp_footer', 'rental_dates_value_fix');
 
+// Include cart pricing fix to ensure correct rental pricing in cart/checkout
+require_once get_template_directory() . '/js-fixes/cart-pricing-fix.php';
+
 /**
  * Enqueue enhanced rental display script
  * This script improves the display of rental dates and price breakdown throughout the site
@@ -454,7 +457,27 @@ function enqueue_enhanced_rental_display() {
             wp_enqueue_script('join-booking-notice', get_template_directory_uri() . '/js/join-booking-notice.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/join-booking-notice.js'), 
                             true);
-        }    
+        }
+        
+        // DISABLED: Original aggressive price override script was corrupted
+        /*
+        wp_enqueue_script(
+            'aggressive-price-override',
+            get_template_directory_uri() . '/js-fixes/aggressive-price-override.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // NEW: Minimal price override script (clean implementation)
+        wp_enqueue_script(
+            'price-override-minimal',
+            get_template_directory_uri() . '/js-fixes/price-override-minimal.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
         
         // Add debug flag for development
         wp_localize_script('enhanced-rental-display', 'rentalConfig', array(

@@ -103,31 +103,51 @@ function mitnafun_apply_rental_pricing($cart) {
         // Calculate rental days
         $rental_days = mitnafun_calculate_rental_days($dates_array[0], $dates_array[1]);
         
-        // Store rental days in cart item for later use
-        $cart_item['rental_days'] = $rental_days;
-        
         // Apply appropriate pricing
         $product_id = $cart_item['product_id'];
         $original_price = $cart_item['data']->get_price();
         
         // Products 150, 153 don't get the discount
         $excluded_products = array(150, 153);
+        $has_discount = !in_array($product_id, $excluded_products) && $rental_days > 1;
         
-        if (!in_array($product_id, $excluded_products) && $rental_days > 1) {
+        // Calculate prices based on rental days
+        if ($has_discount) {
             // First day at full price, additional days at 50%
-            $discounted_price = $original_price + ($original_price * 0.5 * ($rental_days - 1));
+            $first_day_price = $original_price;
+            $additional_days_price = $original_price * 0.5 * ($rental_days - 1);
+            $discounted_price = $first_day_price + $additional_days_price;
             
-            // Store original price for display purposes
-            $cart_item['original_rental_price'] = $original_price * $rental_days;
-            $cart_item['rental_discount'] = $cart_item['original_rental_price'] - $discounted_price;
+            // Calculate original (non-discounted) price
+            $original_total = $original_price * $rental_days;
+            $discount_amount = $original_total - $discounted_price;
+            
+            // Store the calculated values in cart session
+            $cart->cart_contents[$cart_item_key]['rental_days'] = $rental_days;
+            $cart->cart_contents[$cart_item_key]['original_rental_price'] = $original_total;
+            $cart->cart_contents[$cart_item_key]['rental_discount'] = $discount_amount;
+            $cart->cart_contents[$cart_item_key]['first_day_price'] = $first_day_price;
+            $cart->cart_contents[$cart_item_key]['additional_days_price'] = $additional_days_price;
             
             // Set the new price
             $cart_item['data']->set_price($discounted_price);
         } else {
             // For excluded products or single-day rentals, just multiply by days
-            $cart_item['data']->set_price($original_price * $rental_days);
+            $total_price = $original_price * $rental_days;
+            
+            // Store the calculated values in cart session
+            $cart->cart_contents[$cart_item_key]['rental_days'] = $rental_days;
+            $cart->cart_contents[$cart_item_key]['original_rental_price'] = $total_price;
+            $cart->cart_contents[$cart_item_key]['rental_discount'] = 0;
+            $cart->cart_contents[$cart_item_key]['first_day_price'] = $original_price;
+            
+            // Set the new price
+            $cart_item['data']->set_price($total_price);
         }
     }
+    
+    // Make sure the session data is saved
+    $cart->set_session();
 }
 
 /**
@@ -210,27 +230,32 @@ function mitnafun_add_rental_days_item_data($item_data, $cart_item) {
  * @return string Modified price HTML
  */
 function mitnafun_rental_display_price($price, $cart_item, $cart_item_key) {
-    // Only modify rental items with discount
-    if (!mitnafun_is_rental_item($cart_item) || empty($cart_item['original_rental_price'])) {
+    // Only modify rental items
+    if (!mitnafun_is_rental_item($cart_item)) {
         return $price;
     }
     
     $rental_days = isset($cart_item['rental_days']) ? $cart_item['rental_days'] : 1;
-    if ($rental_days <= 1) {
-        return $price; // No discount for 1 day
+    $product_id = $cart_item['product_id'];
+    
+    // Use the stored first day price if available
+    if (isset($cart_item['first_day_price'])) {
+        // For products with discount (more than 1 day)
+        if ($rental_days > 1) {
+            // For products with discount, show first day price + discount info
+            $excluded_products = array(150, 153);
+            $has_discount = !in_array($product_id, $excluded_products);
+            
+            if ($has_discount) {
+                // Return the cart item price without modification
+                // This shows the total price for all rental days with discount applied
+                return $price;
+            }
+        }
     }
     
-    // Display the first day price only
-    $first_day_price = $cart_item['data']->get_price() / ($rental_days - 0.5);
-    $formatted_price = wc_price($first_day_price);
-    
-    // Add discount info
-    $discount_info = sprintf(
-        '<div class="rental-discount-info">יום ראשון: 100%%, ימים נוספים: 50%%</div>',
-        $rental_days - 1
-    );
-    
-    return $formatted_price . $discount_info;
+    // Return the normal price
+    return $price;
 }
 
 /**
@@ -242,27 +267,40 @@ function mitnafun_rental_display_price($price, $cart_item, $cart_item_key) {
  * @return string Modified subtotal HTML
  */
 function mitnafun_rental_display_subtotal($subtotal, $cart_item, $cart_item_key) {
-    // Only modify rental items with discount
-    if (!mitnafun_is_rental_item($cart_item) || empty($cart_item['original_rental_price'])) {
+    // Only modify rental items
+    if (!mitnafun_is_rental_item($cart_item)) {
         return $subtotal;
     }
     
+    // Get rental days and product ID
     $rental_days = isset($cart_item['rental_days']) ? $cart_item['rental_days'] : 1;
+    $product_id = $cart_item['product_id'];
+    
+    // Skip special handling for single day rentals
     if ($rental_days <= 1) {
-        return $subtotal; // No discount for 1 day
+        return $subtotal;
     }
     
-    // Show original price with strikethrough
-    $original_price = wc_price($cart_item['original_rental_price']);
-    $savings = wc_price($cart_item['rental_discount']);
+    // Check if product is excluded from discounts
+    $excluded_products = array(150, 153);
+    $has_discount = !in_array($product_id, $excluded_products);
     
-    // Create HTML for price breakdown
-    $subtotal_html = sprintf(
-        '%s <div class="rental-savings">מחיר מקורי: <span class="original-price">%s</span><br>חסכת: %s</div>',
-        $subtotal,
-        $original_price,
-        $savings
-    );
+    // For products with discount, show savings information
+    if ($has_discount && isset($cart_item['rental_discount']) && $cart_item['rental_discount'] > 0) {
+        $original_price = isset($cart_item['original_rental_price']) ? wc_price($cart_item['original_rental_price']) : '';
+        $savings = wc_price($cart_item['rental_discount']);
+        
+        // Create HTML for price breakdown
+        $subtotal_html = sprintf(
+            '%s <div class="rental-savings">מחיר מקורי: <span class="original-price">%s</span><br>חסכת: %s</div>',
+            $subtotal,
+            $original_price,
+            $savings
+        );
+        
+        return $subtotal_html;
+    }
     
-    return $subtotal_html;
+    // Return normal subtotal
+    return $subtotal;
 }
