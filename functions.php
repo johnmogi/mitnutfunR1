@@ -324,6 +324,63 @@ add_action('wp_ajax_nopriv_get_rental_dates', 'ajax_get_rental_dates');
 // Rental cart pricing is now handled in inc/rental-pricing.php
 
 /**
+ * Fix for the "Must select rental dates before adding to cart" error
+ */
+function rental_dates_value_fix() {
+    // Only add this fix on single product pages
+    if (!is_product()) return;
+    
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // Simple fix for the [object HTMLCollection] issue with rental_dates
+        $('form.cart').on('submit', function(e) {
+            // Get all rental_dates inputs (there might be multiple)
+            var $rentalInputs = $('input[name="rental_dates"]');
+            
+            // If we have multiple inputs, fix the value
+            if ($rentalInputs.length > 1) {
+                console.log('Found multiple rental_dates inputs, fixing...');
+                
+                // Find the visible one that likely has the correct value
+                var $visibleInput = $rentalInputs.filter(':visible').first();
+                var correctValue = '';
+                
+                // Try to get the value from the visible input first
+                if ($visibleInput.length && $visibleInput.val() && !$visibleInput.val().includes('[object')) {
+                    correctValue = $visibleInput.val();
+                }
+                
+                // If that didn't work, try to construct it from the displayed dates
+                if (!correctValue) {
+                    var startDate = $('#selected-start-date').text();
+                    var endDate = $('#selected-end-date').text();
+                    
+                    if (startDate && endDate) {
+                        correctValue = startDate + ' - ' + endDate;
+                    }
+                }
+                
+                // If we found a valid value, set it on the form's main input
+                if (correctValue) {
+                    // Set the value on the first input in the form
+                    $(this).find('input[name="rental_dates"]').val(correctValue);
+                    console.log('Fixed rental_dates value: ' + correctValue);
+                } else {
+                    // If no valid dates, prevent submission
+                    console.log('No valid dates selected');
+                    e.preventDefault();
+                    alert('יש לבחור תאריכי השכרה לפני הוספה לסל');
+                }
+            }
+        });
+    });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'rental_dates_value_fix');
+
+/**
  * Enqueue enhanced rental display script
  * This script improves the display of rental dates and price breakdown throughout the site
  */
