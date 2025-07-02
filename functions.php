@@ -397,6 +397,11 @@ function enqueue_enhanced_rental_display() {
             wp_enqueue_script('join-booking-notice', get_template_directory_uri() . '/js/join-booking-notice.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/join-booking-notice.js'), 
                             true);
+            
+            // Add calendar range validator
+            wp_enqueue_script('calendar-range-validator', get_template_directory_uri() . '/js/calendar-range-validator.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-range-validator.js'), 
+                            true);
         }    
         
         // Add debug flag for development

@@ -129,10 +129,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 if (!empty($rental_dates)) {
                                     echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
                                     
-                                    // Display rental days if available
-                                    if ($rental_days > 0) {
-                                        echo '<div class="rental-days"><strong>ימי השכרה:</strong> ' . $rental_days . '</div>';
-                                    }
+                                    // Rental days display removed to avoid duplication
                                     
                                     $debug_data['found'] = true;
                                     $debug_data['dates'] = $rental_dates;
@@ -159,7 +156,20 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 // For rentals, show the price with any discounts
                                 // The price is already calculated by the rental-pricing.php code
                                 $price = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
-                                echo '<div class="mini-cart rental-price">' . $price . '</div>';
+                                
+                                // Display price with discount info if available
+                                echo '<div class="mini-cart rental-price">' . $price;
+                                
+                                // Add discount info if rental days > 1
+                                if (!empty($cart_item['rental_days']) && $cart_item['rental_days'] > 1) {
+                                    // Check if this product gets the discount (excluded products: 150, 153)
+                                    $excluded_products = array(150, 153);
+                                    if (!in_array($cart_item['product_id'], $excluded_products)) {
+                                        echo '<div class="rental-discount-info">יום ראשון: 100%, ימים נוספים: 50%</div>';
+                                    }
+                                }
+                                
+                                echo '</div>';
                             } else {
                                 // For regular products, show price × quantity
                                 echo '<p>' . $_product->get_price_html() . ' x ' . $cart_item['quantity'] . '</p>';

@@ -46,6 +46,15 @@ function mitnafun_calculate_rental_days($start_date, $end_date) {
         return 1; // Return default if parsing failed
     }
     
+    // Special case: Friday to Sunday counts as 1 day
+    $start_day = date('w', $start);
+    $end_day = date('w', $end);
+    
+    // If the rental starts on Friday (5) and ends on Sunday (0), count as 1 day
+    if ($start_day == 5 && $end_day == 0 && $end <= strtotime('+2 days', $start)) {
+        return 1;
+    }
+    
     // Initialize days counter
     $days = 0;
     $current = $start;

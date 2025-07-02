@@ -97,8 +97,18 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 			$excluded_products = array(150, 153);
 			
 			if (!in_array($product_id, $excluded_products)) {
-				// Show discount info
+				// Calculate the original and discounted price for display
+				$item_total = $item->get_total();
+				$product_price = $item->get_product()->get_price();
+				$original_price = $product_price * $rental_days;
+				$savings = $original_price - $item_total;
+				
+				// Show discount info with original price and savings
 				$subtotal = $subtotal . '<div class="rental-discount-info">יום ראשון: 100%, ימים נוספים: 50%</div>';
+				
+				if ($savings > 0) {
+					$subtotal .= '<div class="rental-savings">מחיר מקורי: <span class="original-price">' . wc_price($original_price) . '</span><br>חסכת: ' . wc_price($savings) . '</div>';
+				}
 			}
 		}
 		
