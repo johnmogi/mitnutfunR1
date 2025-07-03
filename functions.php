@@ -70,9 +70,168 @@ include 'inc/rental-pricing.php';
 function ensure_wc_cart_fragments() {
     if (function_exists('is_woocommerce')) {
         wp_enqueue_script('wc-cart-fragments');
+        
+        // Force cart data to session on checkout page to prevent empty cart
+        if (is_checkout() && !WC()->cart->is_empty()) {
+            // Log debug information
+            error_log('Checkout page loaded with ' . WC()->cart->get_cart_contents_count() . ' items in cart');
+            
+            // Force WooCommerce to save cart to session
+            WC()->cart->get_cart_from_session();
+            WC()->cart->set_session();
+            
+            // Make sure each cart item has its rental dates properly set
+            foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                // Check if this is a rental product that should have dates
+                if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+                    // Log the rental dates being preserved
+                    error_log('Preserving rental dates for product ' . $cart_item['product_id'] . ': ' . $cart_item['rental_dates']);
+                }
+            }
+            
+            // Add debug info to page
+            add_action('woocommerce_before_checkout_form', function() {
+                echo '<!-- CHECKOUT DEBUG: Cart has ' . WC()->cart->get_cart_contents_count() . ' items -->';
+                echo '<!-- Cart Hash: ' . md5(serialize(WC()->cart->get_cart())) . ' -->';
+                
+                // Add rental dates debug info
+                foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                    if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+                        echo '<!-- Product ' . $cart_item['product_id'] . ' rental dates: ' . $cart_item['rental_dates'] . ' -->';
+                    }
+                }
+            }, 1);
+        }
     }
 }
+
+// Ensure rental dates are passed to order meta
+function add_rental_dates_to_order_items($item, $cart_item_key, $values, $order) {
+    // Check if this item has rental dates
+    if (isset($values['rental_dates']) && !empty($values['rental_dates'])) {
+        // Add rental dates as order item meta
+        $item->add_meta_data('rental_dates', $values['rental_dates']);
+        
+        // Add rental days calculation to order item meta
+        if (isset($values['rental_days']) && !empty($values['rental_days'])) {
+            $item->add_meta_data('rental_days', $values['rental_days']);
+        }
+        
+        // Log that we're adding the rental dates to the order
+        error_log('Added rental dates to order item: ' . $values['rental_dates']);
+    }
+}
+
+/**
+ * Display rental dates information in cart and checkout
+ */
+function display_rental_dates_in_cart_checkout($item_data, $cart_item) {
+    // Check if this item has rental dates
+    if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+        // Add rental dates to cart/checkout display
+        $item_data[] = array(
+            'key'     => 'תאריכי השכרה',
+            'value'   => wc_clean($cart_item['rental_dates']),
+            'display' => '',
+        );
+        
+        // If we have calculated rental days, show them as well
+        if (isset($cart_item['rental_days']) && !empty($cart_item['rental_days'])) {
+            // Add rental days (with special pricing info if applicable)
+            $rental_days = intval($cart_item['rental_days']);
+            $day_text = $rental_days == 1 ? 'יום' : 'ימים';
+            
+            $item_data[] = array(
+                'key'     => 'תקופת השכרה',
+                'value'   => $rental_days . ' ' . $day_text,
+                'display' => '',
+            );
+        }
+    }
+    
+    return $item_data;
+}
+add_filter('woocommerce_get_item_data', 'display_rental_dates_in_cart_checkout', 10, 2);
+
+/**
+ * Setup checkout page AJAX helper endpoint
+ * This ensures we can restore cart data if checkout seems empty
+ */
+function register_checkout_cart_ajax_endpoint() {
+    add_action('wp_ajax_get_checkout_cart_status', 'get_checkout_cart_status_callback');
+    add_action('wp_ajax_nopriv_get_checkout_cart_status', 'get_checkout_cart_status_callback');
+}
+add_action('init', 'register_checkout_cart_ajax_endpoint');
+
+/**
+ * AJAX callback to check cart status and send cart items data
+ */
+function get_checkout_cart_status_callback() {
+    // Security check
+    check_ajax_referer('checkout_cart_nonce', 'security');
+    
+    $response = array(
+        'success' => false,
+        'cart_count' => 0,
+        'cart_items' => array(),
+        'message' => ''
+    );
+    
+    if (function_exists('WC') && WC()->cart) {
+        // Get cart contents
+        $cart_count = WC()->cart->get_cart_contents_count();
+        $cart_items = WC()->cart->get_cart();
+        
+        $response['success'] = true;
+        $response['cart_count'] = $cart_count;
+        $response['message'] = sprintf('Cart has %d items', $cart_count);
+        
+        // Add basic item info
+        foreach($cart_items as $cart_item_key => $cart_item) {
+            $product = $cart_item['data'];
+            $response['cart_items'][] = array(
+                'key' => $cart_item_key,
+                'product_id' => $cart_item['product_id'],
+                'quantity' => $cart_item['quantity'],
+                'name' => $product->get_name(),
+                'rental_dates' => isset($cart_item['rental_dates']) ? $cart_item['rental_dates'] : ''
+            );
+        }
+        
+        // Force WC session save
+        WC()->cart->set_session();
+    } else {
+        $response['message'] = 'WooCommerce cart not available';
+    }
+    
+    wp_send_json($response);
+}
+add_action('woocommerce_checkout_create_order_line_item', 'add_rental_dates_to_order_items', 10, 4);
 add_action('wp_enqueue_scripts', 'ensure_wc_cart_fragments', 20);
+
+// Force correct template on checkout page
+add_filter('woocommerce_located_template', 'mitnafun_ensure_checkout_template', 100, 3);
+function mitnafun_ensure_checkout_template($template, $template_name, $template_path) {
+    // Only run on checkout page
+    if (!is_checkout()) {
+        return $template;
+    }
+    
+    // Check if the cart is not empty but an empty template is being loaded
+    if (function_exists('WC') && WC()->cart && !WC()->cart->is_empty() && 
+        ($template_name === 'checkout/form-checkout.php' || $template_name === 'cart/cart-empty.php')) {
+        
+        // Log debug information
+        error_log('Checkout template override: Cart has items but ' . $template_name . ' was selected');
+        
+        // Force the correct template from WooCommerce core
+        if ($template_name === 'cart/cart-empty.php') {
+            return WC()->plugin_path() . '/templates/checkout/form-checkout.php';
+        }
+    }
+    
+    return $template;
+}
 
 add_action('wp_enqueue_scripts', 'load_style_script');
 function load_style_script(){

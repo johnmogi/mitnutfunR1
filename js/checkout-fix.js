@@ -3,23 +3,142 @@
  * Removes any stuck spinners on the checkout page
  */
 jQuery(document).ready(function($) {
+    console.log('Checkout fix script loaded');
+    
+    // Function to ensure checkout review table has items
+    function ensureCheckoutItems() {
+        console.log('Ensuring checkout items are displayed...');
+        
+        // If we're on the checkout page
+        if (window.location.href.includes('/checkout/')) {
+            // Get cart count from WC data if available
+            var cartItemCount = 0;
+            
+            // Try to get the security nonce
+            var checkoutNonce = '';
+            if ($('form.checkout').length > 0) {
+                checkoutNonce = $('form.checkout').find('input[name="_wpnonce"]').val() || '';
+            }
+            
+            // Call our custom AJAX endpoint to check cart status
+            $.ajax({
+                url: woocommerce_params.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'get_checkout_cart_status',
+                    security: checkoutNonce
+                },
+                success: function(response) {
+                    console.log('Cart status check response:', response);
+                    
+                    if (response.success && response.cart_count > 0) {
+                        console.log('Server confirms cart has ' + response.cart_count + ' items');
+                        
+                        // Force update checkout
+                        if ($('form.checkout').length) {
+                            $(document.body).trigger('update_checkout');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking cart status:', error);
+                }
+            });
+            
+            // Try different ways to access cart count
+            if (typeof wc_cart_fragments_params !== 'undefined') {
+                console.log('WooCommerce cart fragments found');
+                
+                // Force fragment refresh
+                $(document.body).trigger('wc_fragment_refresh');
+            }
+            
+            // Check if review order table exists but is empty
+            var $reviewTable = $('.woocommerce-checkout-review-order-table');
+            if ($reviewTable.length > 0) {
+                var hasItems = $reviewTable.find('tr.cart_item').length > 0;
+                console.log('Review order table found, has items:', hasItems);
+                
+                if (!hasItems) {
+                    console.log('No items in review table, attempting to reload');
+                    
+                    // Show loading message
+                    $reviewTable.prepend('<tr class="loading-items"><td colspan="2">טוען פריטים...</td></tr>');
+                    
+                    // Instead of force refreshing, try to recover cart first
+                    setTimeout(function() {
+                        // Check again if items appeared
+                        if ($reviewTable.find('tr.cart_item').length === 0) {
+                            console.log('Still no items, attempting cart recovery instead of reload');
+                            
+                            // Show a more informative message
+                            $reviewTable.find('.loading-items').html('<td colspan="2">מנסה לשחזר את עגלת הקניות...</td>');
+                            
+                            // Try to recover cart state via WooCommerce fragments
+                            if (typeof wc_cart_fragments_params !== 'undefined') {
+                                console.log('Triggering fragment refresh to recover cart');
+                                $(document.body).trigger('wc_fragment_refresh');
+                                
+                                // Check again after fragment refresh
+                                setTimeout(function() {
+                                    if ($reviewTable.find('tr.cart_item').length > 0) {
+                                        console.log('Cart recovered through fragments');
+                                        $reviewTable.find('.loading-items').remove();
+                                    } else {
+                                        console.log('Recovery failed, showing error message');
+                                        // Instead of reload, show user-friendly error message
+                                        $reviewTable.find('.loading-items')
+                                            .html('<td colspan="2">העגלה ריקה או שיש בעיה בטעינת הפריטים. <a href="/shop/">חזרה לחנות</a></td>')
+                                            .removeClass('loading-items')
+                                            .addClass('empty-cart-message');
+                                    }
+                                }, 2000);
+                            } else {
+                                // No fragments support, provide message
+                                $reviewTable.find('.loading-items')
+                                    .html('<td colspan="2">העגלה ריקה או שיש בעיה בטעינת הפריטים. <a href="/shop/">חזרה לחנות</a></td>')
+                                    .removeClass('loading-items')
+                                    .addClass('empty-cart-message');
+                            }
+                        } else {
+                            console.log('Items appeared, removing loading message');
+                            $reviewTable.find('.loading-items').remove();
+                        }
+                    }, 2000);
+                }
+            }
+            
+            // Check session storage for rental dates
+            if (sessionStorage.getItem('last_added_rental')) {
+                try {
+                    const rentalData = JSON.parse(sessionStorage.getItem('last_added_rental'));
+                    console.log('Found rental data in session:', rentalData);
+                    
+                    // Add debug info
+                    $('<div class="rental-debug" style="display:none;">Last added: ' + 
+                      rentalData.product_id + ' - ' + rentalData.rental_dates + '</div>')
+                      .appendTo('.woocommerce-checkout');
+                } catch (e) {
+                    console.error('Error parsing rental data:', e);
+                }
+            }
+        }
+    }
+    
     // Function to remove stuck spinners
     function removeStuckSpinners() {
         $('.blockUI.blockOverlay').remove();
         $('.blockUI.blockMsg').remove();
-        
-        // Also unlock any blocked elements
-        $('.blockElement').removeClass('blockElement');
-        
-        // Remove any spinners in review orders section
-        $('.woocommerce-checkout-review-order-table').unblock();
+        $('.processing').removeClass('processing');
         $('.woocommerce-checkout-payment').unblock();
+        $('form.checkout').unblock();
     }
     
-    // Initial cleanup
-    setTimeout(removeStuckSpinners, 500);
+    // Run initially
+    removeStuckSpinners();
+    setTimeout(ensureCheckoutItems, 500);
     
-    // Watch for AJAX events and clean up after they complete
+    // Also run on AJAX events
     $(document).ajaxComplete(function() {
         setTimeout(removeStuckSpinners, 100);
     });

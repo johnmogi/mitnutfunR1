@@ -83,9 +83,45 @@ jQuery(document).ready(function($) {
     // Initial update
     setTimeout(updatePriceDisplay, 1000);
     
+    // Debounce function to prevent excessive updates
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+    
+    // Use debounced update function
+    const debouncedUpdate = debounce(updatePriceDisplay, 3000); // 3-second delay
+    
+    // Flag to prevent recursive updates
+    let isUpdating = false;
+    
     // Update when DOM changes (for dynamic checkout updates)
     const observer = new MutationObserver(function(mutations) {
-        updatePriceDisplay();
+        // Skip if we're already in the middle of an update
+        if (isUpdating) return;
+        
+        // Check if this mutation was triggered by our own price updates
+        let skipUpdate = false;
+        for (let i = 0; i < mutations.length; i++) {
+            const mutation = mutations[i];
+            // If price elements were modified, likely our own update
+            if (mutation.target && ($(mutation.target).hasClass('cost') || 
+                $(mutation.target).hasClass('rental-price') || 
+                $(mutation.target).hasClass('woocommerce-Price-amount'))) {
+                skipUpdate = true;
+                break;
+            }
+        }
+        
+        if (skipUpdate) return;
+        
+        // Use debounced update to prevent rapid-fire changes
+        debouncedUpdate();
     });
     
     // Observe changes to checkout content
@@ -94,10 +130,23 @@ jQuery(document).ready(function($) {
         if (checkoutReview) {
             observer.observe(checkoutReview, { 
                 childList: true,
-                subtree: true 
+                subtree: true,
+                characterData: true
             });
         }
     }
+    
+    // Modify the updatePriceDisplay function to use the isUpdating flag
+    const originalUpdatePriceDisplay = updatePriceDisplay;
+    updatePriceDisplay = function() {
+        isUpdating = true;
+        originalUpdatePriceDisplay();
+        
+        // Reset the flag after DOM has settled
+        setTimeout(function() {
+            isUpdating = false;
+        }, 1000);
+    };
     
     // Also update after AJAX calls
     $(document).ajaxComplete(function() {

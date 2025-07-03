@@ -307,10 +307,53 @@ jQuery(document).ready(function($) {
             runPriceUpdate();
         });
         
-        // Watch for DOM changes in the order review area
+        // Flag to prevent recursive updates
+        let isUpdating = false;
+        
+        // Debounce timer
+        let updateTimer = null;
+        
+        // Watch for DOM changes in the order review area with debouncing
         const observer = new MutationObserver(function(mutations) {
-            log('Order review DOM changed, running price update');
-            runPriceUpdate();
+            // Skip if we're the ones causing the change
+            if (isUpdating) {
+                return;
+            }
+            
+            // Check if this mutation was triggered by our price updates
+            let skipUpdate = false;
+            mutations.forEach(function(mutation) {
+                // If this is a change to price amounts, likely our own update
+                if (mutation.target && $(mutation.target).hasClass('woocommerce-Price-amount')) {
+                    skipUpdate = true;
+                }
+            });
+            
+            if (skipUpdate) {
+                return;
+            }
+            
+            // Clear previous timer
+            if (updateTimer) {
+                clearTimeout(updateTimer);
+            }
+            
+            // Set new timer with 2 second delay
+            updateTimer = setTimeout(function() {
+                log('Order review DOM changed, running price update (debounced)');
+                
+                // Set flag to prevent recursive updates
+                isUpdating = true;
+                
+                // Run price update
+                updateItemPrices();
+                updateOrderTotal();
+                
+                // Reset flag after a delay to allow DOM to settle
+                setTimeout(function() {
+                    isUpdating = false;
+                }, 1000);
+            }, 2000);
         });
         
         // Start observing the order review table
@@ -319,7 +362,7 @@ jQuery(document).ready(function($) {
             observer.observe($orderReview[0], {
                 childList: true,
                 subtree: true,
-                attributes: false,
+                attributes: true, // Watch attributes too to catch more changes
                 characterData: true
             });
         }

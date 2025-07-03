@@ -10,14 +10,45 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://woo.com/document/template-structure/
- * @package WooCommerce\Templates
+ * @see https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce/Templates
  * @version 3.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// CRITICAL FIX: Force check the cart state before proceeding
+if (function_exists('WC') && WC()->cart) {
+    // Get the cart contents count
+    $cart_count = WC()->cart->get_cart_contents_count();
+    
+    // Debug information
+    echo '<!-- CHECKOUT DEBUG: Cart has ' . $cart_count . ' items -->';
+    
+    // If the cart is empty but we have session fragments, try to recover
+    if ($cart_count == 0 && WC()->session && WC()->session->get('cart')) {
+        // Force cart reload from session
+        WC()->cart->get_cart_from_session();
+        
+        // Check again after reload
+        $cart_count = WC()->cart->get_cart_contents_count();
+        echo '<!-- CHECKOUT DEBUG: After session reload, cart now has ' . $cart_count . ' items -->';
+    }
+    
+    // If cart is still empty, redirect to shop
+    if ($cart_count == 0) {
+        // Only redirect if not already done so (prevent loops)
+        if (!isset($_GET['cart_empty'])) {
+            echo '<div class="woocommerce-info">העגלה ריקה, מוביל לחנות...</div>';
+            echo '<script>setTimeout(function(){ window.location.href = "/shop/"; }, 1500);</script>';
+            exit;
+        }
+    }
+}
+
+do_action( 'woocommerce_before_checkout_form', $checkout );
 
 //
 
