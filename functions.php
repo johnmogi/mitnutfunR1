@@ -648,3 +648,4 @@ function ajax_get_rental_dates() {
 }
 
 
+require_once( get_stylesheet_directory() . '/cart-test.php' );

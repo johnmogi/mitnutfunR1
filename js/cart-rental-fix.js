@@ -606,51 +606,117 @@
                 
                 $item.css('position', 'relative').append($loader);
                 
-                // Use WooCommerce's own AJAX endpoint instead of form submission
-                $.ajax({
-                    type: 'POST',
-                    url: ajaxUrl,
-                    data: {
-                        action: 'woocommerce_remove_from_cart',
-                        cart_item_key: cartItemKey, 
-                        security: nonce || '' // Use nonce if available
-                    },
-                    success: function(response) {
-                        debugLog('Item removed via AJAX', response);
-                        
-                        // Update fragments
-                        if (response && response.fragments) {
-                            // Update each fragment
-                            $.each(response.fragments, function(key, value) {
-                                $(key).replaceWith(value);
+                // Debug current state
+                console.log('Removing item with cart_item_key:', cartItemKey, 'nonce:', nonce, 'href:', href);
+                
+                // Try direct WC API approach first
+                if (typeof wc_add_to_cart_params !== 'undefined') {
+                    console.log('Using WC API for removal');
+                    
+                    // Use WooCommerce's own AJAX endpoint for cart removal
+                    $.ajax({
+                        type: 'POST',
+                        url: ajaxUrl,
+                        data: {
+                            action: 'woocommerce_remove_from_cart',
+                            cart_item_key: cartItemKey, 
+                            security: nonce || '' // Use nonce if available
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log('AJAX removal response:', response);
+                            
+                            // Check if we got a successful response with fragments
+                            if (response && response.fragments) {
+                                console.log('Got fragments, updating cart');  
+                                
+                                // Update each fragment
+                                $.each(response.fragments, function(key, value) {
+                                    $(key).replaceWith(value);
+                                });
+                                
+                                // Manually remove the item from DOM if it still exists
+                                $item.slideUp(250, function() {
+                                    $(this).remove();
+                                });
+                                
+                                // Update cart count if available
+                                if (response.cart_hash !== undefined) {
+                                    // If empty cart now, show empty message
+                                    if ($('.item').length <= 1) { // This item is about to be removed
+                                        console.log('Cart now empty, showing empty message');
+                                        $('.basket-wrap .woocommerce').addClass('cart-empty');
+                                    }
+                                }
+                                
+                                // Trigger fragment refresh after a short delay
+                                setTimeout(function() {
+                                    $(document.body).trigger('wc_fragments_refreshed');
+                                    fixMiniCart();
+                                    fixRentalDateDisplay();
+                                }, 300);
+                            } else {
+                                console.log('Invalid response from server:', response);
+                                // Fallback to href navigation
+                                if (href) {
+                                    window.location.href = href;
+                                } else {
+                                    $item.css('opacity', '1');
+                                    $('.item-remove-loader, .removing-item').remove();
+                                }
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('AJAX removal error:', error, xhr.responseText);
+                            
+                            // Try a second approach with different parameters
+                            console.log('Trying second AJAX approach');
+                            $.ajax({
+                                type: 'POST',
+                                url: wc_add_to_cart_params.ajax_url,
+                                data: {
+                                    action: 'remove_from_cart',
+                                    cart_item_key: cartItemKey
+                                },
+                                success: function() {
+                                    // Second approach worked
+                                    $item.slideUp(250, function() {
+                                        $(this).remove();
+                                        $(document.body).trigger('wc_fragments_refreshed');
+                                    });
+                                },
+                                error: function() {
+                                    // All AJAX approaches failed, use direct URL
+                                    console.log('Both AJAX approaches failed, using direct URL');
+                                    if (href) {
+                                        window.location.href = href;
+                                    } else {
+                                        $item.css('opacity', '1');
+                                        $('.item-remove-loader, .removing-item').remove();
+                                        alert('לא ניתן להסיר את הפריט. אנא נסה שוב או רענן את הדף.');
+                                    }
+                                }
                             });
+                        },
+                        complete: function() {
+                            // Remove loading indicators after a delay
+                            setTimeout(function() {
+                                $('.item-remove-loader, .removing-item').remove();
+                                removeEndlessSpinners();
+                            }, 800);
                         }
-                        
-                        // Ensure our fixes are applied
-                        setTimeout(function() {
-                            fixMiniCart();
-                            fixRentalDateDisplay();
-                            removeEndlessSpinners();
-                        }, 100);
-                    },
-                    error: function(xhr, status, error) {
-                        debugLog('Error removing item:', error);
-                        
-                        // If AJAX fails, fallback to direct URL navigation
-                        if (href) {
-                            window.location.href = href;
-                        } else {
-                            // Remove loading state
-                            $item.css('opacity', '1');
-                            $('.item-remove-loader, .removing-item').remove();
-                            alert('לא ניתן להסיר את הפריט. אנא נסה שוב או רענן את הדף.');
-                        }
-                    },
-                    complete: function() {
-                        // Ensure cart fragments are refreshed
-                        $(document.body).trigger('wc_fragment_refresh');
+                    });
+                } else {
+                    // WC params not defined, use direct URL navigation
+                    console.log('WC params not available, using direct URL');
+                    if (href) {
+                        window.location.href = href;
+                    } else {
+                        $item.css('opacity', '1');
+                        $('.item-remove-loader, .removing-item').remove();
+                        alert('לא ניתן להסיר את הפריט. אנא רענן את הדף ונסה שוב.');
                     }
-                });
+                }
                 
                 // Prevent default action
                 e.preventDefault();
@@ -738,16 +804,170 @@
     }
     
     /**
-     * Fix rental days display to ensure consistency
-     * This ensures Friday-Sunday is treated as 1 day
+     * Fix rental days display to ensure consistency across all site areas
+     * This ensures Friday-Sunday is treated as 1 day and pricing is consistent
      */
     function fixRentalDaysDisplay() {
-        debugLog('Fixing rental days display consistency...');
+        debugLog('Fixing rental days display consistency across all site areas...');
         
-        // Find all rental items in the mini-cart
+        // Target mini-cart and checkout review items with appropriate handler functions
         $('.item', '.check-popup').each(function() {
-            const $item = $(this);
+            processRentalItem($(this));
+        });
+        
+        $('.woocommerce-checkout-review-order-table .item').each(function() {
+            processCheckoutReviewItem($(this));
+        });
+        
+        /**
+         * Process checkout review rental items (different structure)
+         * @param {jQuery} $item - The item element to process
+         */
+        function processCheckoutReviewItem($item) {
+            debugLog('Processing checkout review item:', $item);
             
+            // Find rental dates - in checkout review these are in a p.rental-dates element
+            const $rentalDatesElem = $item.find('.rental-dates');
+            if (!$rentalDatesElem.length) return;
+            
+            // Extract dates from the text
+            let rentalDatesText = $rentalDatesElem.text();
+            if (rentalDatesText.indexOf('תאריכי השכרה:') > -1) {
+                rentalDatesText = rentalDatesText.split('תאריכי השכרה:')[1].trim();
+            }
+            
+            if (!rentalDatesText || rentalDatesText.indexOf(' - ') === -1) return;
+            
+            console.log('Found rental dates in checkout item:', rentalDatesText);
+            
+            // Calculate correct rental days using our standard logic
+            const dateParts = rentalDatesText.split(' - ');
+            if (dateParts.length !== 2) return;
+            
+            // Parse dates - handle various formats (assuming D.M.YYYY)
+            const startParts = dateParts[0].split('.');
+            const endParts = dateParts[1].split('.');
+            
+            if (startParts.length !== 3 || endParts.length !== 3) return;
+            
+            try {
+                // Create Date objects
+                const startDate = new Date(startParts[2], startParts[1]-1, startParts[0]);
+                const endDate = new Date(endParts[2], endParts[1]-1, endParts[0]);
+                
+                // Check for Friday-Sunday special case
+                const startDay = startDate.getDay(); // 0=Sunday, 5=Friday
+                const endDay = endDate.getDay();
+                const diffDays = Math.round((endDate - startDate) / (24 * 60 * 60 * 1000)) + 1;
+                
+                let rentalDays = diffDays;
+                
+                // Apply special Friday-Sunday = 1 day rule
+                if (startDay === 5 && endDay === 0 && diffDays <= 3) {
+                    rentalDays = 1;
+                    console.log('Applied Friday-Sunday special rule to checkout item:', dateParts, 'days:', rentalDays);
+                } else {
+                    // Apply standard rental day counting logic (day count is reduced by one)
+                    rentalDays = Math.max(1, diffDays - 1);
+                    console.log('Applied standard rental day counting to checkout item:', dateParts, 'days:', rentalDays);
+                }
+                
+                // Update any displayed rental days text
+                const $rentalDaysText = $item.find('.rental-days-text');
+                if ($rentalDaysText.length) {
+                    $rentalDaysText.text('ימי השכרה: ' + rentalDays);
+                } else {
+                    // If no rental days text exists, add it
+                    $item.find('.info').append('<div class="rental-days-text">ימי השכרה: ' + rentalDays + '</div>');
+                }
+                
+                // Set data attribute for future reference
+                $item.attr('data-rental-days', rentalDays);
+                
+                // Update price display if needed
+                const $priceContainer = $item.find('.cost');
+                if ($priceContainer.length) {
+                    // Base price is always 550₪ for the first day
+                    const basePrice = 550;
+                    let totalPrice = 0;
+                    
+                    // Get product ID (if available, may not be in checkout)
+                    // For simplicity, assume all rental products follow the discount rule
+                    let hasDiscount = true;
+                    
+                    // Calculate total price using consistent rules
+                    if (rentalDays === 1) {
+                        // One day rental - just base price
+                        totalPrice = basePrice;
+                    } else if (hasDiscount) {
+                        // Standard rental with discount: first day full price + additional days at 50%
+                        const additionalDays = rentalDays - 1;
+                        const additionalDaysPrice = additionalDays * (basePrice * 0.5);
+                        totalPrice = basePrice + additionalDaysPrice;
+                    } else {
+                        // No discount products: full price for all days
+                        totalPrice = basePrice * rentalDays;
+                    }
+                    
+                    // Format the currency symbol
+                    const currency = '₪';
+                    
+                    console.log('Updating checkout item price:', {
+                        rentalDays: rentalDays,
+                        basePrice: basePrice,
+                        totalPrice: totalPrice.toFixed(2)
+                    });
+                    
+                    // Update the displayed price
+                    const $priceDisplay = $priceContainer.find('.woocommerce-Price-amount bdi');
+                    if ($priceDisplay.length) {
+                        $priceDisplay.html(totalPrice.toFixed(2) + '&nbsp;<span class="woocommerce-Price-currencySymbol">' + currency + '</span>');
+                    }
+                    
+                    // Remove any existing breakdown
+                    $item.find('.rental-price-breakdown').remove();
+                    
+                    // Create a detailed price breakdown
+                    let breakdownHtml = `
+                        <div class="rental-price-breakdown" style="margin-top: 8px; font-size: 0.85em; color: #666;">
+                            <div class="rental-days-count" style="margin-bottom: 4px;">
+                                <strong>ימי השכרה:</strong> ${rentalDays}
+                            </div>
+                            <div class="price-details">
+                                <div>יום 1: ${basePrice.toFixed(2)} ${currency}</div>`;
+                    
+                    // Add additional days if any
+                    if (rentalDays > 1 && hasDiscount) {
+                        const additionalDays = rentalDays - 1;
+                        const additionalDaysPrice = additionalDays * (basePrice * 0.5);
+                        breakdownHtml += `
+                                <div>${additionalDays} ימים נוספים (50%): ${additionalDaysPrice.toFixed(2)} ${currency}</div>`;
+                    } else if (rentalDays > 1) {
+                        const additionalDays = rentalDays - 1;
+                        const additionalDaysPrice = additionalDays * basePrice;
+                        breakdownHtml += `
+                                <div>${additionalDays} ימים נוספים: ${additionalDaysPrice.toFixed(2)} ${currency}</div>`;
+                    }
+                    
+                    // Add total
+                    breakdownHtml += `
+                                <div style="margin-top: 4px; font-weight: bold;">סה"כ: ${totalPrice.toFixed(2)} ${currency}</div>
+                            </div>
+                        </div>`;
+                    
+                    // Insert the breakdown after cost div
+                    $priceContainer.after(breakdownHtml);
+                }
+            } catch (err) {
+                console.error('Error processing checkout review dates:', err);
+            }
+        }
+        
+        /**
+         * Process standard rental items (in mini-cart)
+         * @param {jQuery} $item - The item element to process
+         */
+        function processRentalItem($item) {
             // Find rental dates container
             const $dateContainer = $item.find('.rental-dates-container');
             if (!$dateContainer.length) return;
@@ -890,7 +1110,7 @@
             } catch (err) {
                 debugLog('Error calculating rental days:', err);
             }
-        });
+        }
     }
     
     // Initialize date recovery
