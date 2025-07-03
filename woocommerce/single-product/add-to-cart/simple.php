@@ -48,10 +48,64 @@ if ( $product->is_in_stock() ) : ?>
 		?>
         </div>
         <div class="btn-wrap">
-
 		    <button disabled type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="btn-default btn-blue btn-mini">הוסף לסל</button>
-		    <button disabled type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="btn-redirect btn-default btn-yellow btn-mini">הזמן</button>
+		    <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="btn-default btn-yellow btn-mini checkout-direct" disabled="disabled">להזמנה</a>
         </div>
+        <script>
+        // Script to handle direct-to-checkout functionality
+        jQuery(document).ready(function($) {
+            // Store the date selection when available
+            $(document).on('change', '#rental_dates', function() {
+                const dates = $(this).val();
+                if (dates) {
+                    // Store rental dates in session storage
+                    sessionStorage.setItem('rental_dates', dates);
+                    // Enable the direct checkout button if dates are selected
+                    $('.checkout-direct').removeAttr('disabled');
+                } else {
+                    // Disable the direct checkout button if no dates
+                    $('.checkout-direct').attr('disabled', 'disabled');
+                }
+            });
+            
+            // Handle direct checkout click
+            $('.checkout-direct').on('click', function(e) {
+                if ($(this).attr('disabled')) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                e.preventDefault();
+                const productId = $('button[name="add-to-cart"]').val();
+                const quantity = $('input[name="quantity"]').val() || 1;
+                const rentalDates = $('#rental_dates').val();
+                
+                if (!productId || !rentalDates) {
+                    alert('Please select rental dates before proceeding to checkout.');
+                    return false;
+                }
+                
+                // Add to cart via AJAX and redirect to checkout
+                $.ajax({
+                    type: 'POST',
+                    url: wc_add_to_cart_params.ajax_url,
+                    data: {
+                        action: 'woocommerce_ajax_add_to_cart',
+                        product_id: productId,
+                        quantity: quantity,
+                        rental_dates: rentalDates
+                    },
+                    success: function(response) {
+                        window.location.href = '<?php echo esc_url( wc_get_checkout_url() ); ?>';
+                    },
+                    error: function() {
+                        alert('Error adding product to cart. Please try again.');
+                    }
+                });
+                return false;
+            });
+        });
+        </script>
 		<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
         <input type="hidden" name="redirect" value="">
 	</form>

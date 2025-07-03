@@ -376,51 +376,46 @@
                         currentDate.setDate(currentDate.getDate() + 1);
                     }
                     
-                    // Detect weekend pattern (Friday + Sunday, possibly with days in between)
-                    const hasFriday = daysByType[5] > 0;
-                    const hasSunday = daysByType[0] > 0;
-                    const hasWeekendPattern = hasFriday && hasSunday;
-                    
-                    debugLog('Day counts by type:', { daysByType, datesByDay, hasWeekendPattern });
+                    // NEW IMPLEMENTATION: Complete rewrite of weekend pattern detection and calculation
+                    // Count days by type
+                    debugLog('Day counts by type:', { daysByType, datesByDay });
                     
                     // Apply the rental day calculation rule
-                    // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                    // Special case: Friday-Sunday counts as 1 regardless, but ONLY for short ranges (up to 3 days)
+                    // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc. (capped at 5)
+                    // Special case: ONLY true Friday-Sunday weekend (2-3 days) counts as 1
                     let days;
                     
-                    // Fix for 6+ day ranges: Cap at 5 days for pricing
-                    if (rawDays > 6) {
-                        days = 5; // Cap at 5 days for pricing for any 6+ day range
-                        debugLog('Capped day calculation:', { rawDays, cappedDays: days });
-                    } else if (hasWeekendPattern && rawDays <= 3) {
-                        // Only apply the special weekend rule for short ranges (up to 3 days)
-                        // Find the first Friday and last Sunday in the range
-                        let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
-                        let lastSundayIndex = -1;
-                        for (let i = datesByDay.length - 1; i >= 0; i--) {
-                            if (datesByDay[i].dayOfWeek === 0) {
-                                lastSundayIndex = i;
-                                break;
-                            }
-                        }
+                    // Is this a true weekend rental? (Friday to Sunday, max 3 days)
+                    const isTrueWeekendRental = (() => {
+                        // Only consider ranges of 2-3 days that start on Friday and end on Sunday
+                        if (rawDays > 3 || rawDays < 2) return false;
                         
-                        if (fridayIndex >= 0 && lastSundayIndex >= 0) {
-                            // Apply special weekend rule - Friday to Sunday counts as 1 day
-                            days = 1;
-                            
-                            debugLog('Weekend pattern calculation (short range):', {
-                                fridayIndex,
-                                lastSundayIndex,
-                                totalCalculatedDays: days
-                            });
-                        } else {
-                            // Standard calculation as fallback
-                            days = Math.max(1, rawDays - 1); // 2→1, 3→2, 4→3, etc.
-                        }
+                        const startDayOfWeek = startDate.getDay(); // 0 = Sunday, 5 = Friday
+                        const endDayOfWeek = endDate.getDay();
+                        
+                        // Must start on Friday (5) and end on Sunday (0)
+                        return startDayOfWeek === 5 && endDayOfWeek === 0;
+                    })();
+                    
+                    debugLog('Weekend rental detection:', { 
+                        rawDays,
+                        startDay: startDate.getDay(),
+                        endDay: endDate.getDay(),
+                        isTrueWeekendRental
+                    });
+                    
+                    if (isTrueWeekendRental) {
+                        // True weekend rental (Friday to Sunday, max 3 days): count as 1 day
+                        days = 1;
+                        debugLog('True weekend rental detected - counting as 1 day');
+                    } else if (rawDays > 6) {
+                        // Fix for 6+ day ranges: Cap at 5 days for pricing
+                        days = 5;
+                        debugLog('Capped day calculation:', { rawDays, cappedDays: days });
                     } else {
-                        // Standard calculation: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                        // For longer ranges with weekends, use standard calculation (do not apply special weekend rule)
-                        days = rawDays <= 1 ? rawDays : Math.min(5, rawDays - 1); // Cap at 5 days
+                        // Standard calculation for all other cases
+                        // Use actual days (no discount) for non-weekend rentals
+                        days = Math.min(5, rawDays);
                         debugLog('Standard day calculation:', { rawDays, calculatedDays: days });
                     }
                     
@@ -428,8 +423,9 @@
                         startDate: startDate,
                         endDate: endDate,
                         rawDays: rawDays,
-                        hasFriday: hasFriday,
-                        hasSunday: hasSunday,
+                        startDayOfWeek: startDate.getDay(),
+                        endDayOfWeek: endDate.getDay(),
+                        isWeekendRental: isTrueWeekendRental,
                         calculatedDays: days
                     });
                 
@@ -483,26 +479,40 @@
                                 <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
                                 <div style="margin-left: 15px;">יום 1: ${formatter.format(basePrice)}</div>
                                 <div style="margin-left: 15px;">${days-1} ימים נוספים (50% הנחה): ${formatter.format(discountedPrice)}</div>
-                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
+                                <div style="margin-top: 10px;"><strong>סה"&#x05db: ${formatter.format(totalPrice)}</strong></div>
                             </div>
                         `;
-                    } else {
-                        priceBreakdownHtml = `
-                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
-                                <div style="margin-left: 15px;">${days} ימים: ${formatter.format(totalPrice)}</div>
-                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
-                            </div>
-                        `;
+                        
+                        // Add the price breakdown to the rental display
+                        // Remove any existing breakdown first
+                        $('.price-breakdown').remove();
+                        $rentalDisplay.append(priceBreakdownHtml);
                     }
                     
-                    // Update the display
-                    $('.price-breakdown').remove();
-                    $rentalDisplay.append(priceBreakdownHtml);
-                    $rentalDisplay.show();
-                    
-                    // Enable add to cart button
-                    $('.btn-wrap button').prop('disabled', days === 0);
+                    // Add max rental notice if user selects more than 5 days
+                    if (days > 5) {
+                        // Remove existing notice if any
+                        $('.max-rental-notice').remove();
+                        
+                        // Create a max rental notice
+                        const noticeHtml = `
+                            <div class="max-rental-notice" style="margin-top: 12px; padding: 8px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 4px; color: #856404; text-align: right;">
+                                <strong>שימו לב!</strong> השכרות מוגבלות ל-5 ימים. להשכרות ארוכות יותר אנא צרו קשר עם בעל האתר.
+                            </div>
+                        `;
+                        
+                        // Add notice above the rental display
+                        $rentalDisplay.before(noticeHtml);
+                        
+                        // Disable the add to cart button
+                        $('.btn-wrap button').prop('disabled', true);
+                    } else {
+                        // Remove notice if not applicable
+                        $('.max-rental-notice').remove();
+                        
+                        // Enable the add to cart button
+                        $('.btn-wrap button').prop('disabled', false);
+                    }
                     
                     // Log for debugging
                     debugLog('Rental date selection complete', {
@@ -511,6 +521,7 @@
                         days: days,
                         price: totalPrice
                     });
+                    
                 } else if (date.length === 1) {
                     // Single date selected
                     const singleDate = date[0].toLocaleDateString('he-IL');
