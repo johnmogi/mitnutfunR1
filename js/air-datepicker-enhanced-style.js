@@ -201,32 +201,19 @@ jQuery(document).ready(function($) {
                 margin-top: 8px !important;
             }
             
-            /* Mobile improvements */
+            /* Mobile improvements - Modified to prevent floating at bottom */
             @media (max-width: 480px) {
                 .air-datepicker {
                     width: 100% !important;
-                    right: 0 !important;
-                    left: 0 !important;
-                    position: fixed !important;
-                    bottom: 0 !important;
+                    right: auto !important;
+                    left: auto !important;
+                    position: relative !important; /* Changed from fixed to relative */
+                    bottom: auto !important;
                     top: auto !important;
-                    border-radius: 12px 12px 0 0 !important;
+                    border-radius: 8px !important;
                     transform: none !important;
-                    max-height: 80vh !important;
+                    max-height: none !important;
                     padding: 16px !important;
-                }
-                
-                /* Add a touch-friendly close button */
-                .air-datepicker:before {
-                    content: '';
-                    width: 40px;
-                    height: 4px;
-                    background-color: #ccc;
-                    border-radius: 2px;
-                    position: absolute;
-                    top: 8px;
-                    left: 50%;
-                    transform: translateX(-50%);
                 }
             }
         `);

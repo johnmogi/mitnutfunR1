@@ -116,20 +116,22 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                     }
                                 }
                                 
-                                // Calculate rental days if we have dates
+                                // Calculate rental days if we have dates and it's not already set
                                 if (!empty($rental_dates) && function_exists('mitnafun_calculate_rental_days') && strpos($rental_dates, ' - ') !== false) {
                                     $date_parts = explode(' - ', $rental_dates);
                                     if (count($date_parts) === 2) {
-                                        $cart_item['rental_days'] = mitnafun_calculate_rental_days($date_parts[0], $date_parts[1]);
-                                        $debug_data['rental_days'] = $cart_item['rental_days'];
+                                        // Always recalculate to ensure consistency
+                                        $rental_days = mitnafun_calculate_rental_days($date_parts[0], $date_parts[1]);
+                                        $cart_item['rental_days'] = $rental_days; // Update cart item with calculated days
+                                        $debug_data['rental_days'] = $rental_days;
+                                        $debug_data['calculation'] = 'mini-cart.php';
                                     }
                                 }
                                 
-                                // Output the rental dates if found
+                                // Output the rental dates if found - only once
                                 if (!empty($rental_dates)) {
-                                    echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
-                                    
-                                    // Rental days display removed to avoid duplication
+                                    // Do not output dates directly here, only in the container div
+                                    // This prevents duplicate rental dates display
                                     
                                     $debug_data['found'] = true;
                                     $debug_data['dates'] = $rental_dates;
@@ -142,8 +144,12 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                     $debug_data['found'] = false;
                                 }
                                 
-                                // Add data attributes for JS to fix if needed
-                                echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode($debug_data)) . '" data-rental-dates="' . esc_attr($rental_dates) . '" data-rental-days="' . esc_attr($rental_days) . '"></div>';
+                                // Add data attributes and display rental dates in a single container
+                                echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode($debug_data)) . '" data-rental-dates="' . esc_attr($rental_dates) . '" data-rental-days="' . esc_attr($rental_days) . '">';
+                                if (!empty($rental_dates)) {
+                                    echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
+                                }
+                                echo '</div>';
                                 ?>
                             </p>
                         </div>

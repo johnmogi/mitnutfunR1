@@ -70,17 +70,17 @@ function load_style_script(){
     wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), null, true);
     
     // Localize script with necessary data for select2 initialization
-    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), time(), true);
-    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), time(), true);
+    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), null, true);
+    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), null, true);
     
     // Add the cart rental fix script
-    wp_enqueue_script('cart-rental-fix', get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/cart-rental-fix.js'), true);
+    wp_enqueue_script('cart-rental-fix', get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', array('jquery'), null, true);
     
     // Add the final aggressive fix for rental dates in cart
-    wp_enqueue_script('rental-form-final-fix', get_stylesheet_directory_uri() . '/js/rental-form-final-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/rental-form-final-fix.js'), true);
+    wp_enqueue_script('rental-form-final-fix', get_stylesheet_directory_uri() . '/js/rental-form-final-fix.js', array('jquery'), null, true);
     
     // Add fix for mini-cart floating popup
-    wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/mini-cart-fix.js'), true);
+    wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), null, true);
     
     // Enqueue rental datepicker script on product pages
     if (is_product()) {
