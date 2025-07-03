@@ -385,10 +385,15 @@
                     
                     // Apply the rental day calculation rule
                     // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                    // Special case: Friday-Sunday counts as 1 regardless
+                    // Special case: Friday-Sunday counts as 1 regardless, but ONLY for short ranges (up to 3 days)
                     let days;
                     
-                    if (hasWeekendPattern) {
+                    // Fix for 6+ day ranges: Cap at 5 days for pricing
+                    if (rawDays > 6) {
+                        days = 5; // Cap at 5 days for pricing for any 6+ day range
+                        debugLog('Capped day calculation:', { rawDays, cappedDays: days });
+                    } else if (hasWeekendPattern && rawDays <= 3) {
+                        // Only apply the special weekend rule for short ranges (up to 3 days)
                         // Find the first Friday and last Sunday in the range
                         let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
                         let lastSundayIndex = -1;
@@ -400,20 +405,12 @@
                         }
                         
                         if (fridayIndex >= 0 && lastSundayIndex >= 0) {
-                            // Count days in the weekend period (Friday to Sunday)
-                            let weekendDays = lastSundayIndex - fridayIndex + 1;
+                            // Apply special weekend rule - Friday to Sunday counts as 1 day
+                            days = 1;
                             
-                            // Count days after the weekend pattern
-                            let regularDays = datesByDay.length - lastSundayIndex - 1;
-                            
-                            // Apply special weekend rule
-                            days = 1 + regularDays; // Weekend counts as 1 + any additional days
-                            
-                            debugLog('Weekend pattern calculation:', {
+                            debugLog('Weekend pattern calculation (short range):', {
                                 fridayIndex,
                                 lastSundayIndex,
-                                weekendDays,
-                                regularDays,
                                 totalCalculatedDays: days
                             });
                         } else {
@@ -422,7 +419,8 @@
                         }
                     } else {
                         // Standard calculation: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                        days = rawDays <= 1 ? rawDays : rawDays - 1;
+                        // For longer ranges with weekends, use standard calculation (do not apply special weekend rule)
+                        days = rawDays <= 1 ? rawDays : Math.min(5, rawDays - 1); // Cap at 5 days
                         debugLog('Standard day calculation:', { rawDays, calculatedDays: days });
                     }
                     
