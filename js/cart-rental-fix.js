@@ -7,6 +7,54 @@
 (function($) {
     'use strict';
     
+    // CRITICAL FIX: Make sure the cart is visible after page load
+    $(window).on('load', function() {
+        // Force cart to be visible if it has items but is hidden
+        if (window.location.href.includes('/basket/')) {
+            setTimeout(forceShowCart, 100);
+        }
+    });
+    
+    // Force cart to be visible if it has items
+    function forceShowCart() {
+        // Check if we're on the cart page
+        if (!window.location.href.includes('/basket/')) return;
+        
+        console.log('[Cart Fix] Checking if cart needs to be forced visible...');
+        
+        // Check if cart empty message is showing
+        const $emptyNotice = $('.cart-empty.woocommerce-info');
+        
+        // Check if cart items container exists
+        const $cartTable = $('.woocommerce-cart-form__contents, form.woocommerce-cart-form');
+        
+        // If empty notice is showing but cart has items in the session
+        if ($emptyNotice.length > 0 && wc_cart_fragments_params) {
+            console.log('[Cart Fix] Empty cart showing but fragments exist - fixing visibility');
+            
+            // Hide empty cart notice
+            $emptyNotice.hide();
+            
+            // If cart table is hidden or missing, force reload page without cache
+            if ($cartTable.length === 0 || !$cartTable.is(':visible')) {
+                console.log('[Cart Fix] Cart table missing or hidden - forcing refresh');
+                
+                // Show loading message
+                $('<div class="woocommerce-info">Loading your cart items...</div>').insertAfter($emptyNotice);
+                
+                // Force refresh cart fragments from server
+                $(document.body).trigger('wc_fragment_refresh');
+                
+                // If no cart table exists, force page reload after short delay
+                if ($cartTable.length === 0) {
+                    setTimeout(function() {
+                        window.location.reload(true);
+                    }, 1000);
+                }
+            }
+        }
+    }
+    
     // Debug logging helper
     function debugLog(...args) {
         console.log('[Cart Rental Fix]', ...args);
@@ -206,13 +254,89 @@
     
     /**
      * Handle Mini Cart Item Removal
-     * Fixes UI after removing an item
+     * Fixes UI after removing an item and prevents cart emptying errors
      */
     function handleMiniCartRemoval() {
-        // When an item is removed from the cart
+        // Add a fix for the WooCommerce cart fragments JS error
+        // This runs once to patch WooCommerce's cart handling
+        function patchWooCommerceRemoval() {
+            if (typeof window.wc_add_to_cart_params !== 'undefined') {
+                // Create a backup of the original handler if it exists
+                if (typeof window.originalWcRemoveFromCartHandler === 'undefined' && 
+                    typeof $(document.body).data('events') !== 'undefined') {
+                    
+                    window.originalWcRemoveFromCartHandler = true; // Mark as patched
+                    
+                    debugLog('Patching WooCommerce cart removal handler to prevent errors');
+                    
+                    // Add our safer implementation of the handler
+                    $(document.body).off('click', '.remove_from_cart_button');
+                    $(document.body).on('click', '.remove_from_cart_button', function(e) {
+                        try {
+                            e.preventDefault();
+                            
+                            var $thisbutton = $(this);
+                            var $product_id = $thisbutton.data('product_id');
+                            var $cart_item_key = $thisbutton.data('cart_item_key');
+                            var $container = $thisbutton.closest('.widget_shopping_cart_content, .check-popup');
+                            
+                            if (!$product_id || !$cart_item_key) {
+                                debugLog('Missing cart_item_key or product_id on remove button');
+                                return true; // Let the link proceed normally
+                            }
+                            
+                            $container.addClass('processing');
+                            
+                            // Handle the removal via AJAX
+                            $.ajax({
+                                type: 'POST',
+                                url: wc_add_to_cart_params.ajax_url,
+                                data: {
+                                    action: 'remove_from_cart',
+                                    product_id: $product_id,
+                                    cart_item_key: $cart_item_key
+                                },
+                                success: function(response) {
+                                    if (!response || !response.fragments) {
+                                        window.location.reload();
+                                        return;
+                                    }
+                                    
+                                    // Update fragments
+                                    $.each(response.fragments, function(key, value) {
+                                        $(key).replaceWith(value);
+                                    });
+                                    
+                                    // Trigger fragment refresh events
+                                    $(document.body).trigger('removed_from_cart', [$thisbutton, response.fragments, response.cart_hash]);
+                                    $(document.body).trigger('wc_fragments_refreshed');
+                                    
+                                    $container.removeClass('processing');
+                                },
+                                error: function() {
+                                    window.location.reload();
+                                }
+                            });
+                            
+                            return false;
+                        } catch (err) {
+                            debugLog('Error in cart removal handler:', err);
+                            return true; // Let the link proceed normally
+                        }
+                    });
+                }
+            }
+        }
+        
+        // When an item is removed from the cart (visual enhancement only)
         $(document).on('click', '.remove_from_cart_button', function(e) {
             const $button = $(this);
             const $item = $button.closest('.item');
+            
+            // If our patched handler is active, stop here - it will handle the UI
+            if (window.originalWcRemoveFromCartHandler) {
+                return;
+            }
             
             // Animate item removal
             $item.fadeOut(300, function() {
@@ -230,9 +354,10 @@
                     $breakdown.remove();
                 }
             });
-            
-            // Don't prevent default action, let WC handle the actual removal
         });
+        
+        // Run the patch
+        patchWooCommerceRemoval();
     }
     
     /**

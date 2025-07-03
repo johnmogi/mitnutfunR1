@@ -7,6 +7,42 @@ ini_set('display_errors', 'Off');
 include_once 'inc/rental-cart-processing.php';
 
 /**
+ * CRITICAL FIX: Selective WooCommerce template loader
+ * Only loads WooCommerce default templates for problematic files, uses theme templates for all others
+ */
+function mitnafun_selective_template_loader($template, $template_name, $args) {
+    // Get theme and plugin directories
+    $theme_dir = get_stylesheet_directory() . '/woocommerce/';
+    $plugin_dir = WC()->plugin_path() . '/templates/';
+    
+    // Check if we're on the cart page and it should be using the default WooCommerce template
+    if (is_cart() && !empty($_POST['add-to-cart']) || isset($_GET['add-to-cart'])) {
+        if ($template_name === 'cart/cart.php' || $template_name === 'cart/cart-empty.php') {
+            // Force use of WooCommerce's default cart template when adding items
+            error_log('WooCommerce cart template override: Using default ' . $template_name);
+            return $plugin_dir . $template_name;
+        }
+    }
+    
+    // Always use WooCommerce default cart-empty template if cart is NOT empty
+    // This prevents the bug where cart-empty.php shows even when cart has items
+    if ($template_name === 'cart/cart-empty.php' && function_exists('WC') && WC()->cart && !WC()->cart->is_empty()) {
+        error_log('Cart has items but empty template was selected. Forcing regular cart template.');
+        return $plugin_dir . 'cart/cart.php';
+    }
+    
+    // For all other templates, use the theme's version if it exists
+    if (file_exists($theme_dir . $template_name)) {
+        return $theme_dir . $template_name;
+    }
+    
+    // Fall back to plugin's version
+    return $template;
+}
+// Add with very high priority (1) to override any other template selection logic
+add_filter('woocommerce_locate_template', 'mitnafun_selective_template_loader', 1, 3);
+
+/**
  * Custom error handler to suppress specific notices
  */
 function custom_error_handler($errno, $errstr, $errfile, $errline) {
@@ -29,6 +65,14 @@ include 'inc/bookings.php';
 include 'inc/rental-pricing.php';
 
 // show_admin_bar( false );
+
+// Ensure WooCommerce cart fragments are properly loaded
+function ensure_wc_cart_fragments() {
+    if (function_exists('is_woocommerce')) {
+        wp_enqueue_script('wc-cart-fragments');
+    }
+}
+add_action('wp_enqueue_scripts', 'ensure_wc_cart_fragments', 20);
 
 add_action('wp_enqueue_scripts', 'load_style_script');
 function load_style_script(){
@@ -81,6 +125,9 @@ function load_style_script(){
     
     // Add fix for mini-cart floating popup
     wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), null, true);
+    
+    // Add cart debugging script to help diagnose issues
+    wp_enqueue_script('cart-debug', get_stylesheet_directory_uri() . '/js/cart-debug.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/cart-debug.js'), true);
     
     // Enqueue rental datepicker script on product pages
     if (is_product()) {

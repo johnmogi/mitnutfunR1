@@ -17,6 +17,55 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// DEBUG: Check why empty cart template is loading
+echo '<!-- CART-EMPTY TEMPLATE DEBUG: Empty cart template loaded -->\n';
+echo '<!-- Cart has ' . WC()->cart->get_cart_contents_count() . ' items -->\n';
+echo '<!-- Cart total: ' . WC()->cart->get_cart_total() . ' -->\n';
+echo '<!-- URL: ' . esc_url($_SERVER['REQUEST_URI']) . ' -->\n';
+echo '<!-- Query String: ' . esc_html($_SERVER['QUERY_STRING'] ?? '') . ' -->\n';
+
+// CRITICAL FIX: If cart actually has items, force load the correct cart template
+if (WC()->cart && !WC()->cart->is_empty()) {
+    echo '<!-- FIX APPLIED: Redirecting to standard cart template since cart is NOT empty -->\n';
+    
+    // Load the correct cart template
+    wc_get_template('cart/cart.php');
+    
+    // Exit to prevent the empty cart template from loading
+    exit;
+}
+
+// Only proceed with empty cart template if cart is actually empty
+echo '<!-- Confirmed cart is actually empty, proceeding with empty cart template -->\n';
+
+// ENHANCED DEBUG: Check if this template should really be loading
+if (WC()->cart && WC()->cart->get_cart_contents_count() > 0) {
+    echo '<!-- ERROR: Empty cart template is still loading even though cart has ' . WC()->cart->get_cart_contents_count() . ' items! -->\n';
+    echo '<!-- This indicates a theme/plugin conflict or template loading issue -->\n';
+    
+    // Display debug info about cart contents
+    echo '<!-- CART DEBUG - Cart Contents: -->\n';
+    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+        $product_id = $cart_item['product_id'];
+        $product_name = isset($cart_item['data']) ? $cart_item['data']->get_name() : 'Unknown';
+        echo '<!-- Item: ' . esc_html($product_name) . ' (ID: ' . esc_html($product_id) . ') -->\n';
+    }
+    
+    // Display debug hooks that might be interfering
+    echo '<!-- Checking for potentially interfering hooks -->\n';
+    global $wp_filter;
+    $relevant_hooks = ['woocommerce_before_cart', 'woocommerce_cart_is_empty'];
+    
+    foreach ($relevant_hooks as $hook) {
+        if (isset($wp_filter[$hook])) {
+            $count = count($wp_filter[$hook]->callbacks);
+            echo '<!-- Hook: ' . esc_html($hook) . ' has ' . esc_html($count) . ' callbacks -->\n';
+        } else {
+            echo '<!-- Hook: ' . esc_html($hook) . ' not found -->\n';
+        }
+    }
+}
+
 /*
  * @hooked wc_empty_cart_message - 10
  */

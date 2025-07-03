@@ -139,19 +139,19 @@ function bbloomer_remove_optional_checkout_fields( $field ) {
     return $field;
 }
 
-add_action('template_redirect', function(){
-    // Check if we're on the cart page or if add-to-cart parameter exists
-    if (is_cart() || (isset($_GET['add-to-cart']) && !empty($_GET['add-to-cart']))) {
-        wp_redirect(get_permalink(12));
-        exit;
-    }
-
-    // Check if redirect parameter exists in POST
-    if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-        wp_redirect(get_permalink(12));
-        exit;
-    }
-});
+// Redirect removed to fix broken cart flow
+// Previously redirected cart to checkout (page ID 12) which caused empty cart issues
+// add_action('template_redirect', function(){
+//    if (is_cart() || (isset($_GET['add-to-cart']) && !empty($_GET['add-to-cart']))) {
+//        wp_redirect(get_permalink(12));
+//        exit;
+//    }
+//
+//    if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
+//        wp_redirect(get_permalink(12));
+//        exit;
+//    }
+// });
 
 
 

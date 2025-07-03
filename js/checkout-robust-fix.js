@@ -58,14 +58,11 @@ jQuery(document).ready(function($) {
             // If we already have an empty message, don't add another
             if ($emptyMessage.length) return;
             
-            // Check if we need to reload the page
+            // Clear the flag, but don't redirect
             if (sessionStorage.getItem('potential_cart_clear') === 'true') {
-                log('Potential cart clear detected, redirecting to cart page');
+                log('Potential cart clear detected, showing empty cart message');
                 sessionStorage.removeItem('potential_cart_clear');
-                
-                // Redirect to cart page instead of showing a broken checkout
-                window.location.href = '/basket/?empty-cart';
-                return;
+                // No redirect - instead we'll show a message below
             }
             
             // Add empty cart message

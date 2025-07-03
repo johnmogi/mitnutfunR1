@@ -17,6 +17,49 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// EXTENDED DEBUG: Check for any template selection override issues
+echo '<!-- CART TEMPLATE DEBUG: Cart template loaded -->\n';
+echo '<!-- Cart has ' . WC()->cart->get_cart_contents_count() . ' items -->\n';
+echo '<!-- Cart total: ' . WC()->cart->get_cart_total() . ' -->\n';
+echo '<!-- Cart is empty according to WC: ' . (WC()->cart->is_empty() ? 'YES' : 'NO') . ' -->\n';
+echo '<!-- Current page: ' . (is_cart() ? 'IS CART PAGE' : 'NOT CART PAGE') . ' -->\n';
+echo '<!-- Current template: ' . basename(__FILE__) . ' -->\n';
+
+// More detailed cart debug
+echo '<!-- Cart Contents Debug: -->\n';
+foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+    $product = $cart_item['data'];
+    $product_id = $cart_item['product_id'];
+    echo '<!-- Cart Item: ' . esc_html($product->get_name()) . ' (ID: ' . esc_html($product_id) . ') -->\n';
+    if (isset($cart_item['rental_dates'])) {
+        echo '<!-- Rental Dates: ' . esc_html($cart_item['rental_dates']) . ' -->\n';
+    }
+}
+
+// Check for any hooks overriding cart display
+echo '<!-- Checking for cart display interference: -->\n';
+global $wp_filter;
+$cart_hooks = ['woocommerce_before_cart', 'woocommerce_before_cart_table', 'woocommerce_before_cart_contents', 'woocommerce_cart_contents'];
+foreach ($cart_hooks as $hook) {
+    if (isset($wp_filter[$hook])) {
+        $callbacks = array();
+        foreach ($wp_filter[$hook]->callbacks as $priority => $filter_callbacks) {
+            foreach ($filter_callbacks as $id => $callback_data) {
+                if (is_array($callback_data['function'])) {
+                    if (is_object($callback_data['function'][0])) {
+                        $callbacks[] = get_class($callback_data['function'][0]) . '->' . $callback_data['function'][1] . ' (priority: ' . $priority . ')';
+                    } else {
+                        $callbacks[] = $callback_data['function'][0] . '::' . $callback_data['function'][1] . ' (priority: ' . $priority . ')';
+                    }
+                } else if (is_string($callback_data['function'])) {
+                    $callbacks[] = $callback_data['function'] . ' (priority: ' . $priority . ')';
+                }
+            }
+        }
+        echo '<!-- Hook: ' . esc_html($hook) . ' has callbacks: ' . esc_html(implode(', ', $callbacks)) . ' -->\n';
+    }
+}
+
 do_action( 'woocommerce_before_cart' ); ?>
 
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
