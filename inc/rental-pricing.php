@@ -27,7 +27,13 @@ add_action('init', 'mitnafun_init_rental_pricing');
 
 /**
  * Calculate the number of rental days between two dates
- * Handles special cases like Saturday (counts as 0 days)
+ * Implements the following business rules:
+ * - 2 calendar days = 1 rental day
+ * - 4 calendar days = 2 rental days
+ * - 5 calendar days = 4 rental days
+ * - 6 calendar days = 5 rental days
+ * - 7 calendar days = 6 rental days
+ * - Friday-Sunday counts as 1 rental day
  *
  * @param string $start_date Start date in any recognizable format
  * @param string $end_date End date in any recognizable format
@@ -46,34 +52,33 @@ function mitnafun_calculate_rental_days($start_date, $end_date) {
         return 1; // Return default if parsing failed
     }
     
+    // First, calculate the actual calendar days (regardless of weekends)
+    $diff = floor(($end - $start) / 86400) + 1; // +1 to include the end day
+    
     // Special case: Friday to Sunday counts as 1 day
-    $start_day = date('w', $start);
+    $start_day = date('w', $start); // 0 (Sun) through 6 (Sat)
     $end_day = date('w', $end);
     
-    // If the rental starts on Friday (5) and ends on Sunday (0), count as 1 day
-    if ($start_day == 5 && $end_day == 0 && $end <= strtotime('+2 days', $start)) {
-        return 1;
+    // If rental period spans Friday to Sunday (inclusive)
+    if ($start_day == 5 && $end_day == 0 && $diff <= 3) {
+        return 1; // Weekend special: Friday-Sunday = 1 rental day
     }
     
-    // Initialize days counter
-    $days = 0;
-    $current = $start;
-    
-    // Loop through each day and count (skipping Saturdays)
-    while ($current <= $end) {
-        $day_of_week = date('w', $current);
-        
-        // Saturday is day 6, don't count it
-        if ($day_of_week != 6) {
-            $days++;
-        }
-        
-        // Move to next day
-        $current = strtotime('+1 day', $current);
+    // Apply the rental days conversion according to business rules
+    if ($diff <= 2) {
+        return 1; // 1-2 days = 1 rental day
+    } else if ($diff <= 4) {
+        return 2; // 3-4 days = 2 rental days
+    } else if ($diff == 5) {
+        return 4; // 5 days = 4 rental days
+    } else if ($diff == 6) {
+        return 5; // 6 days = 5 rental days
+    } else if ($diff == 7) {
+        return 6; // 7 days = 6 rental days
+    } else {
+        // For longer periods, use the pattern: calendar days - 1
+        return $diff - 1;
     }
-    
-    // Ensure we always have at least 1 day
-    return max(1, $days);
 }
 
 /**

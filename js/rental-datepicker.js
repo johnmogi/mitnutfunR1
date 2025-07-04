@@ -376,47 +376,57 @@
                         currentDate.setDate(currentDate.getDate() + 1);
                     }
                     
-                    // NEW IMPLEMENTATION: Complete rewrite of weekend pattern detection and calculation
-                    // Count days by type
-                    debugLog('Day counts by type:', { daysByType, datesByDay });
+                    // NEW IMPLEMENTATION: Complete rewrite of day calculation to match PHP rules
+                    // Count calendar days first (including all days)
+                    const calendarDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                    debugLog('Total calendar days:', calendarDays);
                     
-                    // Apply the rental day calculation rule
-                    // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc. (capped at 5)
-                    // Special case: ONLY true Friday-Sunday weekend (2-3 days) counts as 1
-                    let days;
-                    
-                    // Is this a true weekend rental? (Friday to Sunday, max 3 days)
+                    // Is this a true weekend rental? (Friday to Sunday)
                     const isTrueWeekendRental = (() => {
-                        // Only consider ranges of 2-3 days that start on Friday and end on Sunday
-                        if (rawDays > 3 || rawDays < 2) return false;
-                        
                         const startDayOfWeek = startDate.getDay(); // 0 = Sunday, 5 = Friday
                         const endDayOfWeek = endDate.getDay();
                         
-                        // Must start on Friday (5) and end on Sunday (0)
-                        return startDayOfWeek === 5 && endDayOfWeek === 0;
+                        // Must start on Friday (5) and end on Sunday (0) with 3 or fewer days
+                        return startDayOfWeek === 5 && endDayOfWeek === 0 && calendarDays <= 3;
                     })();
                     
                     debugLog('Weekend rental detection:', { 
-                        rawDays,
+                        calendarDays,
                         startDay: startDate.getDay(),
                         endDay: endDate.getDay(),
                         isTrueWeekendRental
                     });
                     
+                    // Calculate rental days according to business rules
+                    let days;
                     if (isTrueWeekendRental) {
-                        // True weekend rental (Friday to Sunday, max 3 days): count as 1 day
+                        // Special case: Friday-Sunday counts as 1 day
                         days = 1;
-                        debugLog('True weekend rental detected - counting as 1 day');
-                    } else if (rawDays > 6) {
-                        // Fix for 6+ day ranges: Cap at 5 days for pricing
+                        debugLog('Weekend special applied: 1 rental day');
+                    } else if (calendarDays <= 2) {
+                        // 1-2 calendar days = 1 rental day
+                        days = 1;
+                        debugLog('1-2 days rule applied: 1 rental day');
+                    } else if (calendarDays <= 4) {
+                        // 3-4 calendar days = 2 rental days
+                        days = 2;
+                        debugLog('3-4 days rule applied: 2 rental days');
+                    } else if (calendarDays === 5) {
+                        // 5 calendar days = 4 rental days
+                        days = 4;
+                        debugLog('5 days rule applied: 4 rental days');
+                    } else if (calendarDays === 6) {
+                        // 6 calendar days = 5 rental days
                         days = 5;
-                        debugLog('Capped day calculation:', { rawDays, cappedDays: days });
+                        debugLog('6 days rule applied: 5 rental days');
+                    } else if (calendarDays === 7) {
+                        // 7 calendar days = 6 rental days
+                        days = 6;
+                        debugLog('7 days rule applied: 6 rental days');
                     } else {
-                        // Standard calculation for all other cases
-                        // Use actual days (no discount) for non-weekend rentals
-                        days = Math.min(5, rawDays);
-                        debugLog('Standard day calculation:', { rawDays, calculatedDays: days });
+                        // For longer periods: calendar days - 1
+                        days = calendarDays - 1;
+                        debugLog('Extended period: ' + days + ' rental days');
                     }
                     
                     debugLog('Day calculation', {
