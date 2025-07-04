@@ -334,6 +334,8 @@
                 };
             },
             onSelect: function({date, formattedDate}) {
+                // Define rawDays for backward compatibility with any code that might reference it
+                let rawDays = 0;
                 const $rentalDisplay = $('#rental-dates-display');
                 const $startDateElement = $('#selected-start-date');
                 const $endDateElement = $('#selected-end-date');
@@ -352,34 +354,32 @@
                     const startDate = new Date(date[0]);
                     const endDate = new Date(date[1]);
                     
-                    // Calculate raw days first (excluding Saturdays)
-                    let rawDays = 0;
-                    let currentDate = new Date(startDate);
+                    // NEW IMPLEMENTATION: Complete rewrite of day calculation to match PHP rules
+                    // Count calendar days first (including all days) - make sure to count inclusively
+                    // We don't need to count raw days or days by type anymore, just total calendar days
                     
-                    // First pass: Count days by type and identify patterns
-                    let daysByType = {};
-                    let datesByDay = [];
+                    // Initialize date counter for accurate inclusive counting
+                    let tempDate = new Date(startDate);
+                    let calendarDays = 0;
                     
-                    while (currentDate <= endDate) {
-                        const dayOfWeek = currentDate.getDay();
-                        const dateStr = formatDate(currentDate);
-                        
-                        if (dayOfWeek !== 6) { // Skip Saturdays
-                            rawDays++;
-                            daysByType[dayOfWeek] = (daysByType[dayOfWeek] || 0) + 1;
-                            datesByDay.push({
-                                date: new Date(currentDate),
-                                dayOfWeek: dayOfWeek,
-                                dateStr: dateStr
-                            });
-                        }
-                        currentDate.setDate(currentDate.getDate() + 1);
+                    // Count all days from start to end (inclusive)
+                    while (tempDate <= endDate) {
+                        calendarDays++;
+                        tempDate.setDate(tempDate.getDate() + 1);
                     }
                     
-                    // NEW IMPLEMENTATION: Complete rewrite of day calculation to match PHP rules
-                    // Count calendar days first (including all days)
-                    const calendarDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-                    debugLog('Total calendar days:', calendarDays);
+                    // For debugging, also count days using the timestamp method
+                    const timestampDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                    
+                    // Log both methods to compare
+                    debugLog('Calendar days count comparison:', {
+                        byIteration: calendarDays,
+                        byTimestamp: timestampDays,
+                        startDate: startDate.toDateString(),
+                        endDate: endDate.toDateString()
+                    });
+                    
+                    debugLog('Total calendar days (inclusive counting):', calendarDays);
                     
                     // Is this a true weekend rental? (Friday to Sunday)
                     const isTrueWeekendRental = (() => {
@@ -397,6 +397,17 @@
                         isTrueWeekendRental
                     });
                     
+                    // DEBUG: Log calendar days calculation
+                    debugLog('Calendar days calculation:', {
+                        startDate: startDate,
+                        endDate: endDate,
+                        startTimestamp: startDate.getTime(),
+                        endTimestamp: endDate.getTime(),
+                        diff: endDate - startDate,
+                        diffDays: (endDate - startDate) / (1000 * 60 * 60 * 24),
+                        calendarDays: calendarDays
+                    });
+                    
                     // Calculate rental days according to business rules
                     let days;
                     if (isTrueWeekendRental) {
@@ -407,20 +418,24 @@
                         // 1-2 calendar days = 1 rental day
                         days = 1;
                         debugLog('1-2 days rule applied: 1 rental day');
-                    } else if (calendarDays <= 4) {
-                        // 3-4 calendar days = 2 rental days
+                    } else if (calendarDays == 3) {
+                        // 3 calendar days = 2 rental days
                         days = 2;
-                        debugLog('3-4 days rule applied: 2 rental days');
-                    } else if (calendarDays === 5) {
+                        debugLog('3 days rule applied: 2 rental days');
+                    } else if (calendarDays == 4) {
+                        // 4 calendar days = 3 rental days
+                        days = 3;
+                        debugLog('4 days rule applied: 3 rental days');
+                    } else if (calendarDays == 5) {
                         // 5 calendar days = 4 rental days
                         days = 4;
                         debugLog('5 days rule applied: 4 rental days');
-                    } else if (calendarDays === 6) {
+                    } else if (calendarDays == 6) {
                         // 6 calendar days = 5 rental days
                         days = 5;
                         debugLog('6 days rule applied: 5 rental days');
-                    } else if (calendarDays === 7) {
-                        // 7 calendar days = 6 rental days
+                    } else if (calendarDays == 7 || calendarDays == 8) {
+                        // 7-8 calendar days = 6 rental days
                         days = 6;
                         debugLog('7 days rule applied: 6 rental days');
                     } else {
@@ -429,23 +444,48 @@
                         debugLog('Extended period: ' + days + ' rental days');
                     }
                     
+                    // CRITICAL: Force deep debug output for troubleshooting
+                    console.log('🔄 RENTAL DAY CALCULATION', {
+                        startDate: startDate.toLocaleDateString(),
+                        endDate: endDate.toLocaleDateString(),
+                        calendarDays: calendarDays,
+                        rentalDays: days,
+                        isTrueWeekendRental: isTrueWeekendRental,
+                        rule: isTrueWeekendRental ? 'weekend-special' : 
+                               calendarDays <= 2 ? '1-2 days' : 
+                               calendarDays <= 4 ? '3-4 days' : 
+                               calendarDays === 5 ? '5 days' : 
+                               calendarDays === 6 ? '6 days' : 
+                               calendarDays === 7 ? '7 days' : 'extended'
+                    });
+                    
                     debugLog('Day calculation', {
                         startDate: startDate,
                         endDate: endDate,
-                        rawDays: rawDays,
+                        calendarDays: calendarDays,
                         startDayOfWeek: startDate.getDay(),
                         endDayOfWeek: endDate.getDay(),
                         isWeekendRental: isTrueWeekendRental,
                         calculatedDays: days
                     });
                 
-                    // Update the quantity field
+                    // Update the quantity field with the rental days (not calendar days)
+                    console.log('Setting quantity to:', days, '(rental days)'); 
                     $('[name="quantity"]').val(days);
                     
                     // Format the date range for display
                     const formattedStart = startDate.toLocaleDateString('he-IL');
                     const formattedEnd = endDate.toLocaleDateString('he-IL');
                     $dateInput.val(`${formattedStart} - ${formattedEnd}`);
+                    
+                    // Update visible date display elements with correct rental days (not calendar days)
+                    $startDateElement.text(formattedStart);
+                    $endDateElement.text(formattedEnd);
+                    $daysCountElement.text(days);
+                    
+                    // CRITICAL: Force update of any other elements showing the days count
+                    $('.rental-days-count').text(days); // Update any other elements with this class
+                    $('input[name="rental_days"]').val(days); // Update any hidden input fields
                     
                     // Calculate pricing based on rental days
                     const productPrice = parseFloat($('.list-info .woocommerce-Price-amount').first().text().replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
@@ -459,70 +499,51 @@
                     let totalPrice = productPrice;
                     let discountedPrice = 0;
                     
+                    // Format prices with thousand separator
+                    const formatPrice = (price) => {
+                        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    };
+                    
+                    // Remove any existing price breakdown
+                    $('.price-breakdown').remove();
+                    
                     if (hasDiscount && days > 1) {
                         // First day full price, additional days 50% off
                         basePrice = productPrice;
                         discountedPrice = (days - 1) * (productPrice * 0.5);
                         totalPrice = basePrice + discountedPrice;
-                    } else {
-                        // No discount or just one day
-                        totalPrice = days * productPrice;
-                    }
-                    
-                    // Format prices
-                    const formatter = new Intl.NumberFormat('he-IL', {
-                        style: 'currency',
-                        currency: 'ILS'
-                    });
-                    
-                    // Update visible date display elements
-                    $startDateElement.text(formattedStart);
-                    $endDateElement.text(formattedEnd);
-                    $daysCountElement.text(days);
-                    
-                    // Add price breakdown if applicable
-                    let priceBreakdownHtml = '';
-                    
-                    if (hasDiscount && days > 1) {
-                        priceBreakdownHtml = `
+                        
+                        // Generate HTML for price breakdown
+                        const priceBreakdownHtml = `
                             <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
                                 <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
-                                <div style="margin-left: 15px;">יום 1: ${formatter.format(basePrice)}</div>
-                                <div style="margin-left: 15px;">${days-1} ימים נוספים (50% הנחה): ${formatter.format(discountedPrice)}</div>
-                                <div style="margin-top: 10px;"><strong>סה"&#x05db: ${formatter.format(totalPrice)}</strong></div>
+                                <div style="margin-left: 15px;">יום 1: ‏${basePrice.toFixed(2)}&nbsp;‏₪</div>
+                                <div style="margin-left: 15px;">${days - 1} ימים נוספים (50% הנחה): ‏${discountedPrice.toFixed(2)}&nbsp;‏₪</div>
+                                <div style="margin-top: 10px;"><strong>סה"כ: ‏${formatPrice(totalPrice.toFixed(2))}&nbsp;‏₪</strong></div>
                             </div>
                         `;
                         
                         // Add the price breakdown to the rental display
-                        // Remove any existing breakdown first
-                        $('.price-breakdown').remove();
+                        $rentalDisplay.append(priceBreakdownHtml);
+                    } else {
+                        // No discount or just one day
+                        const priceBreakdownHtml = `
+                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
+                                <div style="margin-left: 15px;">יום 1: ‏${basePrice.toFixed(2)}&nbsp;‏₪</div>
+                                <div style="margin-top: 10px;"><strong>סה"כ: ‏${formatPrice(totalPrice.toFixed(2))}&nbsp;‏₪</strong></div>
+                            </div>
+                        `;
                         $rentalDisplay.append(priceBreakdownHtml);
                     }
                     
-                    // Add max rental notice if user selects more than 5 days
-                    if (days > 5) {
-                        // Remove existing notice if any
-                        $('.max-rental-notice').remove();
-                        
-                        // Create a max rental notice
-                        const noticeHtml = `
-                            <div class="max-rental-notice" style="margin-top: 12px; padding: 8px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 4px; color: #856404; text-align: right;">
-                                <strong>שימו לב!</strong> השכרות מוגבלות ל-5 ימים. להשכרות ארוכות יותר אנא צרו קשר עם בעל האתר.
-                            </div>
-                        `;
-                        
-                        // Add notice above the rental display
-                        $rentalDisplay.before(noticeHtml);
-                        
-                        // Disable the add to cart button
-                        $('.btn-wrap button').prop('disabled', true);
-                    } else {
-                        // Remove notice if not applicable
-                        $('.max-rental-notice').remove();
-                        
-                        // Enable the add to cart button
-                        $('.btn-wrap button').prop('disabled', false);
-                    }
+                    // COMMENT: Temporarily disabled 5-day rental limit for testing
+                    
+                    // Remove any existing notices
+                    $('.max-rental-notice').remove();
+                    
+                    // Enable the add to cart button
+                    $('.btn-wrap button').prop('disabled', false);
                     
                     // Log for debugging
                     debugLog('Rental date selection complete', {
