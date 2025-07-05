@@ -25,24 +25,16 @@ function mitnafun_validate_rental_dates_before_cart($passed, $product_id, $quant
         error_log('=== STARTING CART VALIDATION ===');
         error_log('Product ID: ' . $product_id);
         error_log('Quantity: ' . $quantity);
-        error_log('POST data: ' . print_r($_POST, true));
-        error_log('REQUEST data: ' . print_r($_REQUEST, true));
-    }
-    
-    // Only apply to rental products
-    $product = wc_get_product($product_id);
-    if (!$product) {
-        if ($debug) error_log('Product not found');
         return $passed;
     }
     
-    // Check if this is a rental product (simple product type)
-    if (!$product->is_type('simple')) {
-        if ($debug) error_log('Not a simple product, skipping validation');
+    // Only validate when the form is submitted
+    if (!isset($_REQUEST['add-to-cart']) || !isset($_REQUEST['rental_dates'])) {
+        if ($debug) error_log('Form not submitted or no rental dates, skipping validation');
         return $passed;
     }
     
-    // Check if rental dates are provided
+    // Check if rental dates were provided
     if (!isset($_REQUEST['rental_dates']) || empty($_REQUEST['rental_dates'])) {
         $error_msg = __('יש לבחור תאריכי השכרה לפני הוספה לסל.', 'mitnafun-upro');
         if ($debug) error_log('No rental dates provided: ' . $error_msg);

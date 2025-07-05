@@ -267,28 +267,42 @@
                 });
             });
             
-            // Identify edge days (days that are first or last day of a booking)
-            debugLog('Identifying edge days...');
+            // EDGE DAY LOGIC:
+            // Identify edge days (days that can be used for joined bookings)
+            debugLog('Identifying edge days for joined bookings...');
             const dateKeys = Object.keys(dateStatus).sort();
             
-            for (let i = 0; i < dateKeys.length; i++) {
-                const currentDate = dateKeys[i];
-                const prevDate = i > 0 ? dateKeys[i-1] : null;
-                const nextDate = i < dateKeys.length - 1 ? dateKeys[i+1] : null;
-                
-                // Check if current date is fully booked
-                if (dateStatus[currentDate].status === 'fully_booked') {
-                    // Is it an edge day? Check if previous or next day is NOT booked
-                    const isPrevDayBooked = prevDate && dateStatus[prevDate].status === 'fully_booked';
-                    const isNextDayBooked = nextDate && dateStatus[nextDate].status === 'fully_booked';
+            // For single unit rentals, we don't want any edge days - fully booked means fully booked
+            if (initialStock === 1) {
+                debugLog('Single unit rental mode - no edge days for fully booked dates');
+                dateKeys.forEach(dateKey => {
+                    if (dateStatus[dateKey].status === 'fully_booked') {
+                        dateStatus[dateKey].isEdgeDay = false; // No edge days for single unit rentals
+                        debugLog(`✅ Single unit mode - marked ${dateKey} as FULLY BOOKED (no edge)`);
+                    }
+                });
+            } else {
+                // For multi-unit rentals, only mark the first and last day of booking blocks as edge days
+                for (let i = 0; i < dateKeys.length; i++) {
+                    const currentDate = dateKeys[i];
+                    const prevDate = i > 0 ? dateKeys[i-1] : null;
+                    const nextDate = i < dateKeys.length - 1 ? dateKeys[i+1] : null;
                     
-                    // If either previous or next day is not fully booked (or doesn't exist),
-                    // this is an edge day - it can be used to join bookings
-                    if (!isPrevDayBooked || !isNextDayBooked) {
-                        dateStatus[currentDate].isEdgeDay = true;
-                        debugLog(`Marked ${currentDate} as EDGE DAY`);
-                    } else {
-                        debugLog(`${currentDate} is a MIDDLE day (blocked)`);
+                    // Check if current date is fully booked
+                    if (dateStatus[currentDate].status === 'fully_booked') {
+                        // EDGE DAY DETECTION:
+                        // A day is an edge day if it's at the start or end of a booking block
+                        const isPrevDayFullyBooked = prevDate && dateStatus[prevDate].status === 'fully_booked';
+                        const isNextDayFullyBooked = nextDate && dateStatus[nextDate].status === 'fully_booked';
+                        
+                        // If either adjacent day is not fully booked (or there is no adjacent day),
+                        // this is an edge day that can be used to join bookings
+                        if (!isPrevDayFullyBooked || !isNextDayFullyBooked) {
+                            dateStatus[currentDate].isEdgeDay = true;
+                            debugLog(`✅ Marked ${currentDate} as EDGE DAY - can be used for joined bookings`);
+                        } else {
+                            debugLog(`❌ ${currentDate} is a MIDDLE day (will remain blocked)`);
+                        }
                     }
                 }
             }
@@ -379,22 +393,33 @@
                         });
                         
                         if (isFullyBooked) {
-                            // Check if this is an edge day (can be used as start/end of booking)
-                            if (status.isEdgeDay) {
-                                return {
-                                    // Edge days are selectable - NOT disabled
-                                    classes: 'air-datepicker-cell--edge-day',
-                                    attributes: {
-                                        'title': 'Can be used as first or last day of booking'
-                                    }
-                                };
-                            } else {
-                                // Middle days remain disabled
+                            // For single unit rentals, all fully booked days are completely disabled
+                            if (initialStock === 1) {
                                 return {
                                     disabled: true,
                                     classes: 'air-datepicker-cell--disabled -disabled-',
                                     attributes: {
-                                        'title': `Fully booked (${status.count}/${initialStock})`
+                                        'title': 'Fully booked - not available (1/1)'
+                                    }
+                                };
+                            }
+                            
+                            // For multi-unit rentals, handle edge days
+                            if (status.isEdgeDay) {
+                                return {
+                                    // Edge days are selectable for multi-unit rentals (allows joined bookings)
+                                    classes: 'air-datepicker-cell--edge-day',
+                                    attributes: {
+                                        'title': 'Can be selected as first or last day of your booking'
+                                    }
+                                };
+                            } else {
+                                // Middle days remain disabled to prevent overlapping bookings
+                                return {
+                                    disabled: true,
+                                    classes: 'air-datepicker-cell--disabled -disabled-',
+                                    attributes: {
+                                        'title': `Fully booked - not available (${status.count}/${initialStock})`
                                     }
                                 };
                             }

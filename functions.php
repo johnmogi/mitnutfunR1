@@ -233,81 +233,107 @@ function mitnafun_ensure_checkout_template($template, $template_name, $template_
     return $template;
 }
 
-add_action('wp_enqueue_scripts', 'load_style_script');
-function load_style_script(){
-    // Enqueue select2 from CDN (required for some plugins)
+/**
+ * Enqueue scripts and styles
+ */
+add_action('wp_enqueue_scripts', 'load_style_script', 20);
+function load_style_script() {
+    // Common styles loaded on all pages
     wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
-    
     wp_enqueue_style('my-normalize', get_stylesheet_directory_uri() . '/css/normalize.css');
     wp_enqueue_style('my-Inter', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     wp_enqueue_style('my-Lunasima', 'https://fonts.googleapis.com/css2?family=Lunasima:wght@400;700&display=swap');
     wp_enqueue_style('my-fancybox', get_stylesheet_directory_uri() . '/css/jquery.fancybox.min.css');
     wp_enqueue_style('my-nice-select', get_stylesheet_directory_uri() . '/css/nice-select.css');
     wp_enqueue_style('my-swiper', get_stylesheet_directory_uri() . '/css/swiper.min.css');
-    wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
-    wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
-    wp_enqueue_style('rental-pricing', get_stylesheet_directory_uri() . '/css/rental-pricing.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-pricing.css'));
-    wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), time());
-    wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), time());
+    
+    // Main theme styles
+    wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), filemtime(get_stylesheet_directory() . '/css/styles.css'));
+    wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), filemtime(get_stylesheet_directory() . '/css/responsive.css'));
     wp_enqueue_style('main-style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
     
-    // Enqueue admin-only CSS to hide debug elements
-    wp_enqueue_style('admin-only', get_template_directory_uri() . '/css/admin-only.css', array(), filemtime(get_stylesheet_directory() . '/css/admin-only.css'));
-    
-    // Add checkout fix scripts on checkout page
-    if (is_checkout()) {
-        wp_enqueue_script('checkout-fix', get_template_directory_uri() . '/js/checkout-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-fix.js'), true);
-        wp_enqueue_script('checkout-price-fix', get_template_directory_uri() . '/js/checkout-price-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-price-fix.js'), true);
-        wp_enqueue_script('checkout-robust-fix', get_template_directory_uri() . '/js/checkout-robust-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-robust-fix.js'), true);
+    // Admin-only styles (for frontend admin bar)
+    if (is_admin_bar_showing()) {
+        wp_enqueue_style('admin-only', get_template_directory_uri() . '/css/admin-only.css', array(), filemtime(get_stylesheet_directory() . '/css/admin-only.css'));
     }
-
+    
+    // Common scripts loaded on all pages
     wp_enqueue_script('jquery');
-    wp_enqueue_script('my-swiper', get_stylesheet_directory_uri() . '/js/swiper.js', array(), false, true);
-    wp_enqueue_script('air-datepicker', get_stylesheet_directory_uri() . '/js/air-datepicker.js', array(), false, true);
-    wp_enqueue_script('cuttr', get_stylesheet_directory_uri() . '/js/cuttr.min.js', array(), false, true);
-    wp_enqueue_script('jquery.mask', get_stylesheet_directory_uri() . '/js/jquery.mask.min.js', array(), false, true);
-    wp_enqueue_script('my-fancybox', get_stylesheet_directory_uri() . '/js/jquery.fancybox.min.js', array(), false, true);
-    wp_enqueue_script('my-nice-select', get_stylesheet_directory_uri() . '/js/jquery.nice-select.min.js', array(), false, true);
+    wp_enqueue_script('my-swiper', get_stylesheet_directory_uri() . '/js/swiper.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('cuttr', get_stylesheet_directory_uri() . '/js/cuttr.min.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('jquery.mask', get_stylesheet_directory_uri() . '/js/jquery.mask.min.js', array('jquery'), '1.14.16', true);
+    wp_enqueue_script('my-fancybox', get_stylesheet_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), '3.5.7', true);
+    wp_enqueue_script('my-nice-select', get_stylesheet_directory_uri() . '/js/jquery.nice-select.min.js', array('jquery'), '1.1.0', true);
     
-    // Enqueue select2 JS from CDN (must be loaded before scripts that depend on it)
-    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), null, true);
+    // Select2 for enhanced select fields
+    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), '4.1.0-rc.0', true);
     
-    // Localize script with necessary data for select2 initialization
-    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), null, true);
-    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), null, true);
+    // Main theme scripts
+    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), filemtime(get_stylesheet_directory() . '/js/script.js'), true);
+    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), filemtime(get_stylesheet_directory() . '/js/actions.js'), true);
     
-    // Add the cart rental fix script
-    wp_enqueue_script('cart-rental-fix', get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', array('jquery'), null, true);
+    // Cart and checkout related scripts
+    if (is_cart() || is_checkout() || is_product() || is_shop() || is_product_category()) {
+        // Air Datepicker for rental date selection
+        wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
+        wp_enqueue_script('air-datepicker', get_stylesheet_directory_uri() . '/js/air-datepicker.js', array('jquery'), '3.6.0', true);
+        
+        // Rental specific styles and scripts
+        wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
+        wp_enqueue_style('rental-pricing', get_stylesheet_directory_uri() . '/css/rental-pricing.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-pricing.css'));
+        
+        // Cart and rental fixes - consolidated into one file
+        wp_enqueue_script('cart-rental-fix', 
+            get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', 
+            array('jquery', 'wc-cart-fragments'), 
+            filemtime(get_stylesheet_directory() . '/js/cart-rental-fix.js'), 
+            true
+        );
+        
+        // Localize cart data
+        wp_localize_script('cart-rental-fix', 'cartRentalVars', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('cart-rental-nonce')
+        ));
+    }
     
-    // Add the final aggressive fix for rental dates in cart
-    wp_enqueue_script('rental-form-final-fix', get_stylesheet_directory_uri() . '/js/rental-form-final-fix.js', array('jquery'), null, true);
+    // Checkout page specific scripts
+    if (is_checkout()) {
+        wp_enqueue_script('checkout-fixes', 
+            get_stylesheet_directory_uri() . '/js/checkout-fix.js', 
+            array('jquery', 'wc-checkout'), 
+            filemtime(get_stylesheet_directory() . '/js/checkout-fix.js'), 
+            true
+        );
+    }
     
-    // Add fix for mini-cart floating popup
-    wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), null, true);
-    
-    // Add cart debugging script to help diagnose issues
-    wp_enqueue_script('cart-debug', get_stylesheet_directory_uri() . '/js/cart-debug.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/cart-debug.js'), true);
-    
-    // Enqueue rental datepicker script on product pages
+    // Product page specific scripts
     if (is_product()) {
+        // Enqueue rental datepicker script
         wp_enqueue_script('rental-datepicker', 
             get_stylesheet_directory_uri() . '/js/rental-datepicker.js', 
-            array('jquery', 'air-datepicker'), 
+            array('jquery', 'air-datepicker', 'wc-add-to-cart'), 
             filemtime(get_stylesheet_directory() . '/js/rental-datepicker.js'), 
             true
         );
         
-        // Localize script with WooCommerce AJAX URL
+        // Localize script with necessary data
         wp_localize_script('rental-datepicker', 'rentalDatepickerVars', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rental-datepicker-nonce')
+            'nonce' => wp_create_nonce('rental-datepicker-nonce'),
+            'product_id' => get_the_ID(),
+            'is_rental' => has_term('rental', 'product_cat', get_the_ID())
         ));
-        
-        // Localize script with necessary data
-        wp_localize_script('rental-datepicker', 'wc_add_to_cart_params', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rental_dates_nonce')
-        ));
+    }
+    
+    // Debug scripts - only load for admins
+    if (current_user_can('manage_options') && (defined('WP_DEBUG') && WP_DEBUG)) {
+        wp_enqueue_script('cart-debug', 
+            get_stylesheet_directory_uri() . '/js/cart-debug.js', 
+            array('jquery'), 
+            filemtime(get_stylesheet_directory() . '/js/cart-debug.js'), 
+            true
+        );
     }
 }
 
@@ -591,8 +617,13 @@ function enqueue_enhanced_rental_display() {
             
             // Add join bookings logic
             wp_enqueue_script('calendar-join-bookings', get_template_directory_uri() . '/js/calendar-join-bookings.js', 
-                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
-                            true);
+                             array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
+                             true);
+                             
+            // Add product price breakdown display
+            wp_enqueue_script('product-price-breakdown', get_template_directory_uri() . '/js/product-price-breakdown.js', 
+                             array('jquery'), filemtime(get_template_directory() . '/js/product-price-breakdown.js'), 
+                             true);
             
             // Add enhanced styling for AirDatepicker
             wp_enqueue_script('air-datepicker-enhanced-style', get_template_directory_uri() . '/js/air-datepicker-enhanced-style.js', 
