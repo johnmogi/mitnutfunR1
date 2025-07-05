@@ -255,7 +255,8 @@
                     ...item,
                     status: status,
                     count: item.count || 0,
-                    date: dateStr
+                    date: dateStr,
+                    isEdgeDay: false // Default to false, we'll identify edge days later
                 };
                 
                 debugLog(`Processed date: ${dateStr}`, {
@@ -265,6 +266,32 @@
                     isFullyBooked: isFullyBooked
                 });
             });
+            
+            // Identify edge days (days that are first or last day of a booking)
+            debugLog('Identifying edge days...');
+            const dateKeys = Object.keys(dateStatus).sort();
+            
+            for (let i = 0; i < dateKeys.length; i++) {
+                const currentDate = dateKeys[i];
+                const prevDate = i > 0 ? dateKeys[i-1] : null;
+                const nextDate = i < dateKeys.length - 1 ? dateKeys[i+1] : null;
+                
+                // Check if current date is fully booked
+                if (dateStatus[currentDate].status === 'fully_booked') {
+                    // Is it an edge day? Check if previous or next day is NOT booked
+                    const isPrevDayBooked = prevDate && dateStatus[prevDate].status === 'fully_booked';
+                    const isNextDayBooked = nextDate && dateStatus[nextDate].status === 'fully_booked';
+                    
+                    // If either previous or next day is not fully booked (or doesn't exist),
+                    // this is an edge day - it can be used to join bookings
+                    if (!isPrevDayBooked || !isNextDayBooked) {
+                        dateStatus[currentDate].isEdgeDay = true;
+                        debugLog(`Marked ${currentDate} as EDGE DAY`);
+                    } else {
+                        debugLog(`${currentDate} is a MIDDLE day (blocked)`);
+                    }
+                }
+            }
             
             // Log summary of processed dates
             const statusCounts = Object.values(dateStatus).reduce((acc, item) => {
@@ -346,18 +373,31 @@
                             status: status.status,
                             count: status.count,
                             isFullyBooked: isFullyBooked,
+                            isEdgeDay: status.isEdgeDay,
                             initialStock: initialStock,
                             forceFullyBooked: status.status === 'fully_booked'
                         });
                         
                         if (isFullyBooked) {
-                            return {
-                                disabled: true,
-                                classes: 'air-datepicker-cell--disabled -disabled-',
-                                attributes: {
-                                    'title': `Fully booked (${status.count}/${initialStock})`
-                                }
-                            };
+                            // Check if this is an edge day (can be used as start/end of booking)
+                            if (status.isEdgeDay) {
+                                return {
+                                    // Edge days are selectable - NOT disabled
+                                    classes: 'air-datepicker-cell--edge-day',
+                                    attributes: {
+                                        'title': 'Can be used as first or last day of booking'
+                                    }
+                                };
+                            } else {
+                                // Middle days remain disabled
+                                return {
+                                    disabled: true,
+                                    classes: 'air-datepicker-cell--disabled -disabled-',
+                                    attributes: {
+                                        'title': `Fully booked (${status.count}/${initialStock})`
+                                    }
+                                };
+                            }
                         } else {
                             return {
                                 classes: 'air-datepicker-cell--partially-booked',
