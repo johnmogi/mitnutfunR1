@@ -1,0 +1,39 @@
+/**
+ * Disabled Dates CSS
+ * Styling for the disabled dates error message
+ */
+
+.rental-date-error {
+    color: #ff0000;
+    background-color: #fff0f0;
+    border: 1px solid #ffcccc;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: 15px 0;
+    font-weight: bold;
+    text-align: center;
+    direction: rtl; /* For RTL language support */
+    box-shadow: 0 2px 4px rgba(255, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .rental-date-error {
+        padding: 8px;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+}

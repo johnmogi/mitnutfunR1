@@ -441,9 +441,6 @@ function my_output_images( $prepend_url, $separator = ',', $image_urls ) {
     return implode( $separator, $image_urls );
 }
 
-add_filter('get_the_archive_title_prefix','__return_false');
-
-remove_filter('the_excerpt', 'wpautop');
 
 /**
  * Enqueue rental availability scripts and styles
@@ -636,6 +633,15 @@ function enqueue_rental_validation_scripts() {
             filemtime(get_template_directory() . '/js/rental/booking-validation.js'),
             true
         );
+        
+        // Script to block orders with disabled dates
+        wp_enqueue_script(
+            'block-disabled-dates',
+            get_template_directory_uri() . '/js/block-disabled-dates.js',
+            array('jquery'),
+            filemtime(get_template_directory() . '/js/block-disabled-dates.js'),
+            true
+        );
 
         // CSS
         wp_enqueue_style(
@@ -643,6 +649,14 @@ function enqueue_rental_validation_scripts() {
             get_template_directory_uri() . '/css/rental/booking-validation.css',
             array(),
             filemtime(get_template_directory() . '/css/rental/booking-validation.css')
+        );
+        
+        // CSS for disabled dates error styling
+        wp_enqueue_style(
+            'rental-disabled-dates',
+            get_template_directory_uri() . '/css/rental/disabled-dates.css',
+            array(),
+            filemtime(get_template_directory() . '/css/rental/disabled-dates.css')
         );
     }
 }

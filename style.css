@@ -1,6 +1,9 @@
 /*   
 Theme Name: Mitnafun R
 */
+
+
+.missing-dates,
 .stock.in-stock,
 #rental-debug-panel, #calendar-booking-debug {
     display: none;
