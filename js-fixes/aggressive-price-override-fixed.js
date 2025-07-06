@@ -1,0 +1,4 @@
+/bin /cmd /dev /etc /git-bash.exe /git-cmd.exe /LICENSE.txt /mingw64 /proc /ReleaseNotes.html /tmp /unins000.dat /unins000.exe /unins000.msg /usr
+aggressive-price-override.js aggressive-price-override-fixed.js calendar-join-bookings-fix.js cart-pricing-fix.php checkout-detailed-price-fix.js checkout-fix.js mini-cart-fix.js product-price-transfer.js rental-datepicker-fix.js rental-dates-value-fix.js rental-form-debug-fix.js temp_aggressive_price_override.js Aggressive Price Override - Forces custom rental pricing throughout the cart
+aggressive-price-override.js aggressive-price-override-fixed.js calendar-join-bookings-fix.js cart-pricing-fix.php checkout-detailed-price-fix.js checkout-fix.js mini-cart-fix.js product-price-transfer.js rental-datepicker-fix.js rental-dates-value-fix.js rental-form-debug-fix.js temp_aggressive_price_override.js COMPLETE REWRITE - Version 1.0.0
+*/

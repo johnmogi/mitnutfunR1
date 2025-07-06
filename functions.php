@@ -237,7 +237,6 @@ function mitnafun_ensure_checkout_template($template, $template_name, $template_
  * Enqueue scripts and styles
  */
 add_action('wp_enqueue_scripts', 'load_style_script', 20);
-add_action('wp_enqueue_scripts', 'enqueue_rental_availability_scripts', 30);
 function load_style_script() {
     // Common styles loaded on all pages
     wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
@@ -325,6 +324,15 @@ function load_style_script() {
             'product_id' => get_the_ID(),
             'is_rental' => has_term('rental', 'product_cat', get_the_ID())
         ));
+        
+        // Add weekend price fix script with fixed version number
+        wp_enqueue_script(
+            'weekend-price-fix', 
+            get_template_directory_uri() . '/js-fixes/weekend-price-fix.js', 
+            array('jquery', 'rental-datepicker'), 
+            '1.0.0', 
+            true
+        );
     }
     
     // Debug scripts - only load for admins
@@ -441,74 +449,11 @@ function my_output_images( $prepend_url, $separator = ',', $image_urls ) {
     return implode( $separator, $image_urls );
 }
 
+add_filter('get_the_archive_title_prefix','__return_false');
 
-/**
- * Enqueue rental availability scripts and styles
- */
-function enqueue_rental_availability_scripts() {
-    // Only load on single product pages
-    if (is_product()) {
-        // Enqueue the rental availability script
-        wp_enqueue_script(
-            'rental-availability',
-            get_stylesheet_directory_uri() . '/js/rental-availability.js',
-            array('jquery'),
-            filemtime(get_stylesheet_directory() . '/js/rental-availability.js'),
-            true
-        );
 
-        // Localize script with AJAX URL and nonce
-        wp_localize_script('rental-availability', 'rental_availability', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rental-availability-nonce'),
-            'i18n' => array(
-                'checking_availability' => __('Checking availability...', 'mitnafun'),
-                'dates_available' => __('Selected dates are available', 'mitnafun'),
-                'dates_not_available' => __('Selected dates are not available', 'mitnafun'),
-                'select_dates' => __('Please select rental dates', 'mitnafun'),
-                'server_error' => __('Error checking availability. Please try again.', 'mitnafun')
-            )
-        ));
+remove_filter('the_excerpt', 'wpautop');
 
-        // Add inline styles for the availability indicators
-        $custom_css = "
-            .rental-availability-status {
-                display: inline-block;
-                margin-left: 10px;
-                padding: 5px 10px;
-                border-radius: 3px;
-                font-size: 0.9em;
-                font-weight: 500;
-            }
-            .rental-available {
-                background-color: #e8f5e9;
-                color: #2e7d32;
-            }
-            .rental-unavailable {
-                background-color: #ffebee;
-                color: #c62828;
-            }
-            .rental-checking {
-                background-color: #fff8e1;
-                color: #ff8f00;
-            }
-            button.dates-unavailable {
-                opacity: 0.7;
-                cursor: not-allowed;
-            }
-            .rental-date-error {
-                color: #d32f2f;
-                margin-top: 5px;
-                font-size: 0.9em;
-                display: none;
-            }
-            .rental-date-error.show {
-                display: block;
-            }
-        ";
-        wp_add_inline_style('woocommerce-general', $custom_css);
-    }
-}
 
 /**
  * Get rental dates for a product
@@ -620,47 +565,67 @@ add_action('wp_ajax_nopriv_get_rental_dates', 'ajax_get_rental_dates');
 // Rental cart pricing is now handled in inc/rental-pricing.php
 
 /**
- * Enqueue booking validation scripts and styles
+ * Fix for the "Must select rental dates before adding to cart" error
  */
-function enqueue_rental_validation_scripts() {
-    // Only load on product pages and cart/checkout
-    if (is_product() || is_cart() || is_checkout()) {
-        // JavaScript
-        wp_enqueue_script(
-            'rental-booking-validation',
-            get_template_directory_uri() . '/js/rental/booking-validation.js',
-            array('jquery'),
-            filemtime(get_template_directory() . '/js/rental/booking-validation.js'),
-            true
-        );
-        
-        // Script to block orders with disabled dates
-        wp_enqueue_script(
-            'block-disabled-dates',
-            get_template_directory_uri() . '/js/block-disabled-dates.js',
-            array('jquery'),
-            filemtime(get_template_directory() . '/js/block-disabled-dates.js'),
-            true
-        );
-
-        // CSS
-        wp_enqueue_style(
-            'rental-booking-validation',
-            get_template_directory_uri() . '/css/rental/booking-validation.css',
-            array(),
-            filemtime(get_template_directory() . '/css/rental/booking-validation.css')
-        );
-        
-        // CSS for disabled dates error styling
-        wp_enqueue_style(
-            'rental-disabled-dates',
-            get_template_directory_uri() . '/css/rental/disabled-dates.css',
-            array(),
-            filemtime(get_template_directory() . '/css/rental/disabled-dates.css')
-        );
-    }
+function rental_dates_value_fix() {
+    // Only add this fix on single product pages
+    if (!is_product()) return;
+    
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // Simple fix for the [object HTMLCollection] issue with rental_dates
+        $('form.cart').on('submit', function(e) {
+            // Get all rental_dates inputs (there might be multiple)
+            var $rentalInputs = $('input[name="rental_dates"]');
+            
+            // If we have multiple inputs, fix the value
+            if ($rentalInputs.length > 1) {
+                console.log('Found multiple rental_dates inputs, fixing...');
+                
+                // Find the visible one that likely has the correct value
+                var $visibleInput = $rentalInputs.filter(':visible').first();
+                var correctValue = '';
+                
+                // Try to get the value from the visible input first
+                if ($visibleInput.length && $visibleInput.val() && !$visibleInput.val().includes('[object')) {
+                    correctValue = $visibleInput.val();
+                }
+                
+                // If that didn't work, try to construct it from the displayed dates
+                if (!correctValue) {
+                    var startDate = $('#selected-start-date').text();
+                    var endDate = $('#selected-end-date').text();
+                    
+                    if (startDate && endDate) {
+                        correctValue = startDate + ' - ' + endDate;
+                    }
+                }
+                
+                // If we found a valid value, set it on the form's main input
+                if (correctValue) {
+                    // Set the value on the first input in the form
+                    $(this).find('input[name="rental_dates"]').val(correctValue);
+                    console.log('Fixed rental_dates value: ' + correctValue);
+                } else {
+                    // If no valid dates, prevent submission
+                    console.log('No valid dates selected');
+                    e.preventDefault();
+                    alert('יש לבחור תאריכי השכרה לפני הוספה לסל');
+                }
+            }
+        });
+    });
+    </script>
+    <?php
 }
-add_action('wp_enqueue_scripts', 'enqueue_rental_validation_scripts', 15);
+add_action('wp_footer', 'rental_dates_value_fix');
+
+// Include cart pricing fix to ensure correct rental pricing in cart/checkout
+require_once get_template_directory() . '/js-fixes/cart-pricing-fix.php';
+
+// Include script deactivation to prevent price calculation conflicts
+require_once get_template_directory() . '/js-fixes/deactivate-price-scripts.php';
 
 /**
  * Enqueue enhanced rental display script
@@ -669,15 +634,6 @@ add_action('wp_enqueue_scripts', 'enqueue_rental_validation_scripts', 15);
 function enqueue_enhanced_rental_display() {
     // Only enqueue on front-end pages where rentals might be displayed
     if (!is_admin()) {
-        // Load the lightweight weekend fix solution
-        wp_enqueue_script(
-            'weekend-fix-light',
-            get_template_directory_uri() . '/js/weekend-fix-light.js',
-            array('jquery'), 
-            filemtime(get_template_directory() . '/js/weekend-fix-light.js'),
-            false // Load in header
-        );
-        
         // Add debugging script in header
         wp_enqueue_script(
             'debug-rental',
@@ -736,16 +692,9 @@ function enqueue_enhanced_rental_display() {
                              array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
                              true);
                              
-            // Add rental calculation library (must load before price breakdown)
-            wp_enqueue_script('rental-calculation-lib', get_template_directory_uri() . '/js/rental-calculation-lib.js', 
-                             array('jquery'), filemtime(get_template_directory() . '/js/rental-calculation-lib.js'), 
-                             true);
-                             
-            // Weekend detection is handled by weekend-fix-light.js loaded in header
-
             // Add product price breakdown display
             wp_enqueue_script('product-price-breakdown', get_template_directory_uri() . '/js/product-price-breakdown.js', 
-                             array('jquery', 'rental-calculation-lib'), filemtime(get_template_directory() . '/js/product-price-breakdown.js'), 
+                             array('jquery'), filemtime(get_template_directory() . '/js/product-price-breakdown.js'), 
                              true);
             
             // Add enhanced styling for AirDatepicker
@@ -757,12 +706,58 @@ function enqueue_enhanced_rental_display() {
             wp_enqueue_script('join-booking-notice', get_template_directory_uri() . '/js/join-booking-notice.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/join-booking-notice.js'), 
                             true);
+<<<<<<< HEAD
+        }
+        
+        // DISABLED: Original aggressive price override script was corrupted
+        /*
+        wp_enqueue_script(
+            'aggressive-price-override',
+            get_template_directory_uri() . '/js-fixes/aggressive-price-override.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // DISABLED: Previous minimal implementation wasn't aggressive enough
+        /*
+        wp_enqueue_script(
+            'price-override-minimal',
+            get_template_directory_uri() . '/js-fixes/price-override-minimal.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // DISABLED: Previous price override script had issues
+        /*
+        wp_enqueue_script(
+            'price-override-fixed',
+            get_template_directory_uri() . '/js-fixes/price-override-fixed.js',
+            array('jquery'),
+            '2.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // NEW: Simple price enforcer script - focuses only on consistent pricing
+        wp_enqueue_script(
+            'price-enforcer',
+            get_template_directory_uri() . '/js-fixes/price-enforcer.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+=======
             
             // Add calendar range validator
             wp_enqueue_script('calendar-range-validator', get_template_directory_uri() . '/js/calendar-range-validator.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/calendar-range-validator.js'), 
                             true);
         }    
+>>>>>>> 953d390df977f5093e636eb81c68aa0bd44d5e2b
         
         // Add debug flag for development
         wp_localize_script('enhanced-rental-display', 'rentalConfig', array(
@@ -802,84 +797,4 @@ function ajax_get_rental_dates() {
 }
 
 
-// Include weekend hotfix documentation and pickup time restriction functionality
-require_once( get_stylesheet_directory() . '/inc/pickup-time-restriction.php' );
-
-// Include rental availability validation
-require_once( get_stylesheet_directory() . '/inc/rental-availability-validator.php' );
-
-// Include cart test functionality
 require_once( get_stylesheet_directory() . '/cart-test.php' );
-
-/**
- * Enqueue modularized JavaScript files for better organization
- * Replaces old scattered JS files with a modular approach
- */
-function enqueue_modular_js_files() {
-    // Only load on frontend
-    if (is_admin()) return;
-    
-    // Path to the modules folder
-    $modules_dir = get_stylesheet_directory_uri() . '/js-modules/';
-    $js_dir = get_stylesheet_directory_uri() . '/js/';
-    $modules_version = filemtime(get_stylesheet_directory() . '/js-modules/main.js') ?: time();
-    $js_version = filemtime(get_stylesheet_directory() . '/js/cart-rental-fix-new.js') ?: time();
-    
-    // 1. Logger module (must load first)
-    wp_enqueue_script(
-        'mitnafun-logger', 
-        $modules_dir . 'logger.js', 
-        array('jquery'), 
-        $modules_version, 
-        true
-    );
-    
-    // 2. Checkout validator module
-    wp_enqueue_script(
-        'mitnafun-checkout-validator', 
-        $modules_dir . 'checkout-validator.js', 
-        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'), 
-        $modules_version, 
-        true
-    );
-    
-    // 3. Cart integration module
-    wp_enqueue_script(
-        'mitnafun-cart-integration', 
-        $modules_dir . 'cart-integration.js', 
-        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'), 
-        $modules_version, 
-        true
-    );
-    
-    // 4. Main module loader (loads last)
-    wp_enqueue_script(
-        'mitnafun-main', 
-        $modules_dir . 'main.js', 
-        array('jquery', 'mitnafun-logger', 'mitnafun-checkout-validator', 'mitnafun-cart-integration'), 
-        $modules_version, 
-        true
-    );
-    
-    // 5. New cart rental fix (replaces the old buggy version)
-    wp_enqueue_script(
-        'mitnafun-cart-rental-fix',
-        $js_dir . 'cart-rental-fix-new.js',
-        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'),
-        $js_version,
-        true
-    );
-    
-    // Pass variables to JS
-    wp_localize_script('mitnafun-main', 'MitnaFunConfig', array(
-        'ajaxUrl' => admin_url('admin-ajax.php'),
-        'checkoutUrl' => wc_get_checkout_url(),
-        'cartUrl' => wc_get_cart_url(),
-        'shopUrl' => get_permalink(wc_get_page_id('shop')),
-        'isDebug' => defined('WP_DEBUG') && WP_DEBUG,
-        'nonce' => wp_create_nonce('mitnafun-ajax-nonce')
-    ));
-}
-
-// Enqueue modular JS files with priority 25 (after WooCommerce but before other custom scripts)
-add_action('wp_enqueue_scripts', 'enqueue_modular_js_files', 25);
