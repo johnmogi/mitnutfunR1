@@ -226,6 +226,34 @@
             
             const dateText = $dateContainer.text().trim();
             
+            // Check for missing dates div and replace it with rental dates if present
+            const $missingDates = $item.find('.missing-dates');
+            if ($missingDates.length) {
+                debugLog('Found missing dates div, attempting to restore dates', $item);
+                
+                // Try to get dates from session storage for the most recent product
+                const productId = $item.find('[data-product_id]').data('product_id') || 0;
+                const storedDates = sessionStorage.getItem('last_rental_dates');
+                
+                if (storedDates) {
+                    $missingDates.removeClass('missing-dates').addClass('rental-dates')
+                               .html('<strong>תאריכי השכרה:</strong> ' + storedDates)
+                               .css({'color': '#333', 'font-size': '1em'});
+                    
+                    debugLog('Fixed missing dates from session storage', storedDates);
+                    
+                    // Add rental days count
+                    const dateParts = storedDates.split(' - ');
+                    if (dateParts.length === 2) {
+                        // If same-day booking (same start and end date)
+                        const isSameDayBooking = dateParts[0] === dateParts[1];
+                        const rentalDays = isSameDayBooking ? 1 : 2; // Default to 1 day for same-day bookings
+                        
+                        $missingDates.after('<div class="rental-days-text">מספר ימי השכרה: ' + rentalDays + '</div>');
+                    }
+                }
+            }
+            
             // If the date text is empty or just contains 'null', try to find it elsewhere
             if (!dateText || dateText === 'null') {
                 debugLog('Empty date found, attempting to fix', $item);
@@ -269,6 +297,35 @@
                 }
             }
         });
+        
+        // Remove duplicate items in checkout review (same product but one with dates, one without)
+        if ($('.woocommerce-checkout-review-order-table').length) {
+            const productNames = new Map();
+            
+            $('.woocommerce-checkout-review-order-table .item').each(function() {
+                const $item = $(this);
+                const productName = $item.find('.name').text().trim();
+                const hasDates = $item.find('.rental-dates').length > 0;
+                
+                // If we've seen this product before and current one has dates but previous didn't
+                if (productNames.has(productName)) {
+                    const previousItem = productNames.get(productName);
+                    const previousHasDates = previousItem.find('.rental-dates').length > 0;
+                    
+                    // Keep the one with rental dates and remove the other
+                    if (hasDates && !previousHasDates) {
+                        previousItem.hide(); // Hide the duplicate without dates
+                        debugLog('Hiding duplicate product without dates in checkout', productName);
+                    } else if (!hasDates && previousHasDates) {
+                        $item.hide(); // Hide this one if it doesn't have dates
+                        debugLog('Hiding duplicate product without dates in checkout', productName);
+                    }
+                } else {
+                    // First time seeing this product
+                    productNames.set(productName, $item);
+                }
+            });
+        }
     }
     
     /**

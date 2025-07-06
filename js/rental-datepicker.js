@@ -508,6 +508,8 @@
                 range: true,
                 multipleDatesSeparator: ' - ',
                 minDate: new Date(),
+                // Allow selecting the same date twice for same-day booking
+                toggleSelected: false,
                 locale: {
                     days: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
                     daysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
@@ -625,110 +627,108 @@
                         }
                     };
                 },
-                onSelect: function({date, formattedDate}) {
+                onSelect: function({date, formattedDate, datepicker}) {
                     const $rentalDisplay = $('#rental-dates-display');
                     const $startDateElement = $('#selected-start-date');
                     const $endDateElement = $('#selected-end-date');
                     const $daysCountElement = $('#rental-days-count');
                     const $errorContainer = $('#rental-dates-error');
                     
+                    debugLog('onSelect triggered with:', {
+                        date: date,
+                        formattedDate: formattedDate
+                    });
+                    
                     // Clear any previous error messages
                     $errorContainer.empty().hide();
                     
-                    // Hide display if no dates selected
+                    // Handle date selection logic
                     if (!date || date.length === 0) {
+                        // No dates selected
                         $dateInput.val('');
                         $('.btn-wrap button').prop('disabled', true);
                         $rentalDisplay.hide();
                         return;
                     }
                     
-                    // Handle date range selection
+                    // Check for same-day booking (clicked same date twice)
+                    if (date.length === 1) {
+                        // Force same-day booking (set both start and end dates to the same date)
+                        const selectedDate = new Date(date[0]);
+                        
+                        debugLog('Creating same-day booking for', selectedDate);
+                        
+                        // Set both start and end dates to the selected date for same-day booking
+                        datepicker.selectDate([selectedDate, selectedDate]);
+                        
+                        // This will trigger onSelect again with date.length = 2
+                        return;
+                    }
+                    
+                    // Handle date range selection (2 dates)
                     if (date.length === 2) {
+                        // Check if it's a same-day booking (both dates are the same)
+                        const isSameDayBooking = date[0].getTime() === date[1].getTime();
+                        
+                        // Use UTC methods to avoid timezone issues
                         const startDate = new Date(date[0]);
                         const endDate = new Date(date[1]);
                         
-                        // Format dates for display and logging
-                        const startDateFormatted = formatDate(startDate);
-                        const endDateFormatted = formatDate(endDate);
+                        // Create properly formatted date strings with adjusted timezone
+                        // This ensures the displayed dates match what the user selected
+                        const startDateStr = startDate.getFullYear() + '-' + 
+                            String(startDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                            String(startDate.getDate()).padStart(2, '0');
+                            
+                        const endDateStr = endDate.getFullYear() + '-' + 
+                            String(endDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                            String(endDate.getDate()).padStart(2, '0');
                         
-                        // Calculate days between start and end dates
-                        const msDiff = endDate.getTime() - startDate.getTime();
-                        const totalCalendarDays = Math.ceil(msDiff / (1000 * 60 * 60 * 24)) + 1;
+                        // Calculate days between start and end dates (handle same-day case)
+                        const msDiff = isSameDayBooking ? 0 : (endDate.getTime() - startDate.getTime());
+                        const totalCalendarDays = isSameDayBooking ? 1 : Math.ceil(msDiff / (1000 * 60 * 60 * 24)) + 1;
                         
                         // Calculate rental days based on weekday/weekend rules
                         const rentalDayCalculation = calculateRentalChargeDays(startDate, endDate);
                         const rentalDays = rentalDayCalculation.chargeDays;
-                        const discountedDays = rentalDayCalculation.extraDiscountedDays;
                         
                         debugLog('Weekday/Weekend rental calculation:', {
                             calendarDays: totalCalendarDays,
                             chargeDays: rentalDays,
-                            discountedDays: discountedDays,
-                            startDate: startDateFormatted,
-                            endDate: endDateFormatted,
+                            startDate: startDateStr,
+                            endDate: endDateStr,
+                            isSameDayBooking: isSameDayBooking,
                             weekdayCount: rentalDayCalculation.weekdayCount,
                             weekendIncluded: rentalDayCalculation.weekendIncluded,
                             details: rentalDayCalculation.details
                         });
                         
-                        debugLog('Final rental day calculation:', {
-                            calendarDays: totalCalendarDays,
-                            rentalDays,
-                            formula: 'Weekdays: 2-for-1, Weekend (Fri-Sun): counts as 1 day'
-                        });
-                        
-                        // Update the display
-                        $startDateElement.text(startDateFormatted);
-                        $endDateElement.text(endDateFormatted);
+                        // Update the display with the correct dates (matching what user selected)
+                        $startDateElement.text(startDateStr);
+                        $endDateElement.text(endDateStr);
                         $daysCountElement.text(rentalDays);
                         $rentalDisplay.show();
                         
-                        // Update the hidden input
-                        $dateInput.val(`${startDateFormatted} - ${endDateFormatted}`);
+                        // Update the hidden input with correct date range
+                        $dateInput.val(`${startDateStr} - ${endDateStr}`);
                         
                         // Enable the buttons
                         $('.btn-wrap button').prop('disabled', false);
                         
                         // Trigger custom event for price calculation
                         $(document).trigger('rentalDatesSelected', {
-                            startDate: startDateFormatted,
-                            endDate: endDateFormatted,
+                            startDate: startDateStr,
+                            endDate: endDateStr,
                             days: rentalDays,
                             dayCount: totalCalendarDays
                         });
                         
                         debugLog('Date range selected:', {
-                            startDate: startDateFormatted,
-                            endDate: endDateFormatted,
+                            startDate: startDateStr,
+                            endDate: endDateStr,
                             days: rentalDays,
                             dayCount: totalCalendarDays
                         });
-                        
-                    } else if (date.length === 1) {
-                        // Handle single date selection (same day rental)
-                        const singleDate = formatDate(date[0]);
-                        
-                        // Update the hidden input
-                        $dateInput.val(singleDate);
-                        
-                        // Update the display
-                        $startDateElement.text(singleDate);
-                        $endDateElement.text(singleDate);
-                        $daysCountElement.text('1');
-                        $rentalDisplay.show();
-                        
-                        $('.btn-wrap button').prop('disabled', false);
-                        
-                        // Trigger custom event
-                        $(document).trigger('rentalDatesSelected', {
-                            startDate: singleDate,
-                            endDate: singleDate,
-                            days: 1,
-                            dayCount: 1
-                        });
-                        
-                        debugLog('Single date selected:', singleDate);
                     }
                 }
             });
