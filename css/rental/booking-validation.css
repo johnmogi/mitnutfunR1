@@ -1,0 +1,55 @@
+/* Booking Validation Styles */
+.single_add_to_cart_button.disabled,
+#place_order.disabled,
+.single_add_to_cart_button:disabled,
+#place_order:disabled {
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    pointer-events: none;
+    position: relative;
+}
+
+/* Error message styling */
+.booking-error {
+    color: #e74c3c !important;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 8px 12px;
+    background-color: #fde8e8;
+    border-right: 3px solid #e74c3c;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Tooltip style for disabled buttons */
+[title]:not([title=""]):hover:after {
+    content: attr(title);
+    position: absolute;
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-top: 5px;
+    right: 0;
+    pointer-events: none;
+}
+
+/* Make sure the tooltip doesn't show for enabled buttons */
+.single_add_to_cart_button:not([title=""]):hover:after,
+#place_order:not([title=""]):hover:after {
+    display: none;
+}
+
+/* Disabled state for quantity inputs when dates are invalid */
+.disabled-input input[type="number"] {
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+    background-color: #f5f5f5 !important;
+}

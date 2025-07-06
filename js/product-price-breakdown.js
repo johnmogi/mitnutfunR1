@@ -83,57 +83,110 @@ jQuery(document).ready(function($) {
             return;
         }
         
-        debugLog('Updating price breakdown with data:', data);
+        // Extract data and ensure we have dayCount
+        const { days, dayCount } = data;
         
-        // Get the base price (from the page)
-        const priceText = $priceElem.text().replace(/[^\d.,]/g, '').replace(',', '.');
-        const basePrice = parseFloat(priceText);
+        console.log('[Price Breakdown] Updating price breakdown with data:', data);
         
-        if (isNaN(basePrice)) {
-            debugLog('Could not parse base price');
-            return;
+        // Get days and price
+        const startDate = data.startDate ? new Date(data.startDate) : null;
+        const endDate = data.endDate ? new Date(data.endDate) : null;
+        const basePrice = parseFloat($('.amount').first().text().replace(/[^\d.-]/g, ''));
+        
+        // Calculate rental days using the weekday/weekend-aware logic
+        let rentalDays = 1; // Default to 1 day for single date selection
+        let discountedDays = 0;
+        let weekdayCount = 0;
+        let weekendIncluded = false;
+        let details = [];
+        
+        if (startDate && endDate) {
+            // Use the calculateRentalChargeDays function if it exists, otherwise fallback to simple calculation
+            if (typeof calculateRentalChargeDays === 'function') {
+                const calculation = calculateRentalChargeDays(startDate, endDate);
+                rentalDays = calculation.chargeDays;
+                discountedDays = calculation.extraDiscountedDays;
+                weekdayCount = calculation.weekdayCount;
+                weekendIncluded = calculation.weekendIncluded;
+                details = calculation.details || [];
+                
+                console.log('[Price Breakdown] Used weekday/weekend aware calculation', calculation);
+            } else {
+                // Fallback to simple day count if the function doesn't exist
+                console.log('[Price Breakdown] Function calculateRentalChargeDays not found, using fallback');
+                
+                // Calculate the number of days between dates
+                const msDiff = endDate.getTime() - startDate.getTime();
+                const totalDays = Math.ceil(msDiff / (1000 * 60 * 60 * 24)) + 1;
+                
+                // Apply the 2-for-1 formula
+                rentalDays = Math.ceil((totalDays - 1) / 2) + 1;
+                discountedDays = rentalDays - 1;
+            }
         }
         
-        const days = data.days;
-        const dayCount = data.dayCount;
-        
-        // Calculate pricing based on the rental rules
-        // First day is full price, additional days are 50%
+        // Calculate prices
         const firstDayPrice = basePrice;
-        const additionalDaysPrice = days > 1 ? (basePrice * 0.5 * (days - 1)) : 0;
+        const additionalDaysPrice = basePrice * 0.5 * discountedDays; // 50% for additional days
         const totalPrice = firstDayPrice + additionalDaysPrice;
+        const savedAmount = basePrice * 0.5 * discountedDays; // Saved 50% on additional days
         
-        // Create discount info
-        const discountAmount = days > 1 ? (basePrice * (days - 1)) - additionalDaysPrice : 0;
-        const discountPercentage = days > 1 ? 50 : 0;
+        console.log('[Price Breakdown] Price breakdown updated', {
+            rentalDays: rentalDays,
+            discountedDays: discountedDays,
+            basePrice: basePrice,
+            firstDayPrice: firstDayPrice,
+            additionalDaysPrice: additionalDaysPrice,
+            totalPrice: totalPrice,
+            savedAmount: savedAmount,
+            weekdayCount: weekdayCount,
+            weekendIncluded: weekendIncluded
+        });
         
-        // Format prices (using WooCommerce currency format)
-        const currencySymbol = $('.woocommerce-Price-currencySymbol').first().text();
+        // Build the HTML content
+        let html = `
+            <h3 class="price-breakdown-title">פירוט מחיר השכרה:</h3>
+            <div class="price-breakdown-details">
+                <div class="price-breakdown-row">
+                    <span>יום ראשון (100%):</span>
+                    <span class="price">${basePrice.toFixed(2)}₪</span>
+                </div>`;
         
-        // Generate HTML for the breakdown
-        let html = '<h4>פירוט מחיר השכרה:</h4>';
-        html += `<div class="price-row"><span class="label">יום ראשון (100%):</span> <span class="amount">${firstDayPrice.toFixed(2)}${currencySymbol}</span></div>`;
-        
-        if (days > 1) {
-            html += `<div class="price-row"><span class="label">ימים נוספים (${days - 1} × 50%):</span> <span class="amount">${additionalDaysPrice.toFixed(2)}${currencySymbol}</span></div>`;
-            html += `<div class="discount-row"><span class="label">חסכת:</span> <span class="amount">${discountAmount.toFixed(2)}${currencySymbol} (${discountPercentage}%)</span></div>`;
+        if (discountedDays > 0) {
+            html += `
+                <div class="price-breakdown-row">
+                    <span>ימים נוספים (${discountedDays} × 50%):</span>
+                    <span class="price">${additionalDaysPrice.toFixed(2)}₪</span>
+                </div>
+                <div class="price-breakdown-row saved-row">
+                    <span>חסכת:</span>
+                    <span class="price">${savedAmount.toFixed(2)}₪ (50%)</span>
+                </div>`;
         }
         
-        html += `<div class="total-row"><span class="label">סה״כ:</span> <span class="amount">${totalPrice.toFixed(2)}${currencySymbol}</span></div>`;
-        
-        // Add explanation about the rental day calculation
-        if (data.dayCount > data.days) {
-            html += '<div class="calculation-note" style="margin-top: 8px; font-size: 0.9em; color: #666;">';
-            html += '<p>* חישוב ימי השכרה: סופ״ש (שישי-ראשון) נספר כיום אחד, ובשאר הימים כל יומיים נחשבים ליום אחד</p>';
-            html += '</div>';
-        }
+        html += `
+                <div class="price-breakdown-row total-row">
+                    <span>סה״כ:</span>
+                    <span class="price">${totalPrice.toFixed(2)}₪</span>
+                </div>
+                <div class="price-breakdown-note">
+                    * חישוב ימי השכרה: סופ״ש (שישי-ראשון) נספר כיום אחד, ובשאר הימים כל יומיים נחשבים ליום אחד
+                </div>
+            </div>
+        `;
         
         // Apply styles directly
         html += '<style>';
+        html += '.price-breakdown-row, .price-breakdown-row.saved-row, .price-breakdown-row.total-row { margin-bottom: 5px; display: flex; justify-content: space-between; }';
+        html += '.price-breakdown-row.total-row { margin-top: 10px; font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px; }';
+        html += '.price-breakdown-row.saved-row { color: #4CAF50; }';
         html += '.price-row, .discount-row, .total-row { margin-bottom: 5px; display: flex; justify-content: space-between; }';
         html += '.total-row { margin-top: 10px; font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px; }';
         html += '.discount-row { color: #4CAF50; }';
         html += '</style>';
+        
+        // We're using rentalDays instead of days now
+        debugLog('HTML content generated with rental days:', rentalDays);
         
         // Update and show the breakdown with !important to ensure visibility
         $breakdown.html(html).attr('style', 'display: block !important');
@@ -145,13 +198,13 @@ jQuery(document).ready(function($) {
         }, 50);
         
         debugLog('Price breakdown updated', {
-            days,
+            rentalDays,
             dayCount,
             basePrice,
             firstDayPrice,
             additionalDaysPrice,
             totalPrice,
-            discountAmount,
+            savedAmount,
             visible: $breakdown.is(':visible'),
             style: $breakdown.attr('style'),
             dimensions: {

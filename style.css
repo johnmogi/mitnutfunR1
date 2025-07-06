@@ -1,12 +1,12 @@
 /*   
 Theme Name: Mitnafun R
 */
-
-#rental-debug-panel {
+.stock.in-stock,
+#rental-debug-panel, #calendar-booking-debug {
     display: none;
 }
 
-.logged-in #rental-debug-panel {
+.logged-in #rental-debug-panel, .logged-in #calendar-booking-debug {
     display: block;
 }
 

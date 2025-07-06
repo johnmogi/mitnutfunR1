@@ -8,7 +8,101 @@
 
     // Debug logging helper
     function debugLog(...args) {
-        console.log('[Rental Datepicker]', ...args);
+        if (window.rentalDebugEnabled) {
+            console.log('[Rental Datepicker]', ...args);
+        }
+    }
+
+    /**
+     * Calculate rental charge days based on the business rules:
+     * 1. First day is charged at full price
+     * 2. Weekdays (Mon-Thu) are grouped in 2s, each group counting as 1 rental day
+     * 3. Weekend days (Fri-Sun) count as 1 rental day total, regardless of how many are included
+     * 
+     * @param {Date} startDate - Start date of the rental
+     * @param {Date} endDate - End date of the rental
+     * @return {Object} - Calculation results
+     */
+    function calculateRentalChargeDays(startDate, endDate) {
+        const fullPriceDay = 1;
+        let extraWeekdayCount = 0;
+        let weekendIncluded = false;
+        let details = [];
+        
+        // Clone start date to avoid modifying the original
+        const current = new Date(startDate);
+        const end = new Date(endDate);
+        
+        // First day is charged at full price
+        details.push({
+            date: formatDate(current),
+            type: isWeekend(current) ? 'weekend' : 'weekday',
+            charge: 'full',
+            day: getDayName(current)
+        });
+        
+        // Skip first day for additional calculation
+        current.setDate(current.getDate() + 1);
+        
+        // Process all other days
+        while (current <= end) {
+            const day = current.getDay(); // 0 = Sunday, 6 = Saturday
+            
+            // Check if it's a weekend day
+            if (day === 5 || day === 6 || day === 0) { // Friday, Saturday, or Sunday
+                weekendIncluded = true;
+                details.push({
+                    date: formatDate(current),
+                    type: 'weekend',
+                    charge: 'discounted',
+                    day: getDayName(current)
+                });
+            } else { // Weekday
+                extraWeekdayCount++;
+                details.push({
+                    date: formatDate(current),
+                    type: 'weekday',
+                    charge: 'discounted',
+                    day: getDayName(current)
+                });
+            }
+            
+            // Move to next day
+            current.setDate(current.getDate() + 1);
+        }
+        
+        // Calculate weekday half-days based on 2-for-1 rule
+        const weekdayHalfDays = Math.ceil(extraWeekdayCount / 2);
+        
+        // Calculate total chargeable days
+        const totalChargeableDays = fullPriceDay + weekdayHalfDays + (weekendIncluded ? 1 : 0);
+        
+        return {
+            chargeDays: totalChargeableDays,
+            extraDiscountedDays: totalChargeableDays - 1,
+            weekdayCount: extraWeekdayCount,
+            weekendIncluded: weekendIncluded,
+            details: details
+        };
+    }
+
+    // Helper function to check if a date is a weekend day
+    function isWeekend(date) {
+        const day = date.getDay();
+        return day === 0 || day === 5 || day === 6; // Sunday, Friday, Saturday
+    }
+
+    // Helper function to format date as YYYY-MM-DD
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Helper function to get day name
+    function getDayName(date) {
+        return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
     }
 
     // Initialize the rental date picker
@@ -256,7 +350,9 @@
                     status: status,
                     count: item.count || 0,
                     date: dateStr,
-                    isEdgeDay: false // Default to false, we'll identify edge days later
+                    isEdgeDay: false, // Default to false, we'll identify edge days later
+                    isEdgeStart: false, // First day of booking sequence
+                    isEdgeEnd: false    // Last day of booking sequence
                 };
                 
                 debugLog(`Processed date: ${dateStr}`, {
@@ -267,41 +363,112 @@
                 });
             });
             
-            // EDGE DAY LOGIC:
+            // ENHANCED EDGE DAY LOGIC:
             // Identify edge days (days that can be used for joined bookings)
             debugLog('Identifying edge days for joined bookings...');
             const dateKeys = Object.keys(dateStatus).sort();
             
-            // For single unit rentals, we don't want any edge days - fully booked means fully booked
-            if (initialStock === 1) {
-                debugLog('Single unit rental mode - no edge days for fully booked dates');
-                dateKeys.forEach(dateKey => {
-                    if (dateStatus[dateKey].status === 'fully_booked') {
-                        dateStatus[dateKey].isEdgeDay = false; // No edge days for single unit rentals
-                        debugLog(`✅ Single unit mode - marked ${dateKey} as FULLY BOOKED (no edge)`);
+            // Identify booking sequences and mark start/end edges
+            debugLog('Identifying booking sequences and their edge days...');
+            
+            // First pass: Find booking sequences (continuous fully booked days)
+            let sequences = [];
+            let currentSequence = [];
+            
+            for (let i = 0; i < dateKeys.length; i++) {
+                const currentDate = dateKeys[i];
+                
+                // If fully booked, add to current sequence
+                if (dateStatus[currentDate].status === 'fully_booked') {
+                    currentSequence.push(currentDate);
+                } else {
+                    // If we have a sequence and encounter a non-fully-booked day, end the sequence
+                    if (currentSequence.length > 0) {
+                        sequences.push([...currentSequence]);
+                        currentSequence = [];
                     }
-                });
-            } else {
-                // For multi-unit rentals, only mark the first and last day of booking blocks as edge days
+                }
+                
+                // If this is the last date and we have a sequence, add it
+                if (i === dateKeys.length - 1 && currentSequence.length > 0) {
+                    sequences.push([...currentSequence]);
+                }
+            }
+            
+            debugLog(`Found ${sequences.length} booking sequences`, sequences);
+            
+            // Second pass: Mark start and end edges for each sequence
+            sequences.forEach((sequence, idx) => {
+                if (sequence.length > 0) {
+                    const startDate = sequence[0];
+                    const endDate = sequence[sequence.length - 1];
+                    
+                    // Mark the start edge (can be selected as end of a new booking)
+                    dateStatus[startDate].isEdgeStart = true;
+                    dateStatus[startDate].isEdgeDay = true;
+                    
+                    // Mark the end edge (can be selected as start of a new booking)
+                    dateStatus[endDate].isEdgeEnd = true;
+                    dateStatus[endDate].isEdgeDay = true;
+                    
+                    debugLog(`Sequence ${idx+1}: Marked ${startDate} as START EDGE, ${endDate} as END EDGE`);
+                }
+            });
+            
+            // For multi-unit rentals, add additional edge day logic
+            if (initialStock > 1) {
+                // For multi-unit rentals, identify edge days more intelligently
                 for (let i = 0; i < dateKeys.length; i++) {
                     const currentDate = dateKeys[i];
                     const prevDate = i > 0 ? dateKeys[i-1] : null;
                     const nextDate = i < dateKeys.length - 1 ? dateKeys[i+1] : null;
                     
-                    // Check if current date is fully booked
-                    if (dateStatus[currentDate].status === 'fully_booked') {
-                        // EDGE DAY DETECTION:
-                        // A day is an edge day if it's at the start or end of a booking block
+                    // Only process fully booked dates that aren't already edge days
+                    if (dateStatus[currentDate].status === 'fully_booked' && 
+                        !dateStatus[currentDate].isEdgeStart && 
+                        !dateStatus[currentDate].isEdgeEnd) {
+                        
+                        // ENHANCED EDGE DAY DETECTION:
+                        // Additional cases for multi-unit rentals
                         const isPrevDayFullyBooked = prevDate && dateStatus[prevDate].status === 'fully_booked';
                         const isNextDayFullyBooked = nextDate && dateStatus[nextDate].status === 'fully_booked';
                         
-                        // If either adjacent day is not fully booked (or there is no adjacent day),
-                        // this is an edge day that can be used to join bookings
+                        // Mark as edge day if adjacent to a non-fully booked day
                         if (!isPrevDayFullyBooked || !isNextDayFullyBooked) {
                             dateStatus[currentDate].isEdgeDay = true;
-                            debugLog(`✅ Marked ${currentDate} as EDGE DAY - can be used for joined bookings`);
-                        } else {
-                            debugLog(`❌ ${currentDate} is a MIDDLE day (will remain blocked)`);
+                            debugLog(`✅ Marked ${currentDate} as additional EDGE DAY for multi-unit rental`);
+                        }
+                    }
+                }
+                
+                // Special handling for weekends: ensure Friday-Sunday is treated as one day
+                for (let i = 0; i < dateKeys.length - 2; i++) {
+                    const friday = dateKeys[i];
+                    const saturday = dateKeys[i+1];
+                    const sunday = dateKeys[i+2];
+                    
+                    const fridayDate = new Date(friday);
+                    const saturdayDate = new Date(saturday);
+                    const sundayDate = new Date(sunday);
+                    
+                    // Check if these are consecutive Friday, Saturday, Sunday
+                    if (fridayDate.getDay() === 5 && 
+                        saturdayDate.getDay() === 6 && 
+                        sundayDate.getDay() === 0 &&
+                        (saturdayDate - fridayDate) === 86400000 && // 1 day in ms
+                        (sundayDate - saturdayDate) === 86400000) {
+                        
+                        // If any of these days is fully booked, mark all as edge days
+                        if (dateStatus[friday]?.status === 'fully_booked' || 
+                            dateStatus[saturday]?.status === 'fully_booked' || 
+                            dateStatus[sunday]?.status === 'fully_booked') {
+                            
+                            [friday, saturday, sunday].forEach(day => {
+                                if (dateStatus[day]) {
+                                    dateStatus[day].isEdgeDay = true;
+                                    debugLog(`✅ Weekend special - marked ${day} as EDGE DAY (Friday-Sunday block)`);
+                                }
+                            });
                         }
                     }
                 }
@@ -361,7 +528,7 @@
                     
                     const status = dateStatus[dateStr];
                     const dayOfWeek = date.getDay();
-                    const isSaturday = dayOfWeek === 6; // 6 = Saturday
+                    const isSaturday = dayOfWeek === 6; // 6 = Saturday (only block Saturdays)
                     
                     // Skip if date is in the past
                     if (date < today) {
@@ -393,15 +560,33 @@
                         });
                         
                         if (isFullyBooked) {
-                            // For single unit rentals, all fully booked days are completely disabled
+                            // For single unit rentals, all dates are fully booked (no edge days)
                             if (initialStock === 1) {
-                                return {
-                                    disabled: true,
-                                    classes: 'air-datepicker-cell--disabled -disabled-',
-                                    attributes: {
-                                        'title': 'Fully booked - not available (1/1)'
-                                    }
-                                };
+                                // Check if it's a start or end edge day - those are selectable for joining bookings
+                                if (status.isEdgeStart) {
+                                    return {
+                                        classes: 'air-datepicker-cell--edge-start',
+                                        attributes: {
+                                            'title': 'Can be selected as the end of your booking'
+                                        }
+                                    };
+                                } else if (status.isEdgeEnd) {
+                                    return {
+                                        classes: 'air-datepicker-cell--edge-end',
+                                        attributes: {
+                                            'title': 'Can be selected as the start of your booking'
+                                        }
+                                    };
+                                } else {
+                                    // Middle days remain disabled
+                                    return {
+                                        disabled: true,
+                                        classes: 'air-datepicker-cell--disabled -disabled-',
+                                        attributes: {
+                                            'title': 'Fully booked - not available (1/1)'
+                                        }
+                                    };
+                                }
                             }
                             
                             // For multi-unit rentals, handle edge days
@@ -445,6 +630,10 @@
                     const $startDateElement = $('#selected-start-date');
                     const $endDateElement = $('#selected-end-date');
                     const $daysCountElement = $('#rental-days-count');
+                    const $errorContainer = $('#rental-dates-error');
+                    
+                    // Clear any previous error messages
+                    $errorContainer.empty().hide();
                     
                     // Hide display if no dates selected
                     if (!date || date.length === 0) {
@@ -459,84 +648,40 @@
                         const startDate = new Date(date[0]);
                         const endDate = new Date(date[1]);
                         
-                        // Calculate days between the dates (excluding Saturdays)
-                        let dayCount = 0;
-                        let currentDate = new Date(startDate);
-                        
-                        // First pass: Count days by type and identify patterns
-                        let daysByType = {};
-                        let datesByDay = [];
-                        
-                        while (currentDate <= endDate) {
-                            const dayOfWeek = currentDate.getDay();
-                            const dateStr = formatDate(currentDate);
-                            
-                            if (dayOfWeek !== 6) { // Skip Saturdays
-                                dayCount++;
-                                daysByType[dayOfWeek] = (daysByType[dayOfWeek] || 0) + 1;
-                                datesByDay.push({
-                                    date: new Date(currentDate),
-                                    dayOfWeek: dayOfWeek,
-                                    dateStr: dateStr
-                                });
-                            }
-                            currentDate.setDate(currentDate.getDate() + 1);
-                        }
-                        
-                        // Detect weekend pattern (Friday + Sunday, possibly with days in between)
-                        const hasFriday = daysByType[5] > 0;
-                        const hasSunday = daysByType[0] > 0;
-                        const hasWeekendPattern = hasFriday && hasSunday;
-                        
-                        debugLog('Day counts by type:', { daysByType, datesByDay, hasWeekendPattern });
-                        
-                        // Apply the rental day calculation rule
-                        // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                        // Special case: Friday-Sunday counts as 1 regardless
-                        let days;
-                        
-                        if (hasWeekendPattern) {
-                            // Find the first Friday and last Sunday in the range
-                            let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
-                            let lastSundayIndex = -1;
-                            
-                            for (let i = datesByDay.length - 1; i >= 0; i--) {
-                                if (datesByDay[i].dayOfWeek === 0) {
-                                    lastSundayIndex = i;
-                                    break;
-                                }
-                            }
-                            
-                            if (fridayIndex >= 0 && lastSundayIndex >= 0) {
-                                // If there's a weekend, count it as 1 day
-                                if (dayCount <= 3) {
-                                    // Friday-Sunday (or subset) counts as 1 day total
-                                    days = 1;
-                                } else {
-                                    // More complex calculation
-                                    const weekendDays = lastSundayIndex - fridayIndex + 1;
-                                    const remainingDays = dayCount - weekendDays;
-                                    
-                                    // Weekend is 1 day, remaining follow 2=1, 3=2, etc. rule
-                                    days = 1 + Math.ceil(remainingDays / 2);
-                                }
-                            } else {
-                                // Fallback to regular rule
-                                days = Math.ceil(dayCount / 2);
-                            }
-                        } else {
-                            // Regular rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                            days = Math.ceil(dayCount / 2);
-                        }
-                        
-                        // Format dates for display
+                        // Format dates for display and logging
                         const startDateFormatted = formatDate(startDate);
                         const endDateFormatted = formatDate(endDate);
+                        
+                        // Calculate days between start and end dates
+                        const msDiff = endDate.getTime() - startDate.getTime();
+                        const totalCalendarDays = Math.ceil(msDiff / (1000 * 60 * 60 * 24)) + 1;
+                        
+                        // Calculate rental days based on weekday/weekend rules
+                        const rentalDayCalculation = calculateRentalChargeDays(startDate, endDate);
+                        const rentalDays = rentalDayCalculation.chargeDays;
+                        const discountedDays = rentalDayCalculation.extraDiscountedDays;
+                        
+                        debugLog('Weekday/Weekend rental calculation:', {
+                            calendarDays: totalCalendarDays,
+                            chargeDays: rentalDays,
+                            discountedDays: discountedDays,
+                            startDate: startDateFormatted,
+                            endDate: endDateFormatted,
+                            weekdayCount: rentalDayCalculation.weekdayCount,
+                            weekendIncluded: rentalDayCalculation.weekendIncluded,
+                            details: rentalDayCalculation.details
+                        });
+                        
+                        debugLog('Final rental day calculation:', {
+                            calendarDays: totalCalendarDays,
+                            rentalDays,
+                            formula: 'Weekdays: 2-for-1, Weekend (Fri-Sun): counts as 1 day'
+                        });
                         
                         // Update the display
                         $startDateElement.text(startDateFormatted);
                         $endDateElement.text(endDateFormatted);
-                        $daysCountElement.text(days);
+                        $daysCountElement.text(rentalDays);
                         $rentalDisplay.show();
                         
                         // Update the hidden input
@@ -549,15 +694,15 @@
                         $(document).trigger('rentalDatesSelected', {
                             startDate: startDateFormatted,
                             endDate: endDateFormatted,
-                            days: days,
-                            dayCount: dayCount
+                            days: rentalDays,
+                            dayCount: totalCalendarDays
                         });
                         
                         debugLog('Date range selected:', {
                             startDate: startDateFormatted,
                             endDate: endDateFormatted,
-                            days: days,
-                            dayCount: dayCount
+                            days: rentalDays,
+                            dayCount: totalCalendarDays
                         });
                         
                     } else if (date.length === 1) {
