@@ -55,100 +55,83 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                     <div class="text">
                         <div class="info">
                             <p class="name"><a href="<?= $product_permalink ?>"><?= $product_name ?></a></p>
-                            <p>
-                                <?php 
-                                // Try different meta keys where rental dates might be stored
-                                $rental_dates = '';
-                                $rental_days = 0;
-                                
-                                // Debug to check all cart item data
-                                $debug_data = [];
-                                
-                                // Look in the cart item meta array
-                                if (!empty($cart_item['rental_dates'])) {
-                                    $rental_dates = $cart_item['rental_dates'];
-                                    $debug_data['source'] = 'rental_dates';
-                                } elseif (!empty($cart_item['Rental Dates'])) {
-                                    $rental_dates = $cart_item['Rental Dates'];
-                                    $debug_data['source'] = 'Rental Dates';
-                                } elseif (!empty($cart_item['rental_date'])) {
-                                    $rental_dates = $cart_item['rental_date'];
-                                    $debug_data['source'] = 'rental_date';
-                                }
-                                
-                                // Get rental days if available
-                                if (!empty($cart_item['rental_days'])) {
-                                    $rental_days = intval($cart_item['rental_days']);
-                                }
-                                
-                                // Look in item meta data
-                                if (empty($rental_dates) && function_exists('wc_get_order_item_meta')) {
-                                    $item_key = !empty($cart_item['key']) ? $cart_item['key'] : '';
-                                    if (!empty($item_key)) {
-                                        $meta_data = wc_get_order_item_meta($item_key, '_rental_dates', true);
-                                        if (!empty($meta_data)) {
-                                            $rental_dates = $meta_data;
-                                            $debug_data['source'] = 'wc_get_order_item_meta';
-                                        }
+                            <?php 
+                            // Try different meta keys where rental dates might be stored
+                            $rental_dates = '';
+                            $rental_days = 0;
+                            
+                            // Debug to check all cart item data
+                            $debug_data = [];
+                            
+                            // Look in the cart item meta array
+                            if (!empty($cart_item['rental_dates'])) {
+                                $rental_dates = $cart_item['rental_dates'];
+                                $debug_data['source'] = 'rental_dates';
+                            } elseif (!empty($cart_item['Rental Dates'])) {
+                                $rental_dates = $cart_item['Rental Dates'];
+                                $debug_data['source'] = 'Rental Dates';
+                            } elseif (!empty($cart_item['rental_date'])) {
+                                $rental_dates = $cart_item['rental_date'];
+                                $debug_data['source'] = 'rental_date';
+                            }
+                            
+                            // Get rental days if available
+                            if (!empty($cart_item['rental_days'])) {
+                                $rental_days = intval($cart_item['rental_days']);
+                            }
+                            
+                            // Look in item meta data
+                            if (empty($rental_dates) && function_exists('wc_get_order_item_meta')) {
+                                $item_key = !empty($cart_item['key']) ? $cart_item['key'] : '';
+                                if (!empty($item_key)) {
+                                    $meta_data = wc_get_order_item_meta($item_key, '_rental_dates', true);
+                                    if (!empty($meta_data)) {
+                                        $rental_dates = $meta_data;
+                                        $debug_data['source'] = 'wc_get_order_item_meta';
                                     }
                                 }
-                                
-                                // Look for meta data in any key of the cart item
-                                if (empty($rental_dates)) {
-                                    foreach ($cart_item as $key => $value) {
-                                        if (is_string($value) && strpos(strtolower($key), 'rental') !== false && strpos(strtolower($key), 'date') !== false) {
-                                            $rental_dates = $value;
-                                            $debug_data['source'] = "cart_item[$key]";
-                                            break;
-                                        }
+                            }
+                            
+                            // Look for meta data in any key of the cart item
+                            if (empty($rental_dates)) {
+                                foreach ($cart_item as $key => $value) {
+                                    if (is_string($value) && strpos(strtolower($key), 'rental') !== false && strpos(strtolower($key), 'date') !== false) {
+                                        $rental_dates = $value;
+                                        $debug_data['source'] = 'cart_item_key_' . $key;
+                                        break;
                                     }
                                 }
-                                
-                                // If still empty, try looking in meta data object
-                                if (empty($rental_dates) && !empty($cart_item['data'])) {
-                                    $product = $cart_item['data'];
-                                    if (method_exists($product, 'get_meta')) {
-                                        $product_meta = $product->get_meta('_rental_dates');
-                                        if (!empty($product_meta)) {
-                                            $rental_dates = $product_meta;
-                                            $debug_data['source'] = 'product_meta';
-                                        }
-                                    }
-                                }
-                                
-                                // Calculate rental days if we have dates
-                                if (!empty($rental_dates) && function_exists('mitnafun_calculate_rental_days') && strpos($rental_dates, ' - ') !== false) {
+                            }
+                            
+                            // Add calculation method to debug data
+                            $debug_data['calculation'] = 'mini-cart.php';
+                            $debug_data['found'] = !empty($rental_dates);
+                            $debug_data['dates'] = $rental_dates;
+                            $debug_data['days'] = $rental_days;
+                            
+                            // Output the rental dates if found - only once inside the container
+                            if (!empty($rental_dates)) {
+                                // Calculate rental days if we have dates and it's not already set
+                                if (function_exists('mitnafun_calculate_rental_days') && strpos($rental_dates, ' - ') !== false) {
                                     $date_parts = explode(' - ', $rental_dates);
                                     if (count($date_parts) === 2) {
-                                        $cart_item['rental_days'] = mitnafun_calculate_rental_days($date_parts[0], $date_parts[1]);
-                                        $debug_data['rental_days'] = $cart_item['rental_days'];
+                                        $rental_days = mitnafun_calculate_rental_days($date_parts[0], $date_parts[1]);
+                                        $cart_item['rental_days'] = $rental_days; // Update cart item with calculated days
+                                        $debug_data['rental_days'] = $rental_days;
+                                        $debug_data['calculation'] = 'mini-cart.php';
                                     }
                                 }
                                 
-                                // Output the rental dates if found
-                                if (!empty($rental_dates)) {
-                                    echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
-                                    
-                                    // Display rental days if available
-                                    if ($rental_days > 0) {
-                                        echo '<div class="rental-days"><strong>ימי השכרה:</strong> ' . $rental_days . '</div>';
-                                    }
-                                    
-                                    $debug_data['found'] = true;
-                                    $debug_data['dates'] = $rental_dates;
-                                    $debug_data['days'] = $rental_days;
-                                } else {
-                                    // Only show missing dates in debug mode
-                                    if (current_user_can('manage_options')) {
-                                        echo '<div class="missing-dates" style="color:#999;font-size:0.9em;">(No dates)</div>';
-                                    }
-                                    $debug_data['found'] = false;
-                                }
-                                
-                                // Add data attributes for JS to fix if needed
-                                echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode($debug_data)) . '" data-rental-dates="' . esc_attr($rental_dates) . '" data-rental-days="' . esc_attr($rental_days) . '"></div>';
-                                ?>
-                            </p>
+                                // Output container with data attributes for JavaScript
+                                echo '<div class="rental-dates-container" data-cart-item="' . esc_attr(json_encode($debug_data)) . '" data-rental-dates="' . esc_attr($rental_dates) . '" data-rental-days="' . esc_attr($rental_days) . '">';
+                                // Output the actual dates
+                                echo '<div class="rental-dates"><strong>תאריכי השכרה:</strong> ' . esc_html($rental_dates) . '</div>';
+                                echo '</div>';
+                            } else if (current_user_can('manage_options')) {
+                                // Only show missing dates in debug mode for admins
+                                echo '<div class="missing-dates" style="color:#999;font-size:0.9em;">(No dates)</div>';
+                            }
+                            ?>
                         </div>
                         <div class="cost">
                             <?php 
@@ -159,6 +142,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 // For rentals, show the price with any discounts
                                 $price = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
                                 
+<<<<<<< HEAD
                                 // Get rental days from cart session
                                 $rental_days = !empty($cart_item['rental_days']) ? $cart_item['rental_days'] : 0;
                                 
@@ -169,6 +153,21 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 if (isset($GLOBALS['rental_breakdown_html'][$cart_item_key])) {
                                     unset($GLOBALS['rental_breakdown_html'][$cart_item_key]);
                                 }
+=======
+                                // Display price with discount info if available
+                                echo '<div class="mini-cart rental-price">' . $price;
+                                
+                                // Add discount info if rental days > 1
+                                if (!empty($cart_item['rental_days']) && $cart_item['rental_days'] > 1) {
+                                    // Check if this product gets the discount (excluded products: 150, 153)
+                                    $excluded_products = array(150, 153);
+                                    if (!in_array($cart_item['product_id'], $excluded_products)) {
+                                        echo '<div class="rental-discount-info">יום ראשון: 100%, ימים נוספים: 50%</div>';
+                                    }
+                                }
+                                
+                                echo '</div>';
+>>>>>>> 953d390df977f5093e636eb81c68aa0bd44d5e2b
                             } else {
                                 // For regular products, show price × quantity
                                 echo '<p>' . $_product->get_price_html() . ' x ' . $cart_item['quantity'] . '</p>';
@@ -210,7 +209,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 
         <?php if (!is_checkout()) { ?>
         <div class="btn-wrap">
-            <a href="<?= get_permalink(12) ?>" class="btn-default btn-blue btn-mini">להזמנה</a>
+            <a href="<?= wc_get_checkout_url() ?>" class="btn-default btn-blue btn-mini">להזמנה</a>
         </div>
         <?php } ?>
 

@@ -32,9 +32,9 @@ jQuery(document).ready(function($) {
                 border-radius: 8px !important;
                 border: none !important;
                 direction: rtl !important;
-                width: 380px !important; /* Larger calendar */
-                padding: 15px !important;
-                font-size: 110% !important; /* Larger text */
+                width: 420px !important; /* Even larger calendar */
+                padding: 18px !important;
+                font-size: 115% !important; /* Larger text */
             }
             
             /* Calendar header */
@@ -67,11 +67,12 @@ jQuery(document).ready(function($) {
             .air-datepicker--day-name {
                 color: #555 !important;
                 font-weight: 600 !important;
-                width: 48px !important;
-                height: 38px !important;
+                width: 52px !important;
+                height: 40px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
+                font-size: 15px !important;
             }
             
             /* Date cells */
@@ -80,14 +81,14 @@ jQuery(document).ready(function($) {
             }
             
             .air-datepicker-cell {
-                width: 48px !important;
-                height: 48px !important;
+                width: 52px !important;
+                height: 52px !important;
                 border-radius: 50% !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 transition: all 0.2s ease !important;
-                font-size: 14px !important;
+                font-size: 16px !important;
             }
             
             /* Hover effect for available dates */
@@ -200,32 +201,19 @@ jQuery(document).ready(function($) {
                 margin-top: 8px !important;
             }
             
-            /* Mobile improvements */
+            /* Mobile improvements - Modified to prevent floating at bottom */
             @media (max-width: 480px) {
                 .air-datepicker {
                     width: 100% !important;
-                    right: 0 !important;
-                    left: 0 !important;
-                    position: fixed !important;
-                    bottom: 0 !important;
+                    right: auto !important;
+                    left: auto !important;
+                    position: relative !important; /* Changed from fixed to relative */
+                    bottom: auto !important;
                     top: auto !important;
-                    border-radius: 12px 12px 0 0 !important;
+                    border-radius: 8px !important;
                     transform: none !important;
-                    max-height: 80vh !important;
+                    max-height: none !important;
                     padding: 16px !important;
-                }
-                
-                /* Add a touch-friendly close button */
-                .air-datepicker:before {
-                    content: '';
-                    width: 40px;
-                    height: 4px;
-                    background-color: #ccc;
-                    border-radius: 2px;
-                    position: absolute;
-                    top: 8px;
-                    left: 50%;
-                    transform: translateX(-50%);
                 }
             }
         `);

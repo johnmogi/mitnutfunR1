@@ -58,14 +58,11 @@ jQuery(document).ready(function($) {
             // If we already have an empty message, don't add another
             if ($emptyMessage.length) return;
             
-            // Check if we need to reload the page
+            // Clear the flag, but don't redirect
             if (sessionStorage.getItem('potential_cart_clear') === 'true') {
-                log('Potential cart clear detected, redirecting to cart page');
+                log('Potential cart clear detected, showing empty cart message');
                 sessionStorage.removeItem('potential_cart_clear');
-                
-                // Redirect to cart page instead of showing a broken checkout
-                window.location.href = '/basket/?empty-cart';
-                return;
+                // No redirect - instead we'll show a message below
             }
             
             // Add empty cart message
@@ -94,63 +91,64 @@ jQuery(document).ready(function($) {
     function fixPriceInconsistencies() {
         log('Setting up price consistency fixes');
         
-        // Calculate rental days from date range
-        function calculateRentalDays(dateString) {
-            if (!dateString) return 0;
-            
-            // Extract dates from string like "1.7.2025 - 3.7.2025"
-            const dateMatch = dateString.match(/(\d{1,2}\.\d{1,2}\.\d{4})\s*-\s*(\d{1,2}\.\d{1,2}\.\d{4})/);
-            if (!dateMatch || dateMatch.length !== 3) return 0;
-            
-            // Parse dates
-            const startParts = dateMatch[1].split('.');
-            const endParts = dateMatch[2].split('.');
-            
-            if (startParts.length !== 3 || endParts.length !== 3) return 0;
-            
-            const startDate = new Date(startParts[2], startParts[1] - 1, startParts[0]);
-            const endDate = new Date(endParts[2], endParts[1] - 1, endParts[0]);
-            
-            // Calculate total days in range
-            const diffTime = Math.abs(endDate - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
-            
-            // Apply the special Friday-Sunday = 1 day rule
-            let rentalDays = diffDays;
-            
-            // Check if range spans Friday to Sunday
-            const startDay = startDate.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
-            const endDay = endDate.getDay();
-            
-            if (startDay === 5 && (endDay === 0) && diffDays <= 3) {
-                log('Friday to Sunday special case');
-                rentalDays = 1;
-            } else {
-                // Apply the regular rental days calculation (2=1, 3=2, 4=3, etc.)
-                if (diffDays === 2) rentalDays = 1;
-                else if (diffDays > 2) rentalDays = diffDays - 1;
+        // Get rental days from data attribute or element (set by server-side PHP)
+        function getRentalDaysFromElement($element) {
+            // First try to get rental days from data attributes (set by PHP)
+            if ($element.data('rental-days')) {
+                return parseInt($element.data('rental-days'));
             }
             
-            log('Date range:', dateString, 'Calendar days:', diffDays, 'Rental days:', rentalDays);
-            return rentalDays;
+            // If no data attribute, look for a rental days text display
+            const $rentalDaysText = $element.find('.rental-days-text');
+            if ($rentalDaysText.length) {
+                const daysText = $rentalDaysText.text();
+                const daysMatch = daysText.match(/\d+/);
+                if (daysMatch) {
+                    return parseInt(daysMatch[0]);
+                }
+            }
+            
+            // Look for rental dates to make a basic estimation
+            const $rentalDates = $element.find('.rental-dates');
+            if ($rentalDates.length) {
+                // Just return 1 as a default, this is safer than trying to recalculate
+                // The actual calculation should be done on the server in rental-pricing.php
+                log('Rental dates found but no days specified, defaulting to 1 day');
+                return 1;
+            }
+            
+            // Default to 1 day if we can't find anything rental related
+            return 1;
         }
         
-        // Apply discount based on rental days
-        function applyRentalDiscount(basePrice, rentalDays, isExcluded) {
-            if (rentalDays <= 1 || isExcluded) {
-                // No discount for 1 day or excluded products
-                return basePrice * rentalDays;
+        // NOTE: Discount calculation is now centralized in rental-pricing.php
+        // This function is only used to get discounted prices from the server-side values
+        // when they are available in the DOM
+        function getDiscountedPriceFromElement($element) {
+            // Try to get the discounted price from data attributes or elements
+            // set by the server-side rental pricing logic
+            const $priceEl = $element.find('.rental-price, .discounted-price');
+            if ($priceEl.length) {
+                const priceText = $priceEl.text().trim();
+                const priceMatch = priceText.match(/(\d+(?:\.\d+)?)/);
+                if (priceMatch) {
+                    return parseFloat(priceMatch[0]);
+                }
             }
             
-            // First day at full price, additional days at 50% off
-            const firstDayPrice = basePrice;
-            const additionalDaysPrice = basePrice * 0.5 * (rentalDays - 1);
+            // If we can't find a discounted price element, try the main price
+            // (This is a fallback, not ideal since we won't have proper discounts)
+            const $costEl = $element.find('.cost .woocommerce-Price-amount');
+            if ($costEl.length) {
+                const costText = $costEl.text().trim();
+                const costMatch = costText.match(/(\d+(?:\.\d+)?)/);
+                if (costMatch) {
+                    return parseFloat(costMatch[0]);
+                }
+            }
             
-            const totalPrice = firstDayPrice + additionalDaysPrice;
-            log('Base price:', basePrice, 'First day:', firstDayPrice, 
-                'Additional days:', additionalDaysPrice, 'Total:', totalPrice);
-            
-            return totalPrice;
+            // Default to 0 if we can't find a price
+            return 0;
         }
         
         // Extract numeric price from price string
@@ -205,21 +203,17 @@ jQuery(document).ready(function($) {
                     return;
                 }
                 
-                // Extract rental date string
-                const dateText = $rentalDates.text().trim();
-                const dateMatch = dateText.match(/תאריכי השכרה:?\s*(.+)/);
-                if (!dateMatch || dateMatch.length < 2) {
-                    log('Could not parse date text:', dateText);
-                    return;
-                }
-                
-                const dateString = dateMatch[1].trim();
-                const rentalDays = calculateRentalDays(dateString);
+                // Get rental days from element
+                const rentalDays = getRentalDaysFromElement($item);
                 
                 if (rentalDays <= 0) {
-                    log('Invalid rental days calculation');
+                    log('Invalid rental days');
                     return;
                 }
+                
+                // Store rental days in data attribute for future reference
+                $item.attr('data-rental-days', rentalDays);
+                log('Rental days:', rentalDays);
                 
                 // Get the base price
                 const currentPrice = extractPrice($priceEl.text());
@@ -238,8 +232,8 @@ jQuery(document).ready(function($) {
                     basePrice = currentPrice / (1 + 0.5 * (rentalDays - 1));
                 }
                 
-                // Calculate the correct price with our consistent formula
-                const correctPrice = applyRentalDiscount(basePrice, rentalDays, isExcluded);
+                // Get the discounted price from element or calculate it from base price
+                const correctPrice = getDiscountedPriceFromElement($item) || basePrice * rentalDays;
                 
                 // Only update if there's a significant difference
                 if (Math.abs(correctPrice - currentPrice) > 0.1) {
@@ -313,10 +307,53 @@ jQuery(document).ready(function($) {
             runPriceUpdate();
         });
         
-        // Watch for DOM changes in the order review area
+        // Flag to prevent recursive updates
+        let isUpdating = false;
+        
+        // Debounce timer
+        let updateTimer = null;
+        
+        // Watch for DOM changes in the order review area with debouncing
         const observer = new MutationObserver(function(mutations) {
-            log('Order review DOM changed, running price update');
-            runPriceUpdate();
+            // Skip if we're the ones causing the change
+            if (isUpdating) {
+                return;
+            }
+            
+            // Check if this mutation was triggered by our price updates
+            let skipUpdate = false;
+            mutations.forEach(function(mutation) {
+                // If this is a change to price amounts, likely our own update
+                if (mutation.target && $(mutation.target).hasClass('woocommerce-Price-amount')) {
+                    skipUpdate = true;
+                }
+            });
+            
+            if (skipUpdate) {
+                return;
+            }
+            
+            // Clear previous timer
+            if (updateTimer) {
+                clearTimeout(updateTimer);
+            }
+            
+            // Set new timer with 2 second delay
+            updateTimer = setTimeout(function() {
+                log('Order review DOM changed, running price update (debounced)');
+                
+                // Set flag to prevent recursive updates
+                isUpdating = true;
+                
+                // Run price update
+                updateItemPrices();
+                updateOrderTotal();
+                
+                // Reset flag after a delay to allow DOM to settle
+                setTimeout(function() {
+                    isUpdating = false;
+                }, 1000);
+            }, 2000);
         });
         
         // Start observing the order review table
@@ -325,7 +362,7 @@ jQuery(document).ready(function($) {
             observer.observe($orderReview[0], {
                 childList: true,
                 subtree: true,
-                attributes: false,
+                attributes: true, // Watch attributes too to catch more changes
                 characterData: true
             });
         }

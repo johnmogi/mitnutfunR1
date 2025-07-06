@@ -1,6 +1,15 @@
 /*   
-Theme Name: Mitnafun
+Theme Name: Mitnafun R
 */
+
+#rental-debug-panel {
+    display: none;
+}
+
+.logged-in #rental-debug-panel {
+    display: block;
+}
+
 
 
 

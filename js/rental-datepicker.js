@@ -172,364 +172,422 @@
     
     // Initialize the AirDatepicker with the given dates
     function initializeDatePicker(bookedDates, initialStock) {
-        debugLog('Initializing date picker with params:', { 
-            bookedDatesCount: bookedDates.length, 
-            initialStock: initialStock 
-        });
-        
-        const $container = $('#datepicker-container');
-        const $dateInput = $('#rental_dates');
-        
-        // Clear any existing datepicker
-        $container.empty();
-        
-        debugLog('Container element:', $container[0]);
-        debugLog('Date input element:', $dateInput[0] || 'Not found');
-        
-        // Prepare date status tracking
-        const dateStatus = {};
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
-        // Process the booked dates
-        debugLog('Processing booked dates...');
-        bookedDates.forEach(function(item) {
-            const dateStr = formatDate(item.date);
-            const date = new Date(item.date);
-            
-            // Skip past dates
-            if (date < today) {
-                debugLog(`Skipping past date: ${dateStr}`);
-                return;
-            }
-            
-            // Determine status
-            const isFullyBooked = item.status === 'fully_booked' || item.count >= initialStock;
-            const status = isFullyBooked ? 'fully_booked' : 'partially_booked';
-            
-            // Store status
-            dateStatus[dateStr] = {
-                ...item,
-                status: status,
-                count: item.count || 0,
-                date: dateStr
-            };
-            
-            debugLog(`Processed date: ${dateStr}`, {
-                status: status,
-                count: item.count,
-                initialStock: initialStock,
-                isFullyBooked: isFullyBooked
-            });
-        });
-        
-        // Log summary of processed dates
-        const statusCounts = Object.values(dateStatus).reduce((acc, item) => {
-            acc[item.status] = (acc[item.status] || 0) + 1;
-            return acc;
-        }, {});
-        
-        debugLog('Date processing complete. Summary:', {
-            totalDates: Object.keys(dateStatus).length,
-            ...statusCounts,
-            initialStock: initialStock
-        });
-        
-        // Trigger custom event for other scripts to use the date data
-        $(document).trigger('rentalDatesLoaded', {
-            bookedDates: Object.values(dateStatus),
-            initialStock: initialStock,
-            currentStock: initialStock, // No current stock value available here
-            productId: $('input[name="product_id"]').val() || null
-        });
-        debugLog('Custom event triggered: rentalDatesLoaded');
-        
-        // Check if AirDatepicker is available
-        if (typeof AirDatepicker === 'undefined') {
-            debugError('AirDatepicker is not loaded. Make sure the script is properly enqueued.');
-            $container.html('<div class="error">Error: Date picker library not loaded</div>');
-            return null;
-        }
-        
         debugLog('Initializing AirDatepicker...');
         
+        // CRITICAL FIX: Load actual stock from data attribute if available
+        const stockDataElement = document.getElementById('calendar-availability-data');
+        let actualStock = initialStock;
+        
+        // First try from data attribute
+        if (stockDataElement) {
+            try {
+                const stockData = JSON.parse(stockDataElement.textContent);
+                if (stockData && typeof stockData.stock !== 'undefined') {
+                    actualStock = parseInt(stockData.stock, 10);
+                    console.log(`[STOCK FIX] Found stock=${actualStock} in data attribute (was ${initialStock})`);
+                    initialStock = actualStock; // Replace initialStock with the correct value
+                }
+            } catch (e) {
+                console.error('Error parsing stock data:', e);
+            }
+        }
+        
+        // CRITICAL FIX: For WooCommerce Rental products, force stock to 1 if still not correct
+        // This ensures fully booked logic works regardless of what the server returns
+        if (initialStock > 1 && $('body').hasClass('single-product') && $('#datepicker-container').length) {
+            console.log(`[STOCK OVERRIDE] Forcing stock to 1 for rental product (was ${initialStock})`);
+            initialStock = 1; // Force to 1 for rental products
+        }
+        
+        // Always log the final stock value for debugging
+        console.log(`[FINAL STOCK] Using stock=${initialStock} for calendar rendering`);
+        
+        // CRITICAL FIX: Pre-process booked dates to correctly mark fully booked days
+        if (bookedDates && bookedDates.length > 0) {
+            console.log(`[DATA PRE-PROCESS] Checking ${bookedDates.length} booked dates with stock=${initialStock}`);
+            
+            bookedDates.forEach(date => {
+                if (date.count >= initialStock) {
+                    date.status = 'fully_booked';
+                    console.log(`[DATA FIX] Forcing fully booked status for ${date.date} (${date.count}/${initialStock})`);
+                }
+            });
+        }
+        
         try {
-            const datepicker = new AirDatepicker('#datepicker-container', {
-            inline: true,
-            range: true,
-            multipleDatesSeparator: ' - ',
-            minDate: new Date(),
-            locale: {
-                days: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
-                daysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-                daysMin: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-                months: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-                monthsShort: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
-                today: 'היום',
-                clear: 'נקה',
-                dateFormat: 'yyyy-MM-dd',
-                timeFormat: 'HH:mm',
-                firstDay: 0
-            },
-            onRenderCell: function({date, cellType}) {
-                const dateStr = getDateString(date);
+            debugLog('Initializing date picker with params:', { 
+                bookedDatesCount: bookedDates.length, 
+                initialStock: initialStock 
+            });
+            
+            const $container = $('#datepicker-container');
+            const $dateInput = $('#rental_dates');
+            
+            // Clear any existing datepicker
+            $container.empty();
+            
+            debugLog('Container element:', $container[0]);
+            debugLog('Date input element:', $dateInput[0] || 'Not found');
+            
+            // Prepare date status tracking
+            const dateStatus = {};
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Process the booked dates
+            debugLog('Processing booked dates...');
+            bookedDates.forEach(function(item) {
+                const dateStr = formatDate(item.date);
+                const date = new Date(item.date);
                 
-                // Skip if not a day cell
-                if (cellType !== 'day') return;
-                
-                const status = dateStatus[dateStr];
-                const dayOfWeek = date.getDay();
-                const isSaturday = dayOfWeek === 6; // 6 = Saturday
-                
-                // Skip if date is in the past
+                // Skip past dates
                 if (date < today) {
-                    return {
-                        disabled: true,
-                        classes: 'air-datepicker-cell--past -past-'
-                    };
-                }
-                
-                // Handle Saturday (non-working day)
-                if (isSaturday) {
-                    return {
-                        disabled: true,
-                        classes: 'air-datepicker-cell--weekend -weekend-'
-                    };
-                }
-                
-                // Handle booked dates
-                if (status) {
-                    const isFullyBooked = status.status === 'fully_booked' || status.count >= initialStock;
-                    
-                    debugLog(`Rendering cell for ${dateStr}:`, {
-                        status: status.status,
-                        count: status.count,
-                        isFullyBooked: isFullyBooked,
-                        initialStock: initialStock
-                    });
-                    
-                    if (isFullyBooked) {
-                        return {
-                            disabled: true,
-                            classes: 'air-datepicker-cell--disabled -disabled-',
-                            attributes: {
-                                'title': `Fully booked (${status.count}/${initialStock})`
-                            }
-                        };
-                    } else {
-                        return {
-                            classes: 'air-datepicker-cell--partially-booked',
-                            attributes: {
-                                'title': `Partially booked (${status.count}/${initialStock})`
-                            }
-                        };
-                    }
-                }
-                
-                // Default available date
-                return {
-                    attributes: {
-                        'title': 'Available for booking'
-                    }
-                };
-            },
-            onSelect: function({date, formattedDate}) {
-                const $rentalDisplay = $('#rental-dates-display');
-                const $startDateElement = $('#selected-start-date');
-                const $endDateElement = $('#selected-end-date');
-                const $daysCountElement = $('#rental-days-count');
-                
-                // Hide display if no dates selected
-                if (!date || date.length === 0) {
-                    $dateInput.val('');
-                    $('.btn-wrap button').prop('disabled', true);
-                    $rentalDisplay.hide();
+                    debugLog(`Skipping past date: ${dateStr}`);
                     return;
                 }
                 
-                // Handle date range selection
-                if (date.length === 2) {
-                    const startDate = new Date(date[0]);
-                    const endDate = new Date(date[1]);
-                    
-                    // Calculate raw days first (excluding Saturdays)
-                    let rawDays = 0;
-                    let currentDate = new Date(startDate);
-                    
-                    // First pass: Count days by type and identify patterns
-                    let daysByType = {};
-                    let datesByDay = [];
-                    
-                    while (currentDate <= endDate) {
-                        const dayOfWeek = currentDate.getDay();
-                        const dateStr = formatDate(currentDate);
-                        
-                        if (dayOfWeek !== 6) { // Skip Saturdays
-                            rawDays++;
-                            daysByType[dayOfWeek] = (daysByType[dayOfWeek] || 0) + 1;
-                            datesByDay.push({
-                                date: new Date(currentDate),
-                                dayOfWeek: dayOfWeek,
-                                dateStr: dateStr
-                            });
-                        }
-                        currentDate.setDate(currentDate.getDate() + 1);
-                    }
-                    
-                    // Detect weekend pattern (Friday + Sunday, possibly with days in between)
-                    const hasFriday = daysByType[5] > 0;
-                    const hasSunday = daysByType[0] > 0;
-                    const hasWeekendPattern = hasFriday && hasSunday;
-                    
-                    debugLog('Day counts by type:', { daysByType, datesByDay, hasWeekendPattern });
-                    
-                    // Apply the rental day calculation rule
-                    // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                    // Special case: Friday-Sunday counts as 1 regardless
-                    let days;
-                    
-                    if (hasWeekendPattern) {
-                        // Find the first Friday and last Sunday in the range
-                        let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
-                        let lastSundayIndex = -1;
-                        for (let i = datesByDay.length - 1; i >= 0; i--) {
-                            if (datesByDay[i].dayOfWeek === 0) {
-                                lastSundayIndex = i;
-                                break;
-                            }
-                        }
-                        
-                        if (fridayIndex >= 0 && lastSundayIndex >= 0) {
-                            // Count days in the weekend period (Friday to Sunday)
-                            let weekendDays = lastSundayIndex - fridayIndex + 1;
-                            
-                            // Count days after the weekend pattern
-                            let regularDays = datesByDay.length - lastSundayIndex - 1;
-                            
-                            // Apply special weekend rule
-                            days = 1 + regularDays; // Weekend counts as 1 + any additional days
-                            
-                            debugLog('Weekend pattern calculation:', {
-                                fridayIndex,
-                                lastSundayIndex,
-                                weekendDays,
-                                regularDays,
-                                totalCalculatedDays: days
-                            });
-                        } else {
-                            // Standard calculation as fallback
-                            days = Math.max(1, rawDays - 1); // 2→1, 3→2, 4→3, etc.
-                        }
-                    } else {
-                        // Standard calculation: 2 days = 1, 3 days = 2, 4 days = 3, etc.
-                        days = rawDays <= 1 ? rawDays : rawDays - 1;
-                        debugLog('Standard day calculation:', { rawDays, calculatedDays: days });
-                    }
-                    
-                    debugLog('Day calculation', {
-                        startDate: startDate,
-                        endDate: endDate,
-                        rawDays: rawDays,
-                        hasFriday: hasFriday,
-                        hasSunday: hasSunday,
-                        calculatedDays: days
-                    });
+                // Determine status
+                const isFullyBooked = item.status === 'fully_booked' || item.count >= initialStock;
+                const status = isFullyBooked ? 'fully_booked' : 'partially_booked';
                 
-                    // Update the quantity field
-                    $('[name="quantity"]').val(days);
-                    
-                    // Format the date range for display
-                    const formattedStart = startDate.toLocaleDateString('he-IL');
-                    const formattedEnd = endDate.toLocaleDateString('he-IL');
-                    $dateInput.val(`${formattedStart} - ${formattedEnd}`);
-                    
-                    // Calculate pricing based on rental days
-                    const productPrice = parseFloat($('.list-info .woocommerce-Price-amount').first().text().replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
-                    const productId = $('input[name="add-to-cart"]').val() || 0;
-                    
-                    // Check if product should have discount (all except 150 and 153)
-                    const hasDiscount = productId != 150 && productId != 153;
-                    
-                    // Calculate pricing
-                    let basePrice = productPrice;
-                    let totalPrice = productPrice;
-                    let discountedPrice = 0;
-                    
-                    if (hasDiscount && days > 1) {
-                        // First day full price, additional days 50% off
-                        basePrice = productPrice;
-                        discountedPrice = (days - 1) * (productPrice * 0.5);
-                        totalPrice = basePrice + discountedPrice;
-                    } else {
-                        // No discount or just one day
-                        totalPrice = days * productPrice;
+                // Store status
+                dateStatus[dateStr] = {
+                    ...item,
+                    status: status,
+                    count: item.count || 0,
+                    date: dateStr,
+                    isEdgeDay: false // Default to false, we'll identify edge days later
+                };
+                
+                debugLog(`Processed date: ${dateStr}`, {
+                    status: status,
+                    count: item.count,
+                    initialStock: initialStock,
+                    isFullyBooked: isFullyBooked
+                });
+            });
+            
+            // EDGE DAY LOGIC:
+            // Identify edge days (days that can be used for joined bookings)
+            debugLog('Identifying edge days for joined bookings...');
+            const dateKeys = Object.keys(dateStatus).sort();
+            
+            // For single unit rentals, we don't want any edge days - fully booked means fully booked
+            if (initialStock === 1) {
+                debugLog('Single unit rental mode - no edge days for fully booked dates');
+                dateKeys.forEach(dateKey => {
+                    if (dateStatus[dateKey].status === 'fully_booked') {
+                        dateStatus[dateKey].isEdgeDay = false; // No edge days for single unit rentals
+                        debugLog(`✅ Single unit mode - marked ${dateKey} as FULLY BOOKED (no edge)`);
                     }
+                });
+            } else {
+                // For multi-unit rentals, only mark the first and last day of booking blocks as edge days
+                for (let i = 0; i < dateKeys.length; i++) {
+                    const currentDate = dateKeys[i];
+                    const prevDate = i > 0 ? dateKeys[i-1] : null;
+                    const nextDate = i < dateKeys.length - 1 ? dateKeys[i+1] : null;
                     
-                    // Format prices
-                    const formatter = new Intl.NumberFormat('he-IL', {
-                        style: 'currency',
-                        currency: 'ILS'
-                    });
-                    
-                    // Update visible date display elements
-                    $startDateElement.text(formattedStart);
-                    $endDateElement.text(formattedEnd);
-                    $daysCountElement.text(days);
-                    
-                    // Add price breakdown if applicable
-                    let priceBreakdownHtml = '';
-                    
-                    if (hasDiscount && days > 1) {
-                        priceBreakdownHtml = `
-                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
-                                <div style="margin-left: 15px;">יום 1: ${formatter.format(basePrice)}</div>
-                                <div style="margin-left: 15px;">${days-1} ימים נוספים (50% הנחה): ${formatter.format(discountedPrice)}</div>
-                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
-                            </div>
-                        `;
-                    } else {
-                        priceBreakdownHtml = `
-                            <div class="price-breakdown" style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                                <div style="margin-bottom: 5px;"><strong>מחיר:</strong></div>
-                                <div style="margin-left: 15px;">${days} ימים: ${formatter.format(totalPrice)}</div>
-                                <div style="margin-top: 8px; font-weight: bold;">סה"כ: ${formatter.format(totalPrice)}</div>
-                            </div>
-                        `;
+                    // Check if current date is fully booked
+                    if (dateStatus[currentDate].status === 'fully_booked') {
+                        // EDGE DAY DETECTION:
+                        // A day is an edge day if it's at the start or end of a booking block
+                        const isPrevDayFullyBooked = prevDate && dateStatus[prevDate].status === 'fully_booked';
+                        const isNextDayFullyBooked = nextDate && dateStatus[nextDate].status === 'fully_booked';
+                        
+                        // If either adjacent day is not fully booked (or there is no adjacent day),
+                        // this is an edge day that can be used to join bookings
+                        if (!isPrevDayFullyBooked || !isNextDayFullyBooked) {
+                            dateStatus[currentDate].isEdgeDay = true;
+                            debugLog(`✅ Marked ${currentDate} as EDGE DAY - can be used for joined bookings`);
+                        } else {
+                            debugLog(`❌ ${currentDate} is a MIDDLE day (will remain blocked)`);
+                        }
                     }
-                    
-                    // Update the display
-                    $('.price-breakdown').remove();
-                    $rentalDisplay.append(priceBreakdownHtml);
-                    $rentalDisplay.show();
-                    
-                    // Enable add to cart button
-                    $('.btn-wrap button').prop('disabled', days === 0);
-                    
-                    // Log for debugging
-                    debugLog('Rental date selection complete', {
-                        start: formattedStart,
-                        end: formattedEnd,
-                        days: days,
-                        price: totalPrice
-                    });
-                } else if (date.length === 1) {
-                    // Single date selected
-                    const singleDate = date[0].toLocaleDateString('he-IL');
-                    $dateInput.val(singleDate);
-                    $('[name="quantity"]').val(1);
-                    
-                    // Update visible date display elements for single date
-                    $startDateElement.text(singleDate);
-                    $endDateElement.text(singleDate);
-                    $daysCountElement.text('1');
-                    $rentalDisplay.show();
-                    
-                    $('.btn-wrap button').prop('disabled', false);
                 }
             }
-        });
-        
+            
+            // Log summary of processed dates
+            const statusCounts = Object.values(dateStatus).reduce((acc, item) => {
+                acc[item.status] = (acc[item.status] || 0) + 1;
+                return acc;
+            }, {});
+            
+            debugLog('Date processing complete. Summary:', {
+                totalDates: Object.keys(dateStatus).length,
+                ...statusCounts,
+                initialStock: initialStock
+            });
+            
+            // Trigger custom event for other scripts to use the date data
+            $(document).trigger('rentalDatesLoaded', {
+                bookedDates: Object.values(dateStatus),
+                initialStock: initialStock,
+                currentStock: initialStock, // No current stock value available here
+                productId: $('input[name="product_id"]').val() || null
+            });
+            debugLog('Custom event triggered: rentalDatesLoaded');
+            
+            // Check if AirDatepicker is available
+            if (typeof AirDatepicker === 'undefined') {
+                debugError('AirDatepicker is not loaded. Make sure the script is properly enqueued.');
+                $container.html('<div class="error">Error: Date picker library not loaded</div>');
+                return null;
+            }
+            
+            // Initialize the datepicker with full configuration
+            const datepicker = new AirDatepicker('#datepicker-container', {
+                inline: true,
+                range: true,
+                multipleDatesSeparator: ' - ',
+                minDate: new Date(),
+                locale: {
+                    days: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
+                    daysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+                    daysMin: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+                    months: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+                    monthsShort: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
+                    today: 'היום',
+                    clear: 'נקה',
+                    dateFormat: 'yyyy-MM-dd',
+                    timeFormat: 'HH:mm',
+                    firstDay: 0
+                },
+                onRenderCell: function({date, cellType}) {
+                    const dateStr = getDateString(date);
+                    
+                    // Skip if not a day cell
+                    if (cellType !== 'day') return;
+                    
+                    const status = dateStatus[dateStr];
+                    const dayOfWeek = date.getDay();
+                    const isSaturday = dayOfWeek === 6; // 6 = Saturday
+                    
+                    // Skip if date is in the past
+                    if (date < today) {
+                        return {
+                            disabled: true,
+                            classes: 'air-datepicker-cell--past -past-'
+                        };
+                    }
+                    
+                    // Handle Saturday (non-working day)
+                    if (isSaturday) {
+                        return {
+                            disabled: true,
+                            classes: 'air-datepicker-cell--weekend -weekend-'
+                        };
+                    }
+                    
+                    // Handle booked dates
+                    if (status) {
+                        const isFullyBooked = status.status === 'fully_booked' || status.count >= initialStock;
+                        
+                        debugLog(`Rendering cell for ${dateStr}:`, {
+                            status: status.status,
+                            count: status.count,
+                            isFullyBooked: isFullyBooked,
+                            isEdgeDay: status.isEdgeDay,
+                            initialStock: initialStock,
+                            forceFullyBooked: status.status === 'fully_booked'
+                        });
+                        
+                        if (isFullyBooked) {
+                            // For single unit rentals, all fully booked days are completely disabled
+                            if (initialStock === 1) {
+                                return {
+                                    disabled: true,
+                                    classes: 'air-datepicker-cell--disabled -disabled-',
+                                    attributes: {
+                                        'title': 'Fully booked - not available (1/1)'
+                                    }
+                                };
+                            }
+                            
+                            // For multi-unit rentals, handle edge days
+                            if (status.isEdgeDay) {
+                                return {
+                                    // Edge days are selectable for multi-unit rentals (allows joined bookings)
+                                    classes: 'air-datepicker-cell--edge-day',
+                                    attributes: {
+                                        'title': 'Can be selected as first or last day of your booking'
+                                    }
+                                };
+                            } else {
+                                // Middle days remain disabled to prevent overlapping bookings
+                                return {
+                                    disabled: true,
+                                    classes: 'air-datepicker-cell--disabled -disabled-',
+                                    attributes: {
+                                        'title': `Fully booked - not available (${status.count}/${initialStock})`
+                                    }
+                                };
+                            }
+                        } else {
+                            return {
+                                classes: 'air-datepicker-cell--partially-booked',
+                                attributes: {
+                                    'title': `Partially booked (${status.count}/${initialStock})`
+                                }
+                            };
+                        }
+                    }
+                    
+                    // Default available date
+                    return {
+                        attributes: {
+                            'title': 'Available for booking'
+                        }
+                    };
+                },
+                onSelect: function({date, formattedDate}) {
+                    const $rentalDisplay = $('#rental-dates-display');
+                    const $startDateElement = $('#selected-start-date');
+                    const $endDateElement = $('#selected-end-date');
+                    const $daysCountElement = $('#rental-days-count');
+                    
+                    // Hide display if no dates selected
+                    if (!date || date.length === 0) {
+                        $dateInput.val('');
+                        $('.btn-wrap button').prop('disabled', true);
+                        $rentalDisplay.hide();
+                        return;
+                    }
+                    
+                    // Handle date range selection
+                    if (date.length === 2) {
+                        const startDate = new Date(date[0]);
+                        const endDate = new Date(date[1]);
+                        
+                        // Calculate days between the dates (excluding Saturdays)
+                        let dayCount = 0;
+                        let currentDate = new Date(startDate);
+                        
+                        // First pass: Count days by type and identify patterns
+                        let daysByType = {};
+                        let datesByDay = [];
+                        
+                        while (currentDate <= endDate) {
+                            const dayOfWeek = currentDate.getDay();
+                            const dateStr = formatDate(currentDate);
+                            
+                            if (dayOfWeek !== 6) { // Skip Saturdays
+                                dayCount++;
+                                daysByType[dayOfWeek] = (daysByType[dayOfWeek] || 0) + 1;
+                                datesByDay.push({
+                                    date: new Date(currentDate),
+                                    dayOfWeek: dayOfWeek,
+                                    dateStr: dateStr
+                                });
+                            }
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                        
+                        // Detect weekend pattern (Friday + Sunday, possibly with days in between)
+                        const hasFriday = daysByType[5] > 0;
+                        const hasSunday = daysByType[0] > 0;
+                        const hasWeekendPattern = hasFriday && hasSunday;
+                        
+                        debugLog('Day counts by type:', { daysByType, datesByDay, hasWeekendPattern });
+                        
+                        // Apply the rental day calculation rule
+                        // Rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
+                        // Special case: Friday-Sunday counts as 1 regardless
+                        let days;
+                        
+                        if (hasWeekendPattern) {
+                            // Find the first Friday and last Sunday in the range
+                            let fridayIndex = datesByDay.findIndex(d => d.dayOfWeek === 5);
+                            let lastSundayIndex = -1;
+                            
+                            for (let i = datesByDay.length - 1; i >= 0; i--) {
+                                if (datesByDay[i].dayOfWeek === 0) {
+                                    lastSundayIndex = i;
+                                    break;
+                                }
+                            }
+                            
+                            if (fridayIndex >= 0 && lastSundayIndex >= 0) {
+                                // If there's a weekend, count it as 1 day
+                                if (dayCount <= 3) {
+                                    // Friday-Sunday (or subset) counts as 1 day total
+                                    days = 1;
+                                } else {
+                                    // More complex calculation
+                                    const weekendDays = lastSundayIndex - fridayIndex + 1;
+                                    const remainingDays = dayCount - weekendDays;
+                                    
+                                    // Weekend is 1 day, remaining follow 2=1, 3=2, etc. rule
+                                    days = 1 + Math.ceil(remainingDays / 2);
+                                }
+                            } else {
+                                // Fallback to regular rule
+                                days = Math.ceil(dayCount / 2);
+                            }
+                        } else {
+                            // Regular rule: 2 days = 1, 3 days = 2, 4 days = 3, etc.
+                            days = Math.ceil(dayCount / 2);
+                        }
+                        
+                        // Format dates for display
+                        const startDateFormatted = formatDate(startDate);
+                        const endDateFormatted = formatDate(endDate);
+                        
+                        // Update the display
+                        $startDateElement.text(startDateFormatted);
+                        $endDateElement.text(endDateFormatted);
+                        $daysCountElement.text(days);
+                        $rentalDisplay.show();
+                        
+                        // Update the hidden input
+                        $dateInput.val(`${startDateFormatted} - ${endDateFormatted}`);
+                        
+                        // Enable the buttons
+                        $('.btn-wrap button').prop('disabled', false);
+                        
+                        // Trigger custom event for price calculation
+                        $(document).trigger('rentalDatesSelected', {
+                            startDate: startDateFormatted,
+                            endDate: endDateFormatted,
+                            days: days,
+                            dayCount: dayCount
+                        });
+                        
+                        debugLog('Date range selected:', {
+                            startDate: startDateFormatted,
+                            endDate: endDateFormatted,
+                            days: days,
+                            dayCount: dayCount
+                        });
+                        
+                    } else if (date.length === 1) {
+                        // Handle single date selection (same day rental)
+                        const singleDate = formatDate(date[0]);
+                        
+                        // Update the hidden input
+                        $dateInput.val(singleDate);
+                        
+                        // Update the display
+                        $startDateElement.text(singleDate);
+                        $endDateElement.text(singleDate);
+                        $daysCountElement.text('1');
+                        $rentalDisplay.show();
+                        
+                        $('.btn-wrap button').prop('disabled', false);
+                        
+                        // Trigger custom event
+                        $(document).trigger('rentalDatesSelected', {
+                            startDate: singleDate,
+                            endDate: singleDate,
+                            days: 1,
+                            dayCount: 1
+                        });
+                        
+                        debugLog('Single date selected:', singleDate);
+                    }
+                }
+            });
+            
             debugLog('AirDatepicker initialized successfully');
             return datepicker;
             

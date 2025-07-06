@@ -7,6 +7,42 @@ ini_set('display_errors', 'Off');
 include_once 'inc/rental-cart-processing.php';
 
 /**
+ * CRITICAL FIX: Selective WooCommerce template loader
+ * Only loads WooCommerce default templates for problematic files, uses theme templates for all others
+ */
+function mitnafun_selective_template_loader($template, $template_name, $args) {
+    // Get theme and plugin directories
+    $theme_dir = get_stylesheet_directory() . '/woocommerce/';
+    $plugin_dir = WC()->plugin_path() . '/templates/';
+    
+    // Check if we're on the cart page and it should be using the default WooCommerce template
+    if (is_cart() && !empty($_POST['add-to-cart']) || isset($_GET['add-to-cart'])) {
+        if ($template_name === 'cart/cart.php' || $template_name === 'cart/cart-empty.php') {
+            // Force use of WooCommerce's default cart template when adding items
+            error_log('WooCommerce cart template override: Using default ' . $template_name);
+            return $plugin_dir . $template_name;
+        }
+    }
+    
+    // Always use WooCommerce default cart-empty template if cart is NOT empty
+    // This prevents the bug where cart-empty.php shows even when cart has items
+    if ($template_name === 'cart/cart-empty.php' && function_exists('WC') && WC()->cart && !WC()->cart->is_empty()) {
+        error_log('Cart has items but empty template was selected. Forcing regular cart template.');
+        return $plugin_dir . 'cart/cart.php';
+    }
+    
+    // For all other templates, use the theme's version if it exists
+    if (file_exists($theme_dir . $template_name)) {
+        return $theme_dir . $template_name;
+    }
+    
+    // Fall back to plugin's version
+    return $template;
+}
+// Add with very high priority (1) to override any other template selection logic
+add_filter('woocommerce_locate_template', 'mitnafun_selective_template_loader', 1, 3);
+
+/**
  * Custom error handler to suppress specific notices
  */
 function custom_error_handler($errno, $errstr, $errfile, $errline) {
@@ -30,77 +66,263 @@ include 'inc/rental-pricing.php';
 
 // show_admin_bar( false );
 
-add_action('wp_enqueue_scripts', 'load_style_script');
-function load_style_script(){
-    // Enqueue select2 from CDN (required for some plugins)
-    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
+// Ensure WooCommerce cart fragments are properly loaded
+function ensure_wc_cart_fragments() {
+    if (function_exists('is_woocommerce')) {
+        wp_enqueue_script('wc-cart-fragments');
+        
+        // Force cart data to session on checkout page to prevent empty cart
+        if (is_checkout() && !WC()->cart->is_empty()) {
+            // Log debug information
+            error_log('Checkout page loaded with ' . WC()->cart->get_cart_contents_count() . ' items in cart');
+            
+            // Force WooCommerce to save cart to session
+            WC()->cart->get_cart_from_session();
+            WC()->cart->set_session();
+            
+            // Make sure each cart item has its rental dates properly set
+            foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                // Check if this is a rental product that should have dates
+                if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+                    // Log the rental dates being preserved
+                    error_log('Preserving rental dates for product ' . $cart_item['product_id'] . ': ' . $cart_item['rental_dates']);
+                }
+            }
+            
+            // Add debug info to page
+            add_action('woocommerce_before_checkout_form', function() {
+                echo '<!-- CHECKOUT DEBUG: Cart has ' . WC()->cart->get_cart_contents_count() . ' items -->';
+                echo '<!-- Cart Hash: ' . md5(serialize(WC()->cart->get_cart())) . ' -->';
+                
+                // Add rental dates debug info
+                foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                    if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+                        echo '<!-- Product ' . $cart_item['product_id'] . ' rental dates: ' . $cart_item['rental_dates'] . ' -->';
+                    }
+                }
+            }, 1);
+        }
+    }
+}
+
+// Ensure rental dates are passed to order meta
+function add_rental_dates_to_order_items($item, $cart_item_key, $values, $order) {
+    // Check if this item has rental dates
+    if (isset($values['rental_dates']) && !empty($values['rental_dates'])) {
+        // Add rental dates as order item meta
+        $item->add_meta_data('rental_dates', $values['rental_dates']);
+        
+        // Add rental days calculation to order item meta
+        if (isset($values['rental_days']) && !empty($values['rental_days'])) {
+            $item->add_meta_data('rental_days', $values['rental_days']);
+        }
+        
+        // Log that we're adding the rental dates to the order
+        error_log('Added rental dates to order item: ' . $values['rental_dates']);
+    }
+}
+
+/**
+ * Display rental dates information in cart and checkout
+ */
+function display_rental_dates_in_cart_checkout($item_data, $cart_item) {
+    // Check if this item has rental dates
+    if (isset($cart_item['rental_dates']) && !empty($cart_item['rental_dates'])) {
+        // Add rental dates to cart/checkout display
+        $item_data[] = array(
+            'key'     => 'תאריכי השכרה',
+            'value'   => wc_clean($cart_item['rental_dates']),
+            'display' => '',
+        );
+        
+        // If we have calculated rental days, show them as well
+        if (isset($cart_item['rental_days']) && !empty($cart_item['rental_days'])) {
+            // Add rental days (with special pricing info if applicable)
+            $rental_days = intval($cart_item['rental_days']);
+            $day_text = $rental_days == 1 ? 'יום' : 'ימים';
+            
+            $item_data[] = array(
+                'key'     => 'תקופת השכרה',
+                'value'   => $rental_days . ' ' . $day_text,
+                'display' => '',
+            );
+        }
+    }
     
+    return $item_data;
+}
+add_filter('woocommerce_get_item_data', 'display_rental_dates_in_cart_checkout', 10, 2);
+
+/**
+ * Setup checkout page AJAX helper endpoint
+ * This ensures we can restore cart data if checkout seems empty
+ */
+function register_checkout_cart_ajax_endpoint() {
+    add_action('wp_ajax_get_checkout_cart_status', 'get_checkout_cart_status_callback');
+    add_action('wp_ajax_nopriv_get_checkout_cart_status', 'get_checkout_cart_status_callback');
+}
+add_action('init', 'register_checkout_cart_ajax_endpoint');
+
+/**
+ * AJAX callback to check cart status and send cart items data
+ */
+function get_checkout_cart_status_callback() {
+    // Security check
+    check_ajax_referer('checkout_cart_nonce', 'security');
+    
+    $response = array(
+        'success' => false,
+        'cart_count' => 0,
+        'cart_items' => array(),
+        'message' => ''
+    );
+    
+    if (function_exists('WC') && WC()->cart) {
+        // Get cart contents
+        $cart_count = WC()->cart->get_cart_contents_count();
+        $cart_items = WC()->cart->get_cart();
+        
+        $response['success'] = true;
+        $response['cart_count'] = $cart_count;
+        $response['message'] = sprintf('Cart has %d items', $cart_count);
+        
+        // Add basic item info
+        foreach($cart_items as $cart_item_key => $cart_item) {
+            $product = $cart_item['data'];
+            $response['cart_items'][] = array(
+                'key' => $cart_item_key,
+                'product_id' => $cart_item['product_id'],
+                'quantity' => $cart_item['quantity'],
+                'name' => $product->get_name(),
+                'rental_dates' => isset($cart_item['rental_dates']) ? $cart_item['rental_dates'] : ''
+            );
+        }
+        
+        // Force WC session save
+        WC()->cart->set_session();
+    } else {
+        $response['message'] = 'WooCommerce cart not available';
+    }
+    
+    wp_send_json($response);
+}
+add_action('woocommerce_checkout_create_order_line_item', 'add_rental_dates_to_order_items', 10, 4);
+add_action('wp_enqueue_scripts', 'ensure_wc_cart_fragments', 20);
+
+// Force correct template on checkout page
+add_filter('woocommerce_located_template', 'mitnafun_ensure_checkout_template', 100, 3);
+function mitnafun_ensure_checkout_template($template, $template_name, $template_path) {
+    // Only run on checkout page
+    if (!is_checkout()) {
+        return $template;
+    }
+    
+    // Check if the cart is not empty but an empty template is being loaded
+    if (function_exists('WC') && WC()->cart && !WC()->cart->is_empty() && 
+        ($template_name === 'checkout/form-checkout.php' || $template_name === 'cart/cart-empty.php')) {
+        
+        // Log debug information
+        error_log('Checkout template override: Cart has items but ' . $template_name . ' was selected');
+        
+        // Force the correct template from WooCommerce core
+        if ($template_name === 'cart/cart-empty.php') {
+            return WC()->plugin_path() . '/templates/checkout/form-checkout.php';
+        }
+    }
+    
+    return $template;
+}
+
+/**
+ * Enqueue scripts and styles
+ */
+add_action('wp_enqueue_scripts', 'load_style_script', 20);
+function load_style_script() {
+    // Common styles loaded on all pages
+    wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
     wp_enqueue_style('my-normalize', get_stylesheet_directory_uri() . '/css/normalize.css');
     wp_enqueue_style('my-Inter', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     wp_enqueue_style('my-Lunasima', 'https://fonts.googleapis.com/css2?family=Lunasima:wght@400;700&display=swap');
     wp_enqueue_style('my-fancybox', get_stylesheet_directory_uri() . '/css/jquery.fancybox.min.css');
     wp_enqueue_style('my-nice-select', get_stylesheet_directory_uri() . '/css/nice-select.css');
     wp_enqueue_style('my-swiper', get_stylesheet_directory_uri() . '/css/swiper.min.css');
-    wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
-    wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
-    wp_enqueue_style('rental-pricing', get_stylesheet_directory_uri() . '/css/rental-pricing.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-pricing.css'));
-    wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), time());
-    wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), time());
+    
+    // Main theme styles
+    wp_enqueue_style('my-styles', get_stylesheet_directory_uri() . '/css/styles.css', array(), filemtime(get_stylesheet_directory() . '/css/styles.css'));
+    wp_enqueue_style('my-responsive', get_stylesheet_directory_uri() . '/css/responsive.css', array(), filemtime(get_stylesheet_directory() . '/css/responsive.css'));
     wp_enqueue_style('main-style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
     
-    // Enqueue admin-only CSS to hide debug elements
-    wp_enqueue_style('admin-only', get_template_directory_uri() . '/css/admin-only.css', array(), filemtime(get_stylesheet_directory() . '/css/admin-only.css'));
-    
-    // Add checkout fix scripts on checkout page
-    if (is_checkout()) {
-        wp_enqueue_script('checkout-fix', get_template_directory_uri() . '/js/checkout-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-fix.js'), true);
-        wp_enqueue_script('checkout-price-fix', get_template_directory_uri() . '/js/checkout-price-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-price-fix.js'), true);
-        wp_enqueue_script('checkout-robust-fix', get_template_directory_uri() . '/js/checkout-robust-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/checkout-robust-fix.js'), true);
+    // Admin-only styles (for frontend admin bar)
+    if (is_admin_bar_showing()) {
+        wp_enqueue_style('admin-only', get_template_directory_uri() . '/css/admin-only.css', array(), filemtime(get_stylesheet_directory() . '/css/admin-only.css'));
     }
-
+    
+    // Common scripts loaded on all pages
     wp_enqueue_script('jquery');
-    wp_enqueue_script('my-swiper', get_stylesheet_directory_uri() . '/js/swiper.js', array(), false, true);
-    wp_enqueue_script('air-datepicker', get_stylesheet_directory_uri() . '/js/air-datepicker.js', array(), false, true);
-    wp_enqueue_script('cuttr', get_stylesheet_directory_uri() . '/js/cuttr.min.js', array(), false, true);
-    wp_enqueue_script('jquery.mask', get_stylesheet_directory_uri() . '/js/jquery.mask.min.js', array(), false, true);
-    wp_enqueue_script('my-fancybox', get_stylesheet_directory_uri() . '/js/jquery.fancybox.min.js', array(), false, true);
-    wp_enqueue_script('my-nice-select', get_stylesheet_directory_uri() . '/js/jquery.nice-select.min.js', array(), false, true);
+    wp_enqueue_script('my-swiper', get_stylesheet_directory_uri() . '/js/swiper.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('cuttr', get_stylesheet_directory_uri() . '/js/cuttr.min.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('jquery.mask', get_stylesheet_directory_uri() . '/js/jquery.mask.min.js', array('jquery'), '1.14.16', true);
+    wp_enqueue_script('my-fancybox', get_stylesheet_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), '3.5.7', true);
+    wp_enqueue_script('my-nice-select', get_stylesheet_directory_uri() . '/js/jquery.nice-select.min.js', array('jquery'), '1.1.0', true);
     
-    // Enqueue select2 JS from CDN (must be loaded before scripts that depend on it)
-    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), null, true);
+    // Select2 for enhanced select fields
+    wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), '4.1.0-rc.0', true);
     
-    // Localize script with necessary data for select2 initialization
-    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), time(), true);
-    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), time(), true);
+    // Main theme scripts
+    wp_enqueue_script('my-script', get_stylesheet_directory_uri() . '/js/script.js', array('jquery', 'select2'), filemtime(get_stylesheet_directory() . '/js/script.js'), true);
+    wp_enqueue_script('my-actions', get_stylesheet_directory_uri() . '/js/actions.js', array('jquery', 'select2'), filemtime(get_stylesheet_directory() . '/js/actions.js'), true);
     
-    // Add the cart rental fix script
-    wp_enqueue_script('cart-rental-fix', get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/cart-rental-fix.js'), true);
+    // Cart and checkout related scripts
+    if (is_cart() || is_checkout() || is_product() || is_shop() || is_product_category()) {
+        // Air Datepicker for rental date selection
+        wp_enqueue_style('air-datepicker', get_stylesheet_directory_uri() . '/css/air-datepicker.css');
+        wp_enqueue_script('air-datepicker', get_stylesheet_directory_uri() . '/js/air-datepicker.js', array('jquery'), '3.6.0', true);
+        
+        // Rental specific styles and scripts
+        wp_enqueue_style('rental-datepicker', get_stylesheet_directory_uri() . '/css/rental-datepicker.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-datepicker.css'));
+        wp_enqueue_style('rental-pricing', get_stylesheet_directory_uri() . '/css/rental-pricing.css', array(), filemtime(get_stylesheet_directory() . '/css/rental-pricing.css'));
+        
+        // Cart and rental fixes - consolidated into one file
+        wp_enqueue_script('cart-rental-fix', 
+            get_stylesheet_directory_uri() . '/js/cart-rental-fix.js', 
+            array('jquery', 'wc-cart-fragments'), 
+            filemtime(get_stylesheet_directory() . '/js/cart-rental-fix.js'), 
+            true
+        );
+        
+        // Localize cart data
+        wp_localize_script('cart-rental-fix', 'cartRentalVars', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('cart-rental-nonce')
+        ));
+    }
     
-    // Add the final aggressive fix for rental dates in cart
-    wp_enqueue_script('rental-form-final-fix', get_stylesheet_directory_uri() . '/js/rental-form-final-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/rental-form-final-fix.js'), true);
+    // Checkout page specific scripts
+    if (is_checkout()) {
+        wp_enqueue_script('checkout-fixes', 
+            get_stylesheet_directory_uri() . '/js/checkout-fix.js', 
+            array('jquery', 'wc-checkout'), 
+            filemtime(get_stylesheet_directory() . '/js/checkout-fix.js'), 
+            true
+        );
+    }
     
-    // Add fix for mini-cart floating popup
-    wp_enqueue_script('mini-cart-fix', get_stylesheet_directory_uri() . '/js/mini-cart-fix.js', array('jquery'), filemtime(get_stylesheet_directory() . '/js/mini-cart-fix.js'), true);
-    
-    // Enqueue rental datepicker script on product pages
+    // Product page specific scripts
     if (is_product()) {
+        // Enqueue rental datepicker script
         wp_enqueue_script('rental-datepicker', 
             get_stylesheet_directory_uri() . '/js/rental-datepicker.js', 
-            array('jquery', 'air-datepicker'), 
+            array('jquery', 'air-datepicker', 'wc-add-to-cart'), 
             filemtime(get_stylesheet_directory() . '/js/rental-datepicker.js'), 
             true
         );
         
-        // Localize script with WooCommerce AJAX URL
+        // Localize script with necessary data
         wp_localize_script('rental-datepicker', 'rentalDatepickerVars', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rental-datepicker-nonce')
-        ));
-        
-        // Localize script with necessary data
-        wp_localize_script('rental-datepicker', 'wc_add_to_cart_params', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rental_dates_nonce')
+            'nonce' => wp_create_nonce('rental-datepicker-nonce'),
+            'product_id' => get_the_ID(),
+            'is_rental' => has_term('rental', 'product_cat', get_the_ID())
         ));
         
         // Add weekend price fix script with fixed version number
@@ -109,6 +331,16 @@ function load_style_script(){
             get_template_directory_uri() . '/js-fixes/weekend-price-fix.js', 
             array('jquery', 'rental-datepicker'), 
             '1.0.0', 
+            true
+        );
+    }
+    
+    // Debug scripts - only load for admins
+    if (current_user_can('manage_options') && (defined('WP_DEBUG') && WP_DEBUG)) {
+        wp_enqueue_script('cart-debug', 
+            get_stylesheet_directory_uri() . '/js/cart-debug.js', 
+            array('jquery'), 
+            filemtime(get_stylesheet_directory() . '/js/cart-debug.js'), 
             true
         );
     }
@@ -457,8 +689,13 @@ function enqueue_enhanced_rental_display() {
             
             // Add join bookings logic
             wp_enqueue_script('calendar-join-bookings', get_template_directory_uri() . '/js/calendar-join-bookings.js', 
-                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
-                            true);
+                             array('jquery'), filemtime(get_template_directory() . '/js/calendar-join-bookings.js'), 
+                             true);
+                             
+            // Add product price breakdown display
+            wp_enqueue_script('product-price-breakdown', get_template_directory_uri() . '/js/product-price-breakdown.js', 
+                             array('jquery'), filemtime(get_template_directory() . '/js/product-price-breakdown.js'), 
+                             true);
             
             // Add enhanced styling for AirDatepicker
             wp_enqueue_script('air-datepicker-enhanced-style', get_template_directory_uri() . '/js/air-datepicker-enhanced-style.js', 
@@ -469,6 +706,7 @@ function enqueue_enhanced_rental_display() {
             wp_enqueue_script('join-booking-notice', get_template_directory_uri() . '/js/join-booking-notice.js', 
                             array('jquery'), filemtime(get_template_directory() . '/js/join-booking-notice.js'), 
                             true);
+<<<<<<< HEAD
         }
         
         // DISABLED: Original aggressive price override script was corrupted
@@ -512,6 +750,14 @@ function enqueue_enhanced_rental_display() {
             '1.0.0', // Use fixed version to avoid caching issues
             true
         );
+=======
+            
+            // Add calendar range validator
+            wp_enqueue_script('calendar-range-validator', get_template_directory_uri() . '/js/calendar-range-validator.js', 
+                            array('jquery'), filemtime(get_template_directory() . '/js/calendar-range-validator.js'), 
+                            true);
+        }    
+>>>>>>> 953d390df977f5093e636eb81c68aa0bd44d5e2b
         
         // Add debug flag for development
         wp_localize_script('enhanced-rental-display', 'rentalConfig', array(
@@ -551,3 +797,4 @@ function ajax_get_rental_dates() {
 }
 
 
+require_once( get_stylesheet_directory() . '/cart-test.php' );

@@ -139,48 +139,40 @@ function bbloomer_remove_optional_checkout_fields( $field ) {
     return $field;
 }
 
-add_action('template_redirect', function(){
-    // Check if we're on the cart page or if add-to-cart parameter exists
-    if (is_cart() || (isset($_GET['add-to-cart']) && !empty($_GET['add-to-cart']))) {
-        wp_redirect(get_permalink(12));
-        exit;
-    }
+// Redirect removed to fix broken cart flow
+// Previously redirected cart to checkout (page ID 12) which caused empty cart issues
+// add_action('template_redirect', function(){
+//    if (is_cart() || (isset($_GET['add-to-cart']) && !empty($_GET['add-to-cart']))) {
+//        wp_redirect(get_permalink(12));
+//        exit;
+//    }
+//
+//    if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
+//        wp_redirect(get_permalink(12));
+//        exit;
+//    }
+// });
 
-    // Check if redirect parameter exists in POST
-    if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-        wp_redirect(get_permalink(12));
-        exit;
-    }
-});
 
 
+/**
+ * NOTE: This was a legacy discount function that gave 50% off every second item.
+ * It has been replaced with the rental pricing discount logic in rental-pricing.php,
+ * which gives 100% price for first day and 50% price for subsequent rental days.
+ * 
+ * If you need to re-implement the 'every second item' discount in the future,
+ * make sure it doesn't conflict with the rental pricing discount.
+ *
+ * See rental-pricing.php for the current discount implementation.
+ */
 
+// Legacy discount function (commented out - do not use)
 //add_action('woocommerce_cart_calculate_fees', 'discount_every_second_same_item');
-
+/*
 function discount_every_second_same_item() {
-    $cart = WC()->cart;
-    $items = $cart->get_cart();
-    $total_discount = 0;
-
-    foreach ($items as $cart_item_key => $cart_item) {
-        $quantity = $cart_item['quantity'];
-
-        // Проверяем, что количество товара больше 1
-        if ($quantity > 1) {
-            $product_price = $cart_item['data']->get_price();
-
-            // Считаем, сколько товаров попадают под скидку
-            $discount_quantity = floor($quantity / 2);
-
-            // Считаем общую сумму скидки для этого товара
-            $total_discount += $product_price * $discount_quantity * 0.5;
-        }
-    }
-
-    if ($total_discount > 0) {
-        $cart->add_fee(__('Discount on every second item', 'woocommerce'), -$total_discount);
-    }
+    // This function has been deprecated in favor of the rental pricing discount
 }
+*/
 
 
 
