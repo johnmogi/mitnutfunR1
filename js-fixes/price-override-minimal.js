@@ -1,10 +1,38 @@
 /**
  * Minimal Price Override - Forces custom rental pricing throughout the cart
- * Version 1.0.0 - Simplified implementation
+ * Version 1.0.1 - Enhanced debugging
  */
 
 jQuery(document).ready(function($) {
-    console.log('Minimal Price Override JS loaded - ENFORCING CUSTOM PRICES');
+    console.log('%c🔥 PRICE OVERRIDE SCRIPT LOADED 🔥', 'background: #ffcc00; color: #000000; font-size: 20px; padding: 10px;');
+    
+    // Show visible debug overlay on page
+    function showDebugOverlay() {
+        const debugDiv = $('<div id="price-override-debug" style="position: fixed; bottom: 10px; left: 10px; background: rgba(255,204,0,0.9); z-index: 9999; padding: 10px; border-radius: 5px; max-width: 300px; font-size: 12px; direction: ltr;"></div>');
+        $('body').append(debugDiv);
+        updateDebugOverlay('Price Override script loaded!', 'green');
+    }
+    
+    // Update debug overlay with new message
+    function updateDebugOverlay(message, color) {
+        const debugDiv = $('#price-override-debug');
+        if (debugDiv.length) {
+            const timestamp = new Date().toLocaleTimeString();
+            debugDiv.append(`<div style="margin-bottom: 5px; color: ${color || 'black'}"><b>${timestamp}:</b> ${message}</div>`);
+            // Scroll to bottom
+            debugDiv.scrollTop(debugDiv.prop('scrollHeight'));
+            // Limit to 10 messages
+            if (debugDiv.children().length > 10) {
+                debugDiv.children().first().remove();
+            }
+        }
+    }
+    
+    // Create debug overlay
+    showDebugOverlay();
+    
+    console.log('🔥 PRICE OVERRIDE - ENFORCING CUSTOM PRICES 🔥');
+    updateDebugOverlay('Initializing price enforcement...', 'blue');
     
     // Global registry for price data across page loads
     window.mitnafunPriceRegistry = window.mitnafunPriceRegistry || {};
@@ -28,7 +56,8 @@ jQuery(document).ready(function($) {
     
     // Save rental price data from product page
     function saveRentalPriceData() {
-        console.log('Capturing rental price data...');
+        console.log('%c📝 SAVE PRICE DATA - START', 'background: #4CAF50; color: white; padding: 3px; border-radius: 2px;');
+        updateDebugOverlay('🔍 Attempting to capture product price...', '#4CAF50');
         
         // Get product ID
         let productId = $('input[name="add-to-cart"]').val() || 
@@ -90,10 +119,14 @@ jQuery(document).ready(function($) {
         
         if (totalPrice === 0) {
             console.log('Total price not found');
+            console.log('%c❌ PRICE CAPTURE FAILED - No price found', 'background: #f44336; color: white; padding: 3px; border-radius: 2px;');
+            updateDebugOverlay('❌ Failed: No price found', 'red');
             return false;
         }
         
-        console.log('Captured data:', {productId, totalPrice, rentalDays, dateRange});
+        console.log('%c✅ PRICE CAPTURED', 'background: #4CAF50; color: white; padding: 3px; border-radius: 2px;', 
+            {productId, totalPrice, rentalDays, dateRange});
+        updateDebugOverlay(`✅ Price captured: ${totalPrice} for product ${productId}`, 'green');
 
         // Create rental data object
         const rentalData = {
@@ -140,7 +173,8 @@ jQuery(document).ready(function($) {
     
     // Update cart prices
     function updateCartPrices() {
-        console.log('Enforcing custom prices in cart...');
+        console.log('%c🛒 CART PRICE OVERRIDE - START', 'background: #2196F3; color: white; padding: 3px; border-radius: 2px;');
+        updateDebugOverlay('🛒 Enforcing custom prices in cart...', '#2196F3');
         
         // Load all price data
         const priceData = {...window.mitnafunPriceRegistry};
@@ -275,6 +309,32 @@ jQuery(document).ready(function($) {
     // Set up events
     setupEvents();
     
+    // Add entry to document title to show script is active
+    document.title = '🔥 ' + document.title;
+    
+    // Alert in case console is not open
+    setTimeout(function() {
+        if (!window.__priceOverrideConfirmed) {
+            // Add a div to top of page
+            const alertDiv = $('<div style="background: #ffcc00; padding: 10px; text-align: center; font-weight: bold; position: fixed; top: 0; left: 0; right: 0; z-index: 999999;">PRICE OVERRIDE SCRIPT IS ACTIVE - CHECK CONSOLE FOR DEBUG INFO</div>');
+            $('body').prepend(alertDiv);
+            // Remove after 5 seconds
+            setTimeout(function() { alertDiv.fadeOut(); }, 5000);
+            window.__priceOverrideConfirmed = true;
+        }
+    }, 500);
+    
+    // Force price update with delay to ensure it runs
+    setTimeout(function() {
+        updateDebugOverlay('⚡ Forcing immediate price update...', 'orange');
+        updateCartPrices();
+        if ($('.item, .cart_item, .mini_cart_item').length) {
+            updateDebugOverlay('✓ Cart items found: ' + $('.item, .cart_item, .mini_cart_item').length, 'green');
+        } else {
+            updateDebugOverlay('✗ No cart items found!', 'red');
+        }
+    }, 1500);
+    
     // Initial run
     setTimeout(function() {
         // On product page
@@ -292,4 +352,9 @@ jQuery(document).ready(function($) {
     window.mitnafun = window.mitnafun || {};
     window.mitnafun.updateCartPrices = updateCartPrices;
     window.mitnafun.saveRentalPriceData = saveRentalPriceData;
+    window.mitnafun.debugOverlay = {
+        show: showDebugOverlay,
+        update: updateDebugOverlay,
+        log: function(msg) { console.log(msg); updateDebugOverlay(msg); }
+    };
 });

@@ -67,30 +67,36 @@
                                                          - Fixes the floating mini-cart popup issues
                                                          - Ensures proper alignment and display of rental dates
                                                          - Prevents UI breaking when removing items
+                                                         
+                                                      11. **weekend-price-fix.js**
+                                                         - NEW: Fixes initial rental days calculation and price display for weekend ranges
+                                                         - Ensures immediate correct price calculation when selecting dates with weekends
+                                                         - Properly formats price display and prevents decimal point issues
+                                                         - Applies correct rental day calculation rules (2=1, 3=2, 4=3, Fri-Sun=1) immediately
 
-                                                      11. **checkout-fix.js**
+                                                      12. **checkout-fix.js**
                                                          - Fixes general checkout issues
                                                          - Ensures proper display of rental information
                                                          - Handles checkout form submission correctly
 
-                                                      12. **checkout-price-fix.js**
+                                                      13. **checkout-price-fix.js**
                                                          - Ensures correct price calculation in checkout
                                                          - Prevents price accumulation bugs during refreshes
                                                          - Maintains pricing consistency between product and checkout
 
-                                                      13. **checkout-robust-fix.js**
+                                                      14. **checkout-robust-fix.js**
                                                          - Provides robust handling of checkout edge cases
                                                          - Prevents broken UI during cart changes
                                                          - Handles error states gracefully
 
-                                                      14. **cart-empty-redirect.js**
+                                                      15. **cart-empty-redirect.js**
                                                          - NEW: Prevents broken pages when cart is emptied during checkout
                                                          - Redirects user to home page or last viewed product
                                                          - Monitors cart events and handles empty cart state
 
                                                       ### Debug & Development
 
-                                                      15. **debug-rental.js**
+                                                      16. **debug-rental.js**
                                                          - Development helper for debugging rental functionality
                                                          - Logs important rental variables and state
                                                          - Helps identify issues with rental date passing

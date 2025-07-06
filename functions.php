@@ -102,6 +102,15 @@ function load_style_script(){
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('rental_dates_nonce')
         ));
+        
+        // Add weekend price fix script with fixed version number
+        wp_enqueue_script(
+            'weekend-price-fix', 
+            get_template_directory_uri() . '/js-fixes/weekend-price-fix.js', 
+            array('jquery', 'rental-datepicker'), 
+            '1.0.0', 
+            true
+        );
     }
 }
 
@@ -383,6 +392,9 @@ add_action('wp_footer', 'rental_dates_value_fix');
 // Include cart pricing fix to ensure correct rental pricing in cart/checkout
 require_once get_template_directory() . '/js-fixes/cart-pricing-fix.php';
 
+// Include script deactivation to prevent price calculation conflicts
+require_once get_template_directory() . '/js-fixes/deactivate-price-scripts.php';
+
 /**
  * Enqueue enhanced rental display script
  * This script improves the display of rental dates and price breakdown throughout the site
@@ -470,10 +482,32 @@ function enqueue_enhanced_rental_display() {
         );
         */
         
-        // NEW: Minimal price override script (clean implementation)
+        // DISABLED: Previous minimal implementation wasn't aggressive enough
+        /*
         wp_enqueue_script(
             'price-override-minimal',
             get_template_directory_uri() . '/js-fixes/price-override-minimal.js',
+            array('jquery'),
+            '1.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // DISABLED: Previous price override script had issues
+        /*
+        wp_enqueue_script(
+            'price-override-fixed',
+            get_template_directory_uri() . '/js-fixes/price-override-fixed.js',
+            array('jquery'),
+            '2.0.0', // Use fixed version to avoid caching issues
+            true
+        );
+        */
+        
+        // NEW: Simple price enforcer script - focuses only on consistent pricing
+        wp_enqueue_script(
+            'price-enforcer',
+            get_template_directory_uri() . '/js-fixes/price-enforcer.js',
             array('jquery'),
             '1.0.0', // Use fixed version to avoid caching issues
             true
