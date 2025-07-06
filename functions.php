@@ -55,8 +55,8 @@ function custom_error_handler($errno, $errstr, $errfile, $errline) {
     return false;
 }
 
-// Set custom error handler
-set_error_handler('custom_error_handler', E_NOTICE);
+// Temporarily disabled custom error handler for debugging
+// set_error_handler('custom_error_handler', E_NOTICE);
 
 include 'inc/checkout.php';
 include 'inc/ajax-actions.php';
@@ -718,6 +718,14 @@ function enqueue_enhanced_rental_display() {
             'debug' => true,
             'rentalDebug' => true
         ));
+            
+        // Localize variables for rental datepicker
+        wp_localize_script('rental-datepicker', 'rentalDatepickerVars', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('rental-datepicker-nonce'),
+            'product_id' => get_the_ID(),
+            'debug' => true
+        ));
     }
 }
 add_action('wp_enqueue_scripts', 'enqueue_enhanced_rental_display', 20);
@@ -751,4 +759,5 @@ function ajax_get_rental_dates() {
 }
 
 
-require_once( get_stylesheet_directory() . '/cart-test.php' );
+// Temporarily disabled for debugging
+// require_once( get_stylesheet_directory() . '/cart-test.php' );
