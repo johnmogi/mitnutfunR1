@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
     // Debug helper
     function debugLog() {
         if (window.rentalDebug) {
-            console.log('[Price Breakdown]', ...arguments);
+            // console.log('[Price Breakdown]', ...arguments);
         }
     }
     
@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
         // Extract data and ensure we have dayCount
         const { days, dayCount } = data;
         
-        console.log('[Price Breakdown] Updating price breakdown with data:', data);
+        // console.log('[Price Breakdown] Updating price breakdown with data:', data);
         
         // Get days and price
         const startDate = data.startDate ? new Date(data.startDate) : null;
@@ -110,10 +110,10 @@ jQuery(document).ready(function($) {
                 weekendIncluded = calculation.weekendIncluded;
                 details = calculation.details || [];
                 
-                console.log('[Price Breakdown] Used weekday/weekend aware calculation', calculation);
+                // console.log('[Price Breakdown] Used weekday/weekend aware calculation', calculation);
             } else {
                 // Fallback to simple day count if the function doesn't exist
-                console.log('[Price Breakdown] Function calculateRentalChargeDays not found, using fallback');
+                // console.log('[Price Breakdown] Function calculateRentalChargeDays not found, using fallback');
                 
                 // Calculate the number of days between dates
                 const msDiff = endDate.getTime() - startDate.getTime();
@@ -131,7 +131,7 @@ jQuery(document).ready(function($) {
         const totalPrice = firstDayPrice + additionalDaysPrice;
         const savedAmount = basePrice * 0.5 * discountedDays; // Saved 50% on additional days
         
-        console.log('[Price Breakdown] Price breakdown updated', {
+        // console.log('[Price Breakdown] Price breakdown updated', {
             rentalDays: rentalDays,
             discountedDays: discountedDays,
             basePrice: basePrice,

@@ -210,7 +210,7 @@
 
         log(...args) {
             if (this.settings.debug) {
-                console.log('[Rental Availability]', ...args);
+                // console.log('[Rental Availability]', ...args);
             }
         }
     }

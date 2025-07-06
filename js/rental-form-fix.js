@@ -5,7 +5,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('RENTAL FORM FIX LOADED');
+    // console.log('RENTAL FORM FIX LOADED');
     
     // Main function to ensure rental dates are properly submitted
     function fixRentalFormSubmission() {
@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
             return;
         }
         
-        console.log('Running rental form submission fix');
+        // console.log('Running rental form submission fix');
         
         // Create or ensure rental_dates hidden input exists in the form
         const $form = $('form.cart');
@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
         // Create a new properly named input
         const $rentalInput = $('<input type="hidden" name="rental_dates" id="rental_dates" value="" />');
         $form.append($rentalInput);
-        console.log('Added rental_dates input to form:', $rentalInput[0]);
+        // console.log('Added rental_dates input to form:', $rentalInput[0]);
         
         // Hook into date selection changes
         $(document).on('click', '.air-datepicker-cell', function() {
@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
             captureRentalDates();
             
             const rentalDates = $('#rental_dates').val();
-            console.log('Form submitted with rental_dates:', rentalDates);
+            // console.log('Form submitted with rental_dates:', rentalDates);
             
             // If still no rental dates and datepicker is visible, prevent submission
             if (!rentalDates && $('#datepicker-container').is(':visible')) {
@@ -100,7 +100,7 @@ jQuery(document).ready(function($) {
         // Update the rental dates input if we have a value
         if (rentalDates) {
             $rentalInput.val(rentalDates);
-            console.log('Updated rental_dates input with:', rentalDates);
+            // console.log('Updated rental_dates input with:', rentalDates);
             
             // Store globally for other scripts
             window.rental_dates = rentalDates;
@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
             
             if (rentalDates) {
                 data.rental_dates = rentalDates;
-                console.log('Added rental_dates to AJAX data:', rentalDates);
+                // console.log('Added rental_dates to AJAX data:', rentalDates);
             } else {
                 console.warn('No rental dates found for AJAX add to cart');
             }

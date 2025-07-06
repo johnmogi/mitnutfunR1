@@ -3,11 +3,21 @@
  * Forces proper rental price calculation and display in checkout
  * Note: Core rental calculation logic is now centralized in rental-pricing.php
  * This file now only handles display and UI aspects in the checkout
+ * 
+ * UPDATED: Now integrates with the modular JS system
  */
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('CHECKOUT PRICE FIX LOADED');
+    // Use the centralized logger if available
+    const logger = window.MitnaFunLogger || {
+        debug: function() {},
+        info: function() {},
+        warn: console.warn.bind(console, '[CHECKOUT-PRICE-FIX]'),
+        error: console.error.bind(console, '[CHECKOUT-PRICE-FIX]')
+    };
+    
+    logger.info('CHECKOUT PRICE FIX LOADED');
     
     // Configuration
     const EXCLUDED_PRODUCT_IDS = [150, 153]; // Products excluded from the discount
@@ -34,7 +44,7 @@ jQuery(document).ready(function($) {
         }
         
         // Default to 1 day if we can't find the rental days
-        console.warn('Could not determine rental days, using default of 1');
+        logger.warn('Could not determine rental days, using default of 1');
         return 1;
     }
     
@@ -43,7 +53,7 @@ jQuery(document).ready(function($) {
         // Only run on checkout page
         if (!$('.woocommerce-checkout').length) return;
         
-        console.log('Updating price display in checkout...');
+        logger.debug('Updating price display in checkout...');
         
         // Find all items in the order
         $('.item').each(function() {
@@ -78,6 +88,12 @@ jQuery(document).ready(function($) {
                 $existingBreakdowns.not(':first').remove();
             }
         });
+    }
+    
+    // Check if we're using the new modular system
+    if (window.CartIntegration) {
+        logger.info('Using CartIntegration module - checking if price display updates are needed');
+        // We'll still run our update as a backup
     }
     
     // Initial update

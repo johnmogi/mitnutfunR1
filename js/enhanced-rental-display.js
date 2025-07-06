@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
     // Debug function
     function debugLog() {
         if (window.rentalDebug) {
-            console.log.apply(console, arguments);
+            // console.log.apply(console, arguments);
         }
     }
     

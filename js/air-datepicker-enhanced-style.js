@@ -6,7 +6,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('AIR-DATEPICKER ENHANCED STYLING LOADED');
+    // console.log('AIR-DATEPICKER ENHANCED STYLING LOADED');
     
     /**
      * Apply enhanced styles to the AirDatepicker
@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
             return;
         }
         
-        console.log('Applying enhanced styles to AirDatepicker');
+        // console.log('Applying enhanced styles to AirDatepicker');
         
         // Remove any existing custom styles we added previously
         $('#air-datepicker-enhanced-styles').remove();
@@ -224,7 +224,7 @@ jQuery(document).ready(function($) {
         // Add directional fixes
         fixCalendarRTL();
         
-        console.log('Enhanced styles applied to AirDatepicker');
+        // console.log('Enhanced styles applied to AirDatepicker');
     }
     
     /**

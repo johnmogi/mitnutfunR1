@@ -7,7 +7,7 @@
  */
 
 (function() {
-    console.log('🚀 WEEKEND FIX: Direct implementation loaded');
+    // console.log('🚀 WEEKEND FIX: Direct implementation loaded');
     
     // Initialize immediately
     init();
@@ -75,7 +75,7 @@
                         setTimeout(checkAndFixWeekends, 10);
                     };
                     
-                    console.log('✅ Patched AirDatepicker onSelect handler');
+                    // console.log('✅ Patched AirDatepicker onSelect handler');
                 }
             });
             
@@ -101,7 +101,7 @@
             return;
         }
         
-        console.log(`🔍 Analyzing ${selectedCells.length} selected calendar days`);
+        // console.log(`🔍 Analyzing ${selectedCells.length} selected calendar days`);
         
         // Extract dates and weekend info
         const dates = [];
@@ -137,15 +137,15 @@
         const startDate = firstDay.date.toLocaleDateString();
         const endDate = dates[dates.length-1].date.toLocaleDateString();
         
-        console.log(`📅 Date range: ${startDate} to ${endDate}`);
-        console.log(`🔍 All remaining days are weekends: ${allRemainingAreWeekends}`);
+        // console.log(`📅 Date range: ${startDate} to ${endDate}`);
+        // console.log(`🔍 All remaining days are weekends: ${allRemainingAreWeekends}`);
         
         // Get rental days element
         const rentalDaysEl = document.querySelector('.rental-days-result');
         
         // Special weekend case - if all days after the first are weekends, count as 1 day
         if (allRemainingAreWeekends && rentalDaysEl) {
-            console.log('🎯 WEEKEND FIX: Applying weekend-only rental rule (1 day)');
+            // console.log('🎯 WEEKEND FIX: Applying weekend-only rental rule (1 day)');
             
             // Update rental days display to 1
             rentalDaysEl.textContent = '1';
@@ -204,7 +204,7 @@
             breakdownElement.innerHTML = breakdownHTML;
         }
         
-        console.log(`💰 Updated price for ${rentalDays} rental days: ${totalPrice.toFixed(2)}₪`);
+        // console.log(`💰 Updated price for ${rentalDays} rental days: ${totalPrice.toFixed(2)}₪`);
         
         // Also update the form value for rental days
         const rentalDaysInput = document.querySelector('input[name="rental_days"]');

@@ -6,7 +6,7 @@ jQuery(document).ready($ => {
 
     setTimeout((e) =>{
       let val = $('#shipping_method input:checked').val();
-      console.log(val);
+      // console.log(val);
       toggle_picker(val)
     }, 800)
 
@@ -53,7 +53,7 @@ jQuery(document).ready($ => {
                 coupon: coupon,
             },
             success: function (data) {
-                console.log(data)
+                // console.log(data)
 
                 $(document.body).trigger('update_checkout');
 

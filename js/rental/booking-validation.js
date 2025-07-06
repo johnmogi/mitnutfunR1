@@ -144,8 +144,8 @@
          * @param {string} message - Message to log
          */
         debugLog: function(message) {
-            if (window.console && window.console.log) {
-                console.log(`[Booking Validation] ${message}`);
+            if (window.console && window.// console.log) {
+                // console.log(`[Booking Validation] ${message}`);
             }
             
             // Optionally show debug info in the UI

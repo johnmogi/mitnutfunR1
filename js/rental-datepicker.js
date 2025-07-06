@@ -9,7 +9,7 @@
     // Debug logging helper
     function debugLog(...args) {
         if (window.rentalDebugEnabled) {
-            console.log('[Rental Datepicker]', ...args);
+            // console.log('[Rental Datepicker]', ...args);
         }
     }
 
@@ -120,7 +120,7 @@
             return;
         }
 
-        console.log('Initializing rental date picker...');
+        // console.log('Initializing rental date picker...');
 
         // Get product ID from the data attribute we added to the content div
         debugLog('Looking for product ID...');
@@ -174,7 +174,7 @@
             return;
         }
         
-        console.log('Found product ID:', productId);
+        // console.log('Found product ID:', productId);
 
         // Get initial stock level
         let initialStock = 1;
@@ -278,7 +278,7 @@
                 const stockData = JSON.parse(stockDataElement.textContent);
                 if (stockData && typeof stockData.stock !== 'undefined') {
                     actualStock = parseInt(stockData.stock, 10);
-                    console.log(`[STOCK FIX] Found stock=${actualStock} in data attribute (was ${initialStock})`);
+                    // console.log(`[STOCK FIX] Found stock=${actualStock} in data attribute (was ${initialStock})`);
                     initialStock = actualStock; // Replace initialStock with the correct value
                 }
             } catch (e) {
@@ -289,21 +289,21 @@
         // CRITICAL FIX: For WooCommerce Rental products, force stock to 1 if still not correct
         // This ensures fully booked logic works regardless of what the server returns
         if (initialStock > 1 && $('body').hasClass('single-product') && $('#datepicker-container').length) {
-            console.log(`[STOCK OVERRIDE] Forcing stock to 1 for rental product (was ${initialStock})`);
+            // console.log(`[STOCK OVERRIDE] Forcing stock to 1 for rental product (was ${initialStock})`);
             initialStock = 1; // Force to 1 for rental products
         }
         
         // Always log the final stock value for debugging
-        console.log(`[FINAL STOCK] Using stock=${initialStock} for calendar rendering`);
+        // console.log(`[FINAL STOCK] Using stock=${initialStock} for calendar rendering`);
         
         // CRITICAL FIX: Pre-process booked dates to correctly mark fully booked days
         if (bookedDates && bookedDates.length > 0) {
-            console.log(`[DATA PRE-PROCESS] Checking ${bookedDates.length} booked dates with stock=${initialStock}`);
+            // console.log(`[DATA PRE-PROCESS] Checking ${bookedDates.length} booked dates with stock=${initialStock}`);
             
             bookedDates.forEach(date => {
                 if (date.count >= initialStock) {
                     date.status = 'fully_booked';
-                    console.log(`[DATA FIX] Forcing fully booked status for ${date.date} (${date.count}/${initialStock})`);
+                    // console.log(`[DATA FIX] Forcing fully booked status for ${date.date} (${date.count}/${initialStock})`);
                 }
             });
         }

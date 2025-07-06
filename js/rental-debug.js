@@ -106,7 +106,7 @@ jQuery(document).ready(function($) {
             }
             
             // Also log to console
-            console.log(`[RentalDebug] ${message}`, data || '');
+            // console.log(`[RentalDebug] ${message}`, data || '');
         }
     };
 

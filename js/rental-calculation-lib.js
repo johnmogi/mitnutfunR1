@@ -88,8 +88,8 @@ function getKnownDateRangeDays(startDate, endDate) {
  * @return {Object} - Calculation results
  */
 function calculateRentalChargeDays(startDate, endDate) {
-    console.log('\n=== Rental Calculation Debug ===');
-    console.log(`Date Range: ${formatDate(startDate)} to ${formatDate(endDate)}`);
+    // console.log('\n=== Rental Calculation Debug ===');
+    // console.log(`Date Range: ${formatDate(startDate)} to ${formatDate(endDate)}`);
     
     // Check for known special cases first
     const startStr = formatDate(startDate);
@@ -97,7 +97,7 @@ function calculateRentalChargeDays(startDate, endDate) {
     
     if (isKnownDateRangeCase(startStr, endStr)) {
         const fixedDays = getKnownDateRangeDays(startStr, endStr);
-        console.log(`🔧 HOTFIX: Using fixed value of ${fixedDays} rental days for date range ${startStr} to ${endStr}`);
+        // console.log(`🔧 HOTFIX: Using fixed value of ${fixedDays} rental days for date range ${startStr} to ${endStr}`);
         
         const details = [];
         const current = new Date(startDate);
@@ -130,7 +130,7 @@ function calculateRentalChargeDays(startDate, endDate) {
     const totalDays = Math.round((endDate - startDate) / oneDay) + 1;
     
     if (totalDays <= 0) {
-        console.log('⚠️ Invalid date range');
+        // console.log('⚠️ Invalid date range');
         return { 
             chargeDays: 0, 
             details: [],
@@ -146,7 +146,7 @@ function calculateRentalChargeDays(startDate, endDate) {
     if (totalDays === 2 || totalDays === 3) {
         const isWeekendOnly = isWeekendRange(startDate, endDate);
         if (isWeekendOnly) {
-            console.log(`${totalDays}-day weekend-only range detected - counting as 1 day`);
+            // console.log(`${totalDays}-day weekend-only range detected - counting as 1 day`);
             const details = [];
             const current = new Date(startDate);
             const end = new Date(endDate);
@@ -186,7 +186,7 @@ function calculateRentalChargeDays(startDate, endDate) {
         const isWeekend = day === 0 || day === 5 || day === 6; // Sun, Fri, Sat
         const dayName = getDayName(current);
         
-        console.log(`Day ${i+1}/${totalDays}: ${formatDate(current)} (${dayName}) - ${isWeekend ? 'Weekend' : 'Weekday'}`);
+        // console.log(`Day ${i+1}/${totalDays}: ${formatDate(current)} (${dayName}) - ${isWeekend ? 'Weekend' : 'Weekday'}`);
         
         // First day is always counted as full price
         if (i > 0) {
@@ -204,7 +204,7 @@ function calculateRentalChargeDays(startDate, endDate) {
             isFirstDay: i === 0
         });
 
-        console.log(`- ${formatDate(new Date(current))} (${dayName}): ${
+        // console.log(`- ${formatDate(new Date(current))} (${dayName}): ${
             i === 0 ? 'First day' : isWeekend ? 'Weekend' : 'Weekday'
         }`);
 
@@ -222,19 +222,19 @@ function calculateRentalChargeDays(startDate, endDate) {
     // Fix off-by-one error for longer ranges
     // Date ranges of 4+ days need an adjustment 
     if (totalDays >= 4) {
-        console.log(`Applying +1 adjustment for longer range (${totalDays} days)`);
+        // console.log(`Applying +1 adjustment for longer range (${totalDays} days)`);
         totalChargeDays += 1;
     }
 
-    console.log('\nCalculation:');
-    console.log(`- First day: 1 (full price)`);
+    // console.log('\nCalculation:');
+    // console.log(`- First day: 1 (full price)`);
     if (weekdayBlocks > 0) {
-        console.log(`- Weekday blocks: ${weekdayBlocks} (from ${weekdayCount} weekdays)`);
+        // console.log(`- Weekday blocks: ${weekdayBlocks} (from ${weekdayCount} weekdays)`);
     }
     if (weekendBlock > 0) {
-        console.log(`- Weekend block: 1 (weekend included)`);
+        // console.log(`- Weekend block: 1 (weekend included)`);
     }
-    console.log(`Total charge days: ${totalChargeDays}\n`);
+    // console.log(`Total charge days: ${totalChargeDays}\n`);
 
     return {
         chargeDays: totalChargeDays,
@@ -362,7 +362,7 @@ function getDateClassificationFromCalendar(startDate, endDate) {
     
     // First try to use the calendar DOM directly
     if (Object.keys(calendarMap).length > 0) {
-        console.log('Using direct calendar DOM for day classification');
+        // console.log('Using direct calendar DOM for day classification');
         
         // Iterate through the date range
         const current = new Date(startDate);
@@ -379,7 +379,7 @@ function getDateClassificationFromCalendar(startDate, endDate) {
                     isWeekend: calendarMap[dateStr].isWeekend,
                     isFirst: isFirstDay
                 });
-                console.log(`DOM classification: ${dateStr} - ${calendarMap[dateStr].isWeekend ? 'Weekend' : 'Weekday'}`);
+                // console.log(`DOM classification: ${dateStr} - ${calendarMap[dateStr].isWeekend ? 'Weekend' : 'Weekday'}`);
             } else {
                 // Fallback to date object if not in DOM
                 const day = current.getDay();
@@ -389,14 +389,14 @@ function getDateClassificationFromCalendar(startDate, endDate) {
                     isWeekend: isWeekend,
                     isFirst: isFirstDay
                 });
-                console.log(`Fallback classification: ${dateStr} - ${isWeekend ? 'Weekend' : 'Weekday'}`);
+                // console.log(`Fallback classification: ${dateStr} - ${isWeekend ? 'Weekend' : 'Weekday'}`);
             }
             
             current.setDate(current.getDate() + 1);
         }
     } else {
         // Fallback to searching the DOM for calendar cells if map is empty
-        console.log('Calendar map empty, searching DOM elements directly...');
+        // console.log('Calendar map empty, searching DOM elements directly...');
         
         // Get all calendar day cells
         const calendarCells = document.querySelectorAll('.air-datepicker-cell.-day-:not(.-other-month-)');
@@ -433,7 +433,7 @@ function getDateClassificationFromCalendar(startDate, endDate) {
         return getDateClassificationFromDates(startDate, endDate);
     }
     
-    console.log('DOM Calendar Classification:', days);
+    // console.log('DOM Calendar Classification:', days);
     return days;
 }
 
@@ -454,7 +454,7 @@ function getDateClassificationFromDates(startDate, endDate) {
     const end = new Date(endDate);
     const current = new Date(start);
     
-    console.log('Using Date.getDay() fallback for classification');
+    // console.log('Using Date.getDay() fallback for classification');
     
     while (current <= end) {
         // Check if this is a weekend day (Sun=0, Fri=5, Sat=6)
@@ -468,32 +468,32 @@ function getDateClassificationFromDates(startDate, endDate) {
             isFirst: current.getTime() === start.getTime()
         });
         
-        console.log(`Date classification: ${dateStr} - ${isWeekend ? 'Weekend' : 'Weekday'}`);
+        // console.log(`Date classification: ${dateStr} - ${isWeekend ? 'Weekend' : 'Weekday'}`);
         current.setDate(current.getDate() + 1);
     }
     
     // Special handling for known problematic date ranges even in fallback
     if (startDate === '2025-07-12' && endDate === '2025-07-16') {
-        console.log('🔍 Special date range detected in fallback (Jul 12-16)');
+        // console.log('🔍 Special date range detected in fallback (Jul 12-16)');
         // Ensure Friday/Saturday/Sunday are properly classified as weekend
         days.forEach(day => {
             // 2025-07-12 is Saturday, 2025-07-13 is Sunday
             if (day.date === '2025-07-12' || day.date === '2025-07-13') {
                 if (!day.isWeekend) {
-                    console.log(`Correcting weekend detection for ${day.date}`);
+                    // console.log(`Correcting weekend detection for ${day.date}`);
                     day.isWeekend = true;
                 }
             }
         });
     } 
     else if (startDate === '2025-07-17' && endDate === '2025-07-21') {
-        console.log('🔍 Special date range detected in fallback (Jul 17-21)');
+        // console.log('🔍 Special date range detected in fallback (Jul 17-21)');
         // Ensure Friday/Saturday/Sunday are properly classified as weekend
         days.forEach(day => {
             // 2025-07-18 is Friday, 2025-07-19 is Saturday, 2025-07-20 is Sunday
             if (day.date === '2025-07-18' || day.date === '2025-07-19' || day.date === '2025-07-20') {
                 if (!day.isWeekend) {
-                    console.log(`Correcting weekend detection for ${day.date}`);
+                    // console.log(`Correcting weekend detection for ${day.date}`);
                     day.isWeekend = true;
                 }
             }
@@ -519,13 +519,13 @@ function calculateRentalDaysFromCalendar(startDate, endDate) {
     const basePrice = 700;
     const discountedPrice = basePrice / 2;
     
-    console.log('\n=== DOM-based Rental Calculation ===');
-    console.log(`Date Range: ${startDate} to ${endDate}`);
+    // console.log('\n=== DOM-based Rental Calculation ===');
+    // console.log(`Date Range: ${startDate} to ${endDate}`);
     
     // Check for known special cases first
     if (isKnownDateRangeCase(startDate, endDate)) {
         const fixedDays = getKnownDateRangeDays(startDate, endDate);
-        console.log(`🔧 HOTFIX: Using fixed value of ${fixedDays} rental days for date range ${startDate} to ${endDate}`);
+        // console.log(`🔧 HOTFIX: Using fixed value of ${fixedDays} rental days for date range ${startDate} to ${endDate}`);
         
         // Calculate the appropriate breakdown and price based on the fixed days
         const discountedDays = fixedDays - 1; // First day is full price, rest are discounted
@@ -570,9 +570,9 @@ function calculateRentalDaysFromCalendar(startDate, endDate) {
     // Enhanced debugging for problematic date ranges
     if (startDate === '2025-07-12' && endDate === '2025-07-16' ||
         startDate === '2025-07-17' && endDate === '2025-07-21') {
-        console.log('🔍 ENHANCED DEBUGGING for special date range:', startDate, 'to', endDate);
-        console.log('Calendar days found:', days.length);
-        days.forEach(day => console.log(`- ${day.date}: ${day.isWeekend ? 'Weekend' : 'Weekday'} ${day.isFirst ? '(First Day)' : ''}`))
+        // console.log('🔍 ENHANCED DEBUGGING for special date range:', startDate, 'to', endDate);
+        // console.log('Calendar days found:', days.length);
+        days.forEach(day => // console.log(`- ${day.date}: ${day.isWeekend ? 'Weekend' : 'Weekday'} ${day.isFirst ? '(First Day)' : ''}`))
     }
     
     if (!days.length) return { 
@@ -600,36 +600,36 @@ function calculateRentalDaysFromCalendar(startDate, endDate) {
     
     // Handle specific special cases
     if (startDate === '2025-07-24' && endDate === '2025-07-26') {
-        console.log('🔍 Special attention for Jul 24-26 range - Weekend-only rental');
-        console.log(`Weekend days detected: ${weekendDays.length}`, 
+        // console.log('🔍 Special attention for Jul 24-26 range - Weekend-only rental');
+        // console.log(`Weekend days detected: ${weekendDays.length}`, 
                    weekendDays.map(d => d.date).join(', '));
         
         // Force this to count as 1 day
         specialRangeAdj = -1;
-        console.log(`Special weekend-only adjustment: ${specialRangeAdj}`);
+        // console.log(`Special weekend-only adjustment: ${specialRangeAdj}`);
     }
     else if ((startDate === '2025-07-12' && endDate === '2025-07-16')) {
-        console.log('🔍 Special attention for Jul 12-16 range');
+        // console.log('🔍 Special attention for Jul 12-16 range');
         // This range is 5 calendar days and should be 4 rental days
-        console.log(`Weekend days detected: ${weekendDays.length}`, 
+        // console.log(`Weekend days detected: ${weekendDays.length}`, 
                     weekendDays.map(d => d.date).join(', '));
                     
         if (weekendDays.length >= 2 && totalCalendarDays >= 4) {
             specialRangeAdj = totalCalendarDays == 5 ? 1 : 0;
-            console.log(`Special adjustment applied for Jul 12-16: +${specialRangeAdj}`);
+            // console.log(`Special adjustment applied for Jul 12-16: +${specialRangeAdj}`);
         }
     } 
     else if (startDate === '2025-07-17' && endDate === '2025-07-21') {
-        console.log('🔍 Special attention for Jul 17-21 range');
+        // console.log('🔍 Special attention for Jul 17-21 range');
         // This is already correct at 3 rental days, but log weekend detection
-        console.log(`Weekend days detected: ${weekendDays.length}`, 
+        // console.log(`Weekend days detected: ${weekendDays.length}`, 
                     weekendDays.map(d => d.date).join(', '));
     }
     
     // Check if this is a weekend-only rental
     const isWeekendOnly = isWeekendOnlyRange(days);
     if (isWeekendOnly) {
-        console.log('🔍 Detected WEEKEND-ONLY rental');
+        // console.log('🔍 Detected WEEKEND-ONLY rental');
     }
     
     // Process each day after the first
@@ -676,13 +676,13 @@ function calculateRentalDaysFromCalendar(startDate, endDate) {
         });
     }
     
-    console.log('Calculation summary:');
-    console.log(`- Weekday count: ${weekdayCount}`);
-    console.log(`- Weekend found: ${weekendFound}`);
-    console.log(`- Weekday blocks: ${weekdayBlocks}`);
-    console.log(`- Discounted days: ${discountedDays}`);
-    console.log(`- Total rental days: ${rentalDays}`);
-    console.log(`- Total price: ${total}₪`);
+    // console.log('Calculation summary:');
+    // console.log(`- Weekday count: ${weekdayCount}`);
+    // console.log(`- Weekend found: ${weekendFound}`);
+    // console.log(`- Weekday blocks: ${weekdayBlocks}`);
+    // console.log(`- Discounted days: ${discountedDays}`);
+    // console.log(`- Total rental days: ${rentalDays}`);
+    // console.log(`- Total price: ${total}₪`);
     
     return {
         rentalDays,
@@ -800,8 +800,8 @@ function runRentalDayTests() {
         }
     ];
     
-    console.log("🧪 RUNNING RENTAL DAY CALCULATION TESTS");
-    console.log("======================================");
+    // console.log("🧪 RUNNING RENTAL DAY CALCULATION TESTS");
+    // console.log("======================================");
     
     let passCount = 0;
     let failCount = 0;
@@ -833,28 +833,28 @@ function runRentalDayTests() {
         const totalMatch = Math.abs(total - test.expectedTotal) < 1; // Allow for tiny float precision issues
         
         if (rentalDaysMatch && totalMatch) {
-            console.log(`✅ PASS: ${test.name}`);
+            // console.log(`✅ PASS: ${test.name}`);
             passCount++;
         } else {
-            console.log(`❌ FAIL: ${test.name}`);
-            console.log(`   Description: ${test.description}`);
-            console.log(`   Expected: ${test.expectedRentalDays} rental days, Total: ${test.expectedTotal}₪`);
-            console.log(`   Actual:   ${rentalDays} rental days, Total: ${total}₪`);
+            // console.log(`❌ FAIL: ${test.name}`);
+            // console.log(`   Description: ${test.description}`);
+            // console.log(`   Expected: ${test.expectedRentalDays} rental days, Total: ${test.expectedTotal}₪`);
+            // console.log(`   Actual:   ${rentalDays} rental days, Total: ${total}₪`);
             failCount++;
         }
 
-        console.log(`   Day classification for ${test.name}:`);
+        // console.log(`   Day classification for ${test.name}:`);
         days.forEach(day => {
-            console.log(`   ${day.date}: ${day.isFirst ? 'First day' : day.isWeekend ? 'Weekend day' : 'Weekday'}`);
+            // console.log(`   ${day.date}: ${day.isFirst ? 'First day' : day.isWeekend ? 'Weekend day' : 'Weekday'}`);
         });
-        console.log("\n");
+        // console.log("\n");
     });
     
-    console.log(`TEST SUMMARY: ${passCount} passed, ${failCount} failed`);
+    // console.log(`TEST SUMMARY: ${passCount} passed, ${failCount} failed`);
     
     if (failCount === 0) {
-        console.log("🎉 ALL TESTS PASSED! The rental day calculation is working correctly.");
+        // console.log("🎉 ALL TESTS PASSED! The rental day calculation is working correctly.");
     } else {
-        console.log("⚠️ TESTS FAILED. The rental day calculation needs fixing.");
+        // console.log("⚠️ TESTS FAILED. The rental day calculation needs fixing.");
     }
 }

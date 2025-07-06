@@ -6,29 +6,29 @@
  */
 
 (function() {
-    // console.log('💼 Weekend Fix Light - Script Loaded');
+    // // console.log('💼 Weekend Fix Light - Script Loaded');
     
     // Try to run immediately in case DOM is already ready
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        // console.log('💼 Weekend Fix Light - DOM already ready, initializing now');
+        // // console.log('💼 Weekend Fix Light - DOM already ready, initializing now');
         setTimeout(initWeekendFix, 100);
     }
 
     // Also wait for DOM to be ready (backup)
     document.addEventListener('DOMContentLoaded', function() {
-        // console.log('💼 Weekend Fix Light - DOM ready event fired');
+        // // console.log('💼 Weekend Fix Light - DOM ready event fired');
         setTimeout(initWeekendFix, 100);
     });
     
     // Add special event listener for AirDatepicker events
     document.addEventListener('datepicker-ready', function() {
-        // console.log('💼 Weekend Fix Light - Datepicker ready event received');
+        // // console.log('💼 Weekend Fix Light - Datepicker ready event received');
         initWeekendFix();
     });
     
     // Listen for rental dates selected event
     document.addEventListener('rental_dates_selected', function(e) {
-        // console.log('💼 Weekend Fix Light - Rental dates selected event received', e.detail);
+        // // console.log('💼 Weekend Fix Light - Rental dates selected event received', e.detail);
         setTimeout(checkSelectedRange, 50);
     });
     
@@ -36,15 +36,15 @@
      * Initialize the weekend fix
      */
     function initWeekendFix() {
-        // console.log('💼 Weekend Fix Light - Initializing weekend fix...');
+        // // console.log('💼 Weekend Fix Light - Initializing weekend fix...');
         
         // Don't wait for AirDatepicker instances, just add our listeners
-        // console.log('💼 Weekend Fix Light - Setting up weekend fix without waiting for datepicker instances');
+        // // console.log('💼 Weekend Fix Light - Setting up weekend fix without waiting for datepicker instances');
         
         // Add a listener for calendar changes
         document.addEventListener('click', function(e) {
             if (e.target.closest('.air-datepicker-cell')) {
-                // console.log('💼 Weekend Fix Light - Calendar cell clicked');
+                // // console.log('💼 Weekend Fix Light - Calendar cell clicked');
                 setTimeout(checkSelectedRange, 50);
             }
         });
@@ -52,9 +52,9 @@
         // Set up listeners for direct date selection in the input
         const dateFields = document.querySelectorAll('.date-picker-field, #rental_dates');
         dateFields.forEach(function(field) {
-            // console.log('💼 Weekend Fix Light - Adding change listener to date field', field);
+            // // console.log('💼 Weekend Fix Light - Adding change listener to date field', field);
             field.addEventListener('change', function() {
-                // console.log('💼 Weekend Fix Light - Date field changed', field.value);
+                // // console.log('💼 Weekend Fix Light - Date field changed', field.value);
                 setTimeout(checkSelectedRange, 50);
             });
         });
@@ -65,7 +65,7 @@
         // Also run periodically to catch any changes
         setInterval(checkSelectedRange, 1000);
         
-        // console.log('💼 Weekend Fix Light - Initialization complete');
+        // // console.log('💼 Weekend Fix Light - Initialization complete');
     }
     
     /**
@@ -74,18 +74,18 @@
     function patchDatepicker(datepicker, index) {
         // Only patch once
         if (datepicker._weekendPatched) {
-            // console.log(`💼 Weekend Fix Light - Datepicker #${index} already patched, skipping`);
+            // // console.log(`💼 Weekend Fix Light - Datepicker #${index} already patched, skipping`);
             return;
         }
         
-        // console.log(`💼 Weekend Fix Light - Patching datepicker #${index}`);
+        // // console.log(`💼 Weekend Fix Light - Patching datepicker #${index}`);
         
         // Save original handler
         const originalOnSelect = datepicker.opts.onSelect;
         
         // Replace with patched version
         datepicker.opts.onSelect = function(formattedDate, date, inst) {
-            // console.log(`💼 Weekend Fix Light - Date selected: ${formattedDate}`);
+            // // console.log(`💼 Weekend Fix Light - Date selected: ${formattedDate}`);
             
             // Call original first
             if (originalOnSelect) {
@@ -93,7 +93,7 @@
             }
             
             // Apply our fix
-            // console.log('💼 Weekend Fix Light - Running fix after date selection');
+            // // console.log('💼 Weekend Fix Light - Running fix after date selection');
             setTimeout(checkSelectedRange, 50);
         };
         
@@ -109,7 +109,7 @@
                 const isWeekend = day === 5 || day === 6; // Friday or Saturday
                 if (isWeekend) {
                     // Just for debugging, no actual change here
-                    console.log(`Weekend detected: ${date.toISOString().split('T')[0]}`);
+                    // console.log(`Weekend detected: ${date.toISOString().split('T')[0]}`);
                 }
             }
             
@@ -118,7 +118,7 @@
         
         // Mark as patched
         datepicker._weekendPatched = true;
-        // console.log(`💼 Weekend Fix Light - Datepicker #${index} successfully patched`);
+        // // console.log(`💼 Weekend Fix Light - Datepicker #${index} successfully patched`);
     }
     
     /**
@@ -126,7 +126,7 @@
      * or mixed weekday/weekend scenarios
      */
     function checkSelectedRange() {
-        // console.log('💼 Weekend Fix Light - Checking selected range');
+        // // console.log('💼 Weekend Fix Light - Checking selected range');
 
         // APPROACH 1: Get dates from rental_dates input field
         const rentalDatesInput = document.querySelector('#rental_dates');
@@ -136,7 +136,7 @@
 
         if (rentalDatesInput && rentalDatesInput.value) {
             dateRange = rentalDatesInput.value;
-            // console.log(`💼 Weekend Fix Light - Found date range in input: ${dateRange}`);
+            // // console.log(`💼 Weekend Fix Light - Found date range in input: ${dateRange}`);
             
             // Parse the date range (format: "YYYY-MM-DD - YYYY-MM-DD")
             const dates = dateRange.split(' - ');
@@ -150,11 +150,11 @@
         if (!startDate || !endDate) {
             const selectedCells = document.querySelectorAll('.air-datepicker-cell.-selected-, .air-datepicker-cell.-range-from-, .air-datepicker-cell.-range-to-, .air-datepicker-cell.-in-range-');
             if (selectedCells.length < 2) {
-                // console.log('💼 Weekend Fix Light - Not enough selected dates to process');
+                // // console.log('💼 Weekend Fix Light - Not enough selected dates to process');
                 return;
             }
             
-            // console.log(`💼 Weekend Fix Light - Found ${selectedCells.length} selected cells`);
+            // // console.log(`💼 Weekend Fix Light - Found ${selectedCells.length} selected cells`);
             
             // Extract dates from cells
             const dates = Array.from(selectedCells).map(cell => {
@@ -166,13 +166,13 @@
         }
 
         if (!startDate || !endDate) {
-            // console.log('💼 Weekend Fix Light - Could not determine date range');
+            // // console.log('💼 Weekend Fix Light - Could not determine date range');
             return;
         }
 
-        // console.log(`💼 Weekend Fix Light - Processing date range: ${startDate} to ${endDate}`);
+        // // console.log(`💼 Weekend Fix Light - Processing date range: ${startDate} to ${endDate}`);
 
-        // console.log(`💼 Weekend Fix Light - Calculating rental days for ${startDate} to ${endDate}`);
+        // // console.log(`💼 Weekend Fix Light - Calculating rental days for ${startDate} to ${endDate}`);
 
         // Function to calculate rental days based on business rules
         function calculateRentalDaysAdvanced(startDateStr, endDateStr) {
@@ -181,7 +181,7 @@
             const end = new Date(endDateStr);
             const totalDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
             
-            // console.log(`💼 Weekend Fix Light - Total calendar days: ${totalDays}`);
+            // // console.log(`💼 Weekend Fix Light - Total calendar days: ${totalDays}`);
             
             // Special cases for specific Thu-Sat patterns
             const isSpecialWeekendCase = (
@@ -191,7 +191,7 @@
             );
             
             if (isSpecialWeekendCase) {
-                // console.log(`💼 Weekend Fix Light - Special weekend case detected (Thu-Sat), returning 1 rental day`);
+                // // console.log(`💼 Weekend Fix Light - Special weekend case detected (Thu-Sat), returning 1 rental day`);
                 return 1;
             }
             
@@ -203,7 +203,7 @@
             if (startDay === 4 && (endDay === 0 || endDay === 1) && totalDays <= 5) {
                 // Thu-Sun (4 days) or Thu-Mon (5 days) - count as 2 days
                 // Thu-Sat is counted as 1 day, and Sun or Sun-Mon is counted as 1 day
-                // console.log(`💼 Weekend Fix Light - Extended weekend pattern detected (Thu to Sun/Mon), returning 2 rental days`);
+                // // console.log(`💼 Weekend Fix Light - Extended weekend pattern detected (Thu to Sun/Mon), returning 2 rental days`);
                 return 2;
             }
             
@@ -233,28 +233,28 @@
             // Calculate rental days based on weekday count and weekend presence
             if (hasWeekendInRange) {
                 rentalDays += 1; // Weekend counts as 1 day
-                // console.log(`💼 Weekend Fix Light - Weekend included, adding 1 rental day`);
+                // // console.log(`💼 Weekend Fix Light - Weekend included, adding 1 rental day`);
             }
             
             // Every 2 weekdays count as 1 rental day
             rentalDays += Math.ceil(weekdayCount / 2);
-            // console.log(`💼 Weekend Fix Light - ${weekdayCount} weekdays, adding ${Math.ceil(weekdayCount / 2)} rental days`);
+            // // console.log(`💼 Weekend Fix Light - ${weekdayCount} weekdays, adding ${Math.ceil(weekdayCount / 2)} rental days`);
             
             return rentalDays;
         }
         
         // Calculate rental days for this date range
         let rentalDays = calculateRentalDaysAdvanced(startDate, endDate);
-        // console.log(`💼 Weekend Fix Light - Final calculated rental days: ${rentalDays}`);
+        // // console.log(`💼 Weekend Fix Light - Final calculated rental days: ${rentalDays}`);
 
         // Find the rental days display element
         const rentalDaysEl = document.querySelector('#rental-days-count, .rental-days-result');
         if (rentalDaysEl) {
             const currentDays = parseInt(rentalDaysEl.textContent, 10);
-            // console.log(`💼 Weekend Fix Light - Current rental days: ${currentDays}, New rental days: ${rentalDays}`);
+            // // console.log(`💼 Weekend Fix Light - Current rental days: ${currentDays}, New rental days: ${rentalDays}`);
             
             if (currentDays !== rentalDays) {
-                // console.log(`💼 Weekend Fix Light - UPDATING rental days from ${currentDays} to ${rentalDays}`);
+                // // console.log(`💼 Weekend Fix Light - UPDATING rental days from ${currentDays} to ${rentalDays}`);
                 
                 // Update the displayed rental days
                 rentalDaysEl.textContent = rentalDays.toString();
@@ -270,7 +270,7 @@
                 // Update price total
                 const priceEl = document.querySelector('.rental-price-total');
                 if (priceEl) {
-                    // console.log(`💼 Weekend Fix Light - Updating price from ${priceEl.textContent} to ${totalPrice.toFixed(2)}₪`);
+                    // // console.log(`💼 Weekend Fix Light - Updating price from ${priceEl.textContent} to ${totalPrice.toFixed(2)}₪`);
                     priceEl.textContent = `${totalPrice.toFixed(2)}₪`;
                 }
                 
@@ -281,7 +281,7 @@
                     const el = document.querySelector(selector);
                     if (el) {
                         breakdownEl = el;
-                        // console.log(`💼 Weekend Fix Light - Found price breakdown element: ${selector}`);
+                        // // console.log(`💼 Weekend Fix Light - Found price breakdown element: ${selector}`);
                         break;
                     }
                 }
@@ -296,13 +296,13 @@
                     
                     html += `<div class="price-breakdown-row total-row"><span>סה״כ:</span><span class="price">${totalPrice.toFixed(2)}₪</span></div>`;
                     
-                    // console.log('💼 Weekend Fix Light - Updating price breakdown HTML');
+                    // // console.log('💼 Weekend Fix Light - Updating price breakdown HTML');
                     breakdownEl.innerHTML = html;
                 }
                 
                 // Update hidden input fields
                 document.querySelectorAll('input[name="rental_days"], .rental_days').forEach(input => {
-                    // console.log(`💼 Weekend Fix Light - Updating input: ${input.name || input.className} = ${rentalDays}`);
+                    // // console.log(`💼 Weekend Fix Light - Updating input: ${input.name || input.className} = ${rentalDays}`);
                     input.value = rentalDays;
                 });
                 
@@ -312,12 +312,12 @@
                 });
                 document.dispatchEvent(event);
                 
-                // console.log(`💼 Weekend Fix Light - Successfully updated rental days to ${rentalDays} for ${startDate} to ${endDate}`);
+                // // console.log(`💼 Weekend Fix Light - Successfully updated rental days to ${rentalDays} for ${startDate} to ${endDate}`);
             } else {
-                // console.log(`💼 Weekend Fix Light - Rental days already correct at ${rentalDays}`);
+                // // console.log(`💼 Weekend Fix Light - Rental days already correct at ${rentalDays}`);
             }
         } else {
-            // console.log('💼 Weekend Fix Light - Could not find rental days display element');
+            // // console.log('💼 Weekend Fix Light - Could not find rental days display element');
         }
     }
     

@@ -2,13 +2,13 @@
  * Debug Rental Issues
  * Place this file in the header to debug before other scripts run
  */
-console.log('DEBUG RENTAL SCRIPT LOADED');
+// console.log('DEBUG RENTAL SCRIPT LOADED');
 
 // Create a prominent visual debug panel
 window.addEventListener('DOMContentLoaded', function() {
     // Force debug mode on
     window.rentalDebug = true;
-    console.log('Debug mode enabled for rental features');
+    // console.log('Debug mode enabled for rental features');
     
     // Create debug panel
     var debugPanel = document.createElement('div');
@@ -149,11 +149,11 @@ window.addEventListener('DOMContentLoaded', function() {
         // Check for console messages about rental dates
         info.push('<h4>JS Console (see browser console)</h4>');
         info.push('<p>Check browser console for detailed debug info about rental dates processing</p>');
-        console.log('===== RENTAL DEBUG INFORMATION =====');
-        console.log('Checking for window variables related to rental:');
-        if (window.rental_dates) console.log('window.rental_dates:', window.rental_dates);
-        if (window.selectedDates) console.log('window.selectedDates:', window.selectedDates);
-        console.log('===== END RENTAL DEBUG =====');
+        // console.log('===== RENTAL DEBUG INFORMATION =====');
+        // console.log('Checking for window variables related to rental:');
+        if (window.rental_dates) // console.log('window.rental_dates:', window.rental_dates);
+        if (window.selectedDates) // console.log('window.selectedDates:', window.selectedDates);
+        // console.log('===== END RENTAL DEBUG =====');
         
         // Dump content to panel
         content.innerHTML = info.join('');

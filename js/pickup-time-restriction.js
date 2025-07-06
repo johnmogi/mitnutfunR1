@@ -9,12 +9,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🕒 Pickup Time Restriction - Script loaded');
+    // console.log('🕒 Pickup Time Restriction - Script loaded');
     initPickupTimeRestrictions();
     
     // Also initialize when fragments are updated (checkout refreshes)
     jQuery(document.body).on('updated_checkout', function() {
-        console.log('🕒 Pickup Time Restriction - Checkout updated event detected');
+        // console.log('🕒 Pickup Time Restriction - Checkout updated event detected');
         initPickupTimeRestrictions();
     });
 });
@@ -23,30 +23,30 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize the pickup time restriction functionality
  */
 function initPickupTimeRestrictions() {
-    console.log('🕒 Pickup Time Restriction - Initializing restrictions');
+    // console.log('🕒 Pickup Time Restriction - Initializing restrictions');
     
     // Check if we're on the checkout page
     if (!document.querySelector('.woocommerce-checkout')) {
-        console.log('🕒 Pickup Time Restriction - Not on checkout page, exiting');
+        // console.log('🕒 Pickup Time Restriction - Not on checkout page, exiting');
         return;
     }
     
     // Find the pickup time dropdown
     const pickupTimeSelect = document.querySelector('select[name="order_comments"]');
     if (!pickupTimeSelect) {
-        console.log('🕒 Pickup Time Restriction - Pickup time dropdown not found');
+        // console.log('🕒 Pickup Time Restriction - Pickup time dropdown not found');
         return;
     }
     
-    console.log('🕒 Pickup Time Restriction - Found pickup time dropdown');
+    // console.log('🕒 Pickup Time Restriction - Found pickup time dropdown');
     
     // Check for edge date bookings in the cart
     checkForEdgeBookings().then(function(edgeBookingInfo) {
         if (edgeBookingInfo.hasEdgeBooking) {
-            console.log('🕒 Pickup Time Restriction - Edge booking found, restricting early pickup times');
+            // console.log('🕒 Pickup Time Restriction - Edge booking found, restricting early pickup times');
             restrictEarlyPickupTimes(pickupTimeSelect, edgeBookingInfo.returnTime);
         } else {
-            console.log('🕒 Pickup Time Restriction - No edge bookings found, allowing all pickup times');
+            // console.log('🕒 Pickup Time Restriction - No edge bookings found, allowing all pickup times');
             enableAllPickupTimes(pickupTimeSelect);
         }
     });
@@ -68,18 +68,18 @@ function checkForEdgeBookings() {
             },
             success: function(response) {
                 if (response.success) {
-                    console.log('🕒 Pickup Time Restriction - Edge booking check result:', response.data);
+                    // console.log('🕒 Pickup Time Restriction - Edge booking check result:', response.data);
                     resolve({
                         hasEdgeBooking: response.data.has_edge_booking,
                         returnTime: response.data.return_time || '11:00' // Default to 11:00 if not specified
                     });
                 } else {
-                    console.log('🕒 Pickup Time Restriction - Error checking edge bookings');
+                    // console.log('🕒 Pickup Time Restriction - Error checking edge bookings');
                     resolve({ hasEdgeBooking: false });
                 }
             },
             error: function() {
-                console.log('🕒 Pickup Time Restriction - AJAX error checking edge bookings');
+                // console.log('🕒 Pickup Time Restriction - AJAX error checking edge bookings');
                 resolve({ hasEdgeBooking: false });
             }
         });
@@ -92,7 +92,7 @@ function checkForEdgeBookings() {
  * @param {string} returnTime The return time (format: 'HH:MM')
  */
 function restrictEarlyPickupTimes(selectElement, returnTime) {
-    console.log(`🕒 Pickup Time Restriction - Restricting pickup times before ${returnTime}`);
+    // console.log(`🕒 Pickup Time Restriction - Restricting pickup times before ${returnTime}`);
     
     // Parse return time
     const returnHour = parseInt(returnTime.split(':')[0], 10);
@@ -111,7 +111,7 @@ function restrictEarlyPickupTimes(selectElement, returnTime) {
         if (startHour < returnHour) {
             option.disabled = true;
             option.setAttribute('data-restricted', 'true');
-            console.log(`🕒 Pickup Time Restriction - Disabled pickup time: ${value} (before ${returnTime})`);
+            // console.log(`🕒 Pickup Time Restriction - Disabled pickup time: ${value} (before ${returnTime})`);
         } else {
             option.disabled = false;
             option.removeAttribute('data-restricted');
@@ -141,7 +141,7 @@ function restrictEarlyPickupTimes(selectElement, returnTime) {
  * @param {HTMLElement} selectElement The pickup time select element
  */
 function enableAllPickupTimes(selectElement) {
-    console.log('🕒 Pickup Time Restriction - Enabling all pickup times');
+    // console.log('🕒 Pickup Time Restriction - Enabling all pickup times');
     
     // Enable all options
     const options = selectElement.querySelectorAll('option');
@@ -181,7 +181,7 @@ function addPickupTimeNotice(returnTime) {
     const pickupTimeContainer = document.querySelector('select[name="order_comments"]').closest('.form-row');
     if (pickupTimeContainer && pickupTimeContainer.parentNode) {
         pickupTimeContainer.parentNode.insertBefore(noticeContainer, pickupTimeContainer.nextSibling);
-        console.log('🕒 Pickup Time Restriction - Added notice about restricted pickup times');
+        // console.log('🕒 Pickup Time Restriction - Added notice about restricted pickup times');
     }
 }
 
@@ -192,6 +192,6 @@ function removePickupTimeNotice() {
     const existingNotice = document.getElementById('pickup-time-restriction-notice');
     if (existingNotice) {
         existingNotice.parentNode.removeChild(existingNotice);
-        console.log('🕒 Pickup Time Restriction - Removed pickup time restriction notice');
+        // console.log('🕒 Pickup Time Restriction - Removed pickup time restriction notice');
     }
 }

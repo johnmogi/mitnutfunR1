@@ -3,7 +3,7 @@ Theme Name: Mitnafun R
 */
 
 
-.missing-dates,
+.page-template-checkout .missing-dates,	
 .stock.in-stock,
 #rental-debug-panel, #calendar-booking-debug {
     display: none;

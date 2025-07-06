@@ -6,7 +6,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('CALENDAR BOOKING STATUS FIX LOADED');
+    // console.log('CALENDAR BOOKING STATUS FIX LOADED');
     
     /**
      * Fix calendar booking display
@@ -14,10 +14,10 @@ jQuery(document).ready(function($) {
     function fixCalendarBooking() {
         // Listen for the rentalDatesLoaded event
         $(document).on('rentalDatesLoaded', function(e, data) {
-            console.log('Calendar fix: Rental dates loaded event received', data);
+            // console.log('Calendar fix: Rental dates loaded event received', data);
             
             if (!data || !data.bookedDates) {
-                console.log('Calendar fix: No booked dates data');
+                // console.log('Calendar fix: No booked dates data');
                 return;
             }
             
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
                 
                 if (initialMatch && initialMatch[1]) {
                     initialStock = parseInt(initialMatch[1], 10);
-                    console.log('Calendar fix: Found initial stock from debugger:', initialStock);
+                    // console.log('Calendar fix: Found initial stock from debugger:', initialStock);
                 }
             }
             
@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
             const $stockData = $('[data-initial-stock]');
             if ($stockData.length) {
                 initialStock = parseInt($stockData.data('initial-stock'), 10) || initialStock;
-                console.log('Calendar fix: Found initial stock from data attribute:', initialStock);
+                // console.log('Calendar fix: Found initial stock from data attribute:', initialStock);
             }
             
             // Fix the calendar cells after a short delay to ensure they've been rendered
@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
      * Fix calendar cells based on correct stock calculation and identify booking edges
      */
     function fixCalendarCells(initialStock, bookedDates) {
-        console.log('Calendar fix: Fixing calendar cells with initial stock', initialStock);
+        // console.log('Calendar fix: Fixing calendar cells with initial stock', initialStock);
         
         // CRITICAL FIX: First, pre-process the booked dates to ensure correct status
         // Override backend status if count >= initialStock
@@ -64,11 +64,11 @@ jQuery(document).ready(function($) {
                 
                 // If this date should be fully booked, force the status
                 if (isFullyBooked) {
-                    console.log(`Calendar fix: Forcing date ${dateKey} to fully booked (count ${bookingCount} >= stock ${initialStock})`);
+                    // console.log(`Calendar fix: Forcing date ${dateKey} to fully booked (count ${bookingCount} >= stock ${initialStock})`);
                     // We'll use this in the cell processing loop later
                     bookedDates[dateKey].isFullyBooked = true;
                     bookedDates[dateKey].status = 'fully_booked'; // Override backend status!
-                    console.log(`[FORCE FULL] ${dateKey} marked fully booked (count=${bookingCount}, stock=${initialStock})`);
+                    // console.log(`[FORCE FULL] ${dateKey} marked fully booked (count=${bookingCount}, stock=${initialStock})`);
                 }
             }
         }
@@ -76,12 +76,12 @@ jQuery(document).ready(function($) {
         // Extra check: If initial stock is missing or invalid, default to 1
         if (!initialStock || initialStock <= 0) {
             initialStock = 1;
-            console.log('Calendar fix: Initial stock was invalid, defaulting to 1');
+            // console.log('Calendar fix: Initial stock was invalid, defaulting to 1');
         }
         
         // First, analyze bookings to identify start/end dates for each booking
         const bookingEdges = analyzeBookingEdges(bookedDates);
-        console.log('Calendar fix: Identified booking edges:', bookingEdges);
+        // console.log('Calendar fix: Identified booking edges:', bookingEdges);
         
         // Add debug info to the page
         addCalendarBookingDebug(initialStock, bookedDates, bookingEdges);
@@ -100,7 +100,7 @@ jQuery(document).ready(function($) {
             const dateKey = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             
             // Debug this cell
-            console.log(`Calendar cell check: ${dateKey}`, {
+            // console.log(`Calendar cell check: ${dateKey}`, {
                 isStartEdge: bookingEdges.startDates.includes(dateKey),
                 isEndEdge: bookingEdges.endDates.includes(dateKey),
                 cell: this
@@ -135,7 +135,7 @@ jQuery(document).ready(function($) {
                     const isEdgeDay = isStartEdge || isEndEdge;
                     const isMiddleDay = shouldBlock && !isEdgeDay;
                     
-                    console.log(`Calendar fix: Date ${dateKey} - Bookings: ${bookingCount}, Initial Stock: ${initialStock}, Should block: ${shouldBlock}, Edge: ${isEdgeDay} (Start: ${isStartEdge}, End: ${isEndEdge}), Middle: ${isMiddleDay}, Backend fully booked: ${isBackendFullyBooked}`);
+                    // console.log(`Calendar fix: Date ${dateKey} - Bookings: ${bookingCount}, Initial Stock: ${initialStock}, Should block: ${shouldBlock}, Edge: ${isEdgeDay} (Start: ${isStartEdge}, End: ${isEndEdge}), Middle: ${isMiddleDay}, Backend fully booked: ${isBackendFullyBooked}`);
                     
                     // CLEAR ALL BOOKING CLASSES FIRST to avoid conflicts
                     $cell.removeClass(
@@ -171,11 +171,11 @@ jQuery(document).ready(function($) {
                             // Add specific start/end class for more precise styling if needed
                             if (isStartEdge) {
                                 $cell.addClass('booking-start-edge');
-                                console.log(`Calendar fix: Marking ${dateKey} as START edge day`);
+                                // console.log(`Calendar fix: Marking ${dateKey} as START edge day`);
                             }
                             if (isEndEdge) {
                                 $cell.addClass('booking-end-edge');
-                                console.log(`Calendar fix: Marking ${dateKey} as END edge day`);
+                                // console.log(`Calendar fix: Marking ${dateKey} as END edge day`);
                             }
                         } else {
                             // Middle days - fully block
@@ -187,7 +187,7 @@ jQuery(document).ready(function($) {
                             $cell.attr('data-booking-status', 'fully-booked-middle');
                             $cell.attr('data-booking-count', bookingCount);
                             
-                            console.log(`Calendar fix: Fully blocking middle date ${dateKey}`);
+                            // console.log(`Calendar fix: Fully blocking middle date ${dateKey}`);
                         }
                     } else if (bookingCount > 0 && !isBackendFullyBooked && bookedDates[dateKey].status !== 'fully_booked') {
                         // Partially booked days (only if not forced to fully booked)
@@ -196,11 +196,11 @@ jQuery(document).ready(function($) {
                         $cell.attr('data-booking-status', 'partially-booked');
                         $cell.attr('data-fully-booked', 'false');
                         
-                        console.log(`Calendar fix: Date ${dateKey} is partially booked (count ${bookingCount} < stock ${initialStock})`);
+                        // console.log(`Calendar fix: Date ${dateKey} is partially booked (count ${bookingCount} < stock ${initialStock})`);
                     }
                     
                     // Debug verification of cell classes AFTER all processing
-                    console.log(`[Render] ${dateKey} → classes:`, {
+                    // console.log(`[Render] ${dateKey} → classes:`, {
                         fullBooked: $cell.hasClass('air-datepicker-cell--fully-booked'),
                         partialBooked: $cell.hasClass('air-datepicker-cell--partially-booked'),
                         edgeBooked: $cell.hasClass('air-datepicker-cell--edge-booked'),
@@ -288,7 +288,7 @@ jQuery(document).ready(function($) {
         
         // Find consecutive sequences in fully booked dates
         const bookingSequences = findDateSequences(fullyBookedDates);
-        console.log('Calendar fix: Found booking sequences:', bookingSequences);
+        // console.log('Calendar fix: Found booking sequences:', bookingSequences);
         
         // Each sequence's start and end dates are booking edges
         bookingSequences.forEach(sequence => {
@@ -299,11 +299,11 @@ jQuery(document).ready(function($) {
                 startDates.push(firstDate);
                 endDates.push(lastDate);
                 
-                console.log(`Calendar fix: Booking sequence - Start: ${firstDate}, End: ${lastDate}`);
+                // console.log(`Calendar fix: Booking sequence - Start: ${firstDate}, End: ${lastDate}`);
             }
         });
         
-        console.log('Calendar fix: Identified edges -', 
+        // console.log('Calendar fix: Identified edges -', 
             'Starts:', startDates.join(', '), 
             'Ends:', endDates.join(', ')
         );

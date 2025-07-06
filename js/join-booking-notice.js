@@ -5,7 +5,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('JOIN BOOKING NOTICE LOADED');
+    // console.log('JOIN BOOKING NOTICE LOADED');
     
     /**
      * Add return time notice to the calendar when joining bookings
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
         
         // Listen for rental dates loaded event
         $(document).on('rentalDatesLoaded', function(e, data) {
-            console.log('Join Notice: Rental dates loaded event received', data);
+            // console.log('Join Notice: Rental dates loaded event received', data);
             
             if (!data || !data.bookedDates) {
                 return;
@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
                 }
             }
             
-            console.log('Join Notice: Fully booked dates:', fullyBookedDates);
+            // console.log('Join Notice: Fully booked dates:', fullyBookedDates);
         });
         
         // Listen for date selection
@@ -101,7 +101,7 @@ jQuery(document).ready(function($) {
             const isJoiningEnd = fullyBookedDates[dayAfterEndStr];
             
             if (isJoiningStart || isJoiningEnd) {
-                console.log('Join Notice: Joining booking detected', {
+                // console.log('Join Notice: Joining booking detected', {
                     isJoiningStart,
                     isJoiningEnd,
                     startDate: startDateStr,

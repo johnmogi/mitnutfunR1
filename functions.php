@@ -810,3 +810,76 @@ require_once( get_stylesheet_directory() . '/inc/rental-availability-validator.p
 
 // Include cart test functionality
 require_once( get_stylesheet_directory() . '/cart-test.php' );
+
+/**
+ * Enqueue modularized JavaScript files for better organization
+ * Replaces old scattered JS files with a modular approach
+ */
+function enqueue_modular_js_files() {
+    // Only load on frontend
+    if (is_admin()) return;
+    
+    // Path to the modules folder
+    $modules_dir = get_stylesheet_directory_uri() . '/js-modules/';
+    $js_dir = get_stylesheet_directory_uri() . '/js/';
+    $modules_version = filemtime(get_stylesheet_directory() . '/js-modules/main.js') ?: time();
+    $js_version = filemtime(get_stylesheet_directory() . '/js/cart-rental-fix-new.js') ?: time();
+    
+    // 1. Logger module (must load first)
+    wp_enqueue_script(
+        'mitnafun-logger', 
+        $modules_dir . 'logger.js', 
+        array('jquery'), 
+        $modules_version, 
+        true
+    );
+    
+    // 2. Checkout validator module
+    wp_enqueue_script(
+        'mitnafun-checkout-validator', 
+        $modules_dir . 'checkout-validator.js', 
+        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'), 
+        $modules_version, 
+        true
+    );
+    
+    // 3. Cart integration module
+    wp_enqueue_script(
+        'mitnafun-cart-integration', 
+        $modules_dir . 'cart-integration.js', 
+        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'), 
+        $modules_version, 
+        true
+    );
+    
+    // 4. Main module loader (loads last)
+    wp_enqueue_script(
+        'mitnafun-main', 
+        $modules_dir . 'main.js', 
+        array('jquery', 'mitnafun-logger', 'mitnafun-checkout-validator', 'mitnafun-cart-integration'), 
+        $modules_version, 
+        true
+    );
+    
+    // 5. New cart rental fix (replaces the old buggy version)
+    wp_enqueue_script(
+        'mitnafun-cart-rental-fix',
+        $js_dir . 'cart-rental-fix-new.js',
+        array('jquery', 'mitnafun-logger', 'wc-cart-fragments'),
+        $js_version,
+        true
+    );
+    
+    // Pass variables to JS
+    wp_localize_script('mitnafun-main', 'MitnaFunConfig', array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'checkoutUrl' => wc_get_checkout_url(),
+        'cartUrl' => wc_get_cart_url(),
+        'shopUrl' => get_permalink(wc_get_page_id('shop')),
+        'isDebug' => defined('WP_DEBUG') && WP_DEBUG,
+        'nonce' => wp_create_nonce('mitnafun-ajax-nonce')
+    ));
+}
+
+// Enqueue modular JS files with priority 25 (after WooCommerce but before other custom scripts)
+add_action('wp_enqueue_scripts', 'enqueue_modular_js_files', 25);

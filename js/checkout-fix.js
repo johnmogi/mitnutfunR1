@@ -1,13 +1,22 @@
 /**
  * Checkout page fix
  * Removes any stuck spinners on the checkout page
+ * UPDATED: Now integrates with the modular JS system
  */
 jQuery(document).ready(function($) {
-    console.log('Checkout fix script loaded');
+    // Use the centralized logger if available
+    const log = window.MitnaFunLogger || {
+        debug: function(msg) { /* console.debug(msg); */ },
+        info: function(msg) { /* console.info(msg); */ },
+        warn: console.warn.bind(console, '[Checkout Fix]'),
+        error: console.error.bind(console, '[Checkout Fix]')
+    };
+    
+    log.info('Checkout fix script loaded');
     
     // Function to ensure checkout review table has items
     function ensureCheckoutItems() {
-        console.log('Ensuring checkout items are displayed...');
+        log.debug('Ensuring checkout items are displayed...');
         
         // If we're on the checkout page
         if (window.location.href.includes('/checkout/')) {
@@ -29,10 +38,10 @@ jQuery(document).ready(function($) {
                     security: checkoutNonce
                 },
                 success: function(response) {
-                    console.log('Cart status check response:', response);
+                    log.debug('Cart status check response:', response);
                     
                     if (response.success && response.cart_count > 0) {
-                        console.log('Server confirms cart has ' + response.cart_count + ' items');
+                        log.info('Server confirms cart has ' + response.cart_count + ' items');
                         
                         // Force update checkout
                         if ($('form.checkout').length) {
@@ -41,13 +50,13 @@ jQuery(document).ready(function($) {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error checking cart status:', error);
+                    log.error('Error checking cart status:', error);
                 }
             });
             
             // Try different ways to access cart count
             if (typeof wc_cart_fragments_params !== 'undefined') {
-                console.log('WooCommerce cart fragments found');
+                log.debug('WooCommerce cart fragments found');
                 
                 // Force fragment refresh
                 $(document.body).trigger('wc_fragment_refresh');
@@ -57,10 +66,10 @@ jQuery(document).ready(function($) {
             var $reviewTable = $('.woocommerce-checkout-review-order-table');
             if ($reviewTable.length > 0) {
                 var hasItems = $reviewTable.find('tr.cart_item').length > 0;
-                console.log('Review order table found, has items:', hasItems);
+                log.debug('Review order table found, has items:', hasItems);
                 
                 if (!hasItems) {
-                    console.log('No items in review table, attempting to reload');
+                    log.info('No items in review table, attempting to reload');
                     
                     // Show loading message
                     $reviewTable.prepend('<tr class="loading-items"><td colspan="2">טוען פריטים...</td></tr>');
@@ -69,23 +78,23 @@ jQuery(document).ready(function($) {
                     setTimeout(function() {
                         // Check again if items appeared
                         if ($reviewTable.find('tr.cart_item').length === 0) {
-                            console.log('Still no items, attempting cart recovery instead of reload');
+                            log.warn('Still no items, attempting cart recovery instead of reload');
                             
                             // Show a more informative message
                             $reviewTable.find('.loading-items').html('<td colspan="2">מנסה לשחזר את עגלת הקניות...</td>');
                             
                             // Try to recover cart state via WooCommerce fragments
                             if (typeof wc_cart_fragments_params !== 'undefined') {
-                                console.log('Triggering fragment refresh to recover cart');
+                                log.info('Triggering fragment refresh to recover cart');
                                 $(document.body).trigger('wc_fragment_refresh');
                                 
                                 // Check again after fragment refresh
                                 setTimeout(function() {
                                     if ($reviewTable.find('tr.cart_item').length > 0) {
-                                        console.log('Cart recovered through fragments');
+                                        log.info('Cart recovered through fragments');
                                         $reviewTable.find('.loading-items').remove();
                                     } else {
-                                        console.log('Recovery failed, showing error message');
+                                        log.warn('Recovery failed, showing error message');
                                         // Instead of reload, show user-friendly error message
                                         $reviewTable.find('.loading-items')
                                             .html('<td colspan="2">העגלה ריקה או שיש בעיה בטעינת הפריטים. <a href="/shop/">חזרה לחנות</a></td>')
@@ -101,7 +110,7 @@ jQuery(document).ready(function($) {
                                     .addClass('empty-cart-message');
                             }
                         } else {
-                            console.log('Items appeared, removing loading message');
+                            log.info('Items appeared, removing loading message');
                             $reviewTable.find('.loading-items').remove();
                         }
                     }, 2000);
@@ -112,14 +121,14 @@ jQuery(document).ready(function($) {
             if (sessionStorage.getItem('last_added_rental')) {
                 try {
                     const rentalData = JSON.parse(sessionStorage.getItem('last_added_rental'));
-                    console.log('Found rental data in session:', rentalData);
+                    log.debug('Found rental data in session:', rentalData);
                     
                     // Add debug info
                     $('<div class="rental-debug" style="display:none;">Last added: ' + 
                       rentalData.product_id + ' - ' + rentalData.rental_dates + '</div>')
                       .appendTo('.woocommerce-checkout');
                 } catch (e) {
-                    console.error('Error parsing rental data:', e);
+                    log.error('Error parsing rental data:', e);
                 }
             }
         }
@@ -136,7 +145,14 @@ jQuery(document).ready(function($) {
     
     // Run initially
     removeStuckSpinners();
-    setTimeout(ensureCheckoutItems, 500);
+    
+    // Check if we're using the new modular system
+    if (window.CheckoutValidator) {
+        log.info('Using new checkout validator module');
+    } else {
+        log.info('Legacy mode: using built-in checkout validation');
+        setTimeout(ensureCheckoutItems, 500);
+    }
     
     // Also run on AJAX events
     $(document).ajaxComplete(function() {
@@ -150,4 +166,12 @@ jQuery(document).ready(function($) {
     
     // Set periodic check to make sure no spinners get stuck
     setInterval(removeStuckSpinners, 2000);
+    
+    // Use the Cart Integration module if available
+    if (window.CartIntegration && typeof CartIntegration.forceShowCart === 'function') {
+        log.info('Using Cart Integration module for force show cart');
+        // Let the module handle this functionality
+    } else {
+        log.info('Legacy mode: using built-in force show cart');
+    }
 });

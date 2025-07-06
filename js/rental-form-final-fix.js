@@ -5,7 +5,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('FINAL RENTAL FORM FIX LOADED');
+    // console.log('FINAL RENTAL FORM FIX LOADED');
     
     // Global storage for rental dates
     window.lastSelectedRentalDates = '';
@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
         
         // If found, store globally and in all possible locations
         if (rentalDates) {
-            console.log('Final Fix - Captured rental dates:', rentalDates);
+            // console.log('Final Fix - Captured rental dates:', rentalDates);
             
             // Store globally
             window.lastSelectedRentalDates = rentalDates;
@@ -74,7 +74,7 @@ jQuery(document).ready(function($) {
             try {
                 rentalDates = sessionStorage.getItem('rental_dates') || window.lastSelectedRentalDates || '';
                 if (rentalDates) {
-                    console.log('Final Fix - Restored rental dates from storage:', rentalDates);
+                    // console.log('Final Fix - Restored rental dates from storage:', rentalDates);
                 }
             } catch (e) { console.warn('Failed to restore from sessionStorage', e); }
         }
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
             }
             $input.val(rentalDates);
             
-            console.log('Final Fix - Form submission with rental dates:', rentalDates);
+            // console.log('Final Fix - Form submission with rental dates:', rentalDates);
             
             // Call original handler if it exists
             if (typeof originalSubmit === 'function') {
@@ -114,12 +114,12 @@ jQuery(document).ready(function($) {
         $(document.body).on('adding_to_cart', function(e, $button, data) {
             const rentalDates = captureRentalDates();
             if (rentalDates) {
-                console.log('Final Fix - Adding rental dates to AJAX data:', rentalDates);
+                // console.log('Final Fix - Adding rental dates to AJAX data:', rentalDates);
                 data.rental_dates = rentalDates;
             }
         });
         
-        console.log('Final Fix - Enhanced add to cart form');
+        // console.log('Final Fix - Enhanced add to cart form');
     }
     
     // Display rental dates in cart/checkout even if they're missing
@@ -127,7 +127,7 @@ jQuery(document).ready(function($) {
         // Only run on cart or checkout pages
         if (!$('.woocommerce-cart-form,.woocommerce-checkout').length) return;
         
-        console.log('Final Fix - Enhancing cart display for rental dates');
+        // console.log('Final Fix - Enhancing cart display for rental dates');
         
         // Try to extract dates from URL parameters (they might be passed this way)
         function getUrlParam(name) {
@@ -137,7 +137,7 @@ jQuery(document).ready(function($) {
         
         const urlDates = getUrlParam('rental_dates');
         if (urlDates) {
-            console.log('Final Fix - Found rental dates in URL:', urlDates);
+            // console.log('Final Fix - Found rental dates in URL:', urlDates);
             window.lastSelectedRentalDates = urlDates;
         }
         
@@ -153,7 +153,7 @@ jQuery(document).ready(function($) {
                 
                 // Only add if there isn't already rental info
                 if (!$item.find('.rental-dates').length && !$item.find('.rental-info').length) {
-                    console.log('Final Fix - Adding rental dates to cart item');
+                    // console.log('Final Fix - Adding rental dates to cart item');
                     
                     // Create rental info display
                     const $rentalInfo = $(

@@ -8,7 +8,7 @@
     // Debug logging helper
     function debugLog(...args) {
         if (window.rentalDebugEnabled) {
-            console.log('[Block Disabled Dates]', ...args);
+            // console.log('[Block Disabled Dates]', ...args);
         }
     }
     
@@ -104,7 +104,60 @@
         return false;
     }
 
-    // Add validation to cart form submission
+    // Show error message with visual feedback
+    function showErrorMessage($targetElement, message, isCheckout = false) {
+        // Default error message if none provided
+        const errorMsg = message || 'לא ניתן להזמין בתאריכים אלו - תאריכים מסומנים כלא זמינים';
+        
+        // Make button visibly disabled with animation
+        $targetElement.addClass('disabled-with-dates');
+        $targetElement.css('position', 'relative');
+        
+        // Add visual feedback to the button
+        if (!$targetElement.find('.disabled-overlay').length) {
+            $targetElement.append('<div class="disabled-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.2); z-index: 10;"></div>');
+        }
+        
+        // Create or update error message
+        if ($('.rental-date-error').length) {
+            $('.rental-date-error')
+                .html(errorMsg + '<br><span class="error-instruction">(בחר/י תאריך אחר)</span>')
+                .show();
+        } else {
+            const $errorDiv = $('<div class="rental-date-error"></div>')
+                .html(errorMsg + '<br><span class="error-instruction">(בחר/י תאריך אחר)</span>');
+            
+            // Insert in appropriate location based on context
+            if (isCheckout) {
+                $errorDiv.insertBefore($targetElement.closest('form'));
+            } else {
+                $errorDiv.insertAfter($targetElement);
+            }
+        }
+        
+        // Add animation to draw attention
+        $('.rental-date-error').hide().fadeIn(300);
+        $targetElement.find('.disabled-overlay').css('opacity', '0').animate({opacity: 0.2}, 300);
+        
+        // Safely scroll to error message after ensuring it's in the DOM
+        setTimeout(function() {
+            const $errorElement = $('.rental-date-error');
+            if ($errorElement.length && typeof $errorElement.offset() !== 'undefined') {
+                $('html, body').animate({
+                    scrollTop: $errorElement.offset().top - 100
+                }, 500);
+            }
+        }, 100);
+    }
+    
+    // Clear error state
+    function clearErrorState() {
+        $('.rental-date-error').hide();
+        $('.disabled-with-dates').removeClass('disabled-with-dates');
+        $('.disabled-overlay').remove();
+    }
+
+    // Add validation to cart form submission and checkout
     function blockDisabledDates() {
         debugLog('Setting up disabled date blocking');
         
@@ -133,27 +186,17 @@
                 e.preventDefault(); // Stop form submission
                 e.stopPropagation();
                 
-                // Show error message
-                const errorMsg = 'לא ניתן להזמין בתאריכים אלו - תאריכים מסומנים כלא זמינים';
-                
-                // Create or update error message
-                if ($('.rental-date-error').length) {
-                    $('.rental-date-error').text(errorMsg).show();
-                } else {
-                    $('<div class="rental-date-error" style="color: red; margin-top: 10px; font-weight: bold;"></div>')
-                        .text(errorMsg)
-                        .insertAfter($form.find('.single_add_to_cart_button'));
-                }
+                showErrorMessage($form.find('.single_add_to_cart_button'));
                 
                 debugLog('Blocked order with disabled dates');
                 return false;
             }
             
             // Clear any previous error messages
-            $('.rental-date-error').hide();
+            clearErrorState();
         });
         
-        // Also add validation to the direct add-to-cart button click
+        // Direct add-to-cart button click validation
         $(document).on('click', '.single_add_to_cart_button', function(e) {
             // Only if not within a form (direct add to cart buttons)
             if (!$(this).closest('form.cart').length) {
@@ -175,24 +218,54 @@
                     e.preventDefault(); // Stop button action
                     e.stopPropagation();
                     
-                    // Show error message
-                    const errorMsg = 'לא ניתן להזמין בתאריכים אלו - תאריכים מסומנים כלא זמינים';
-                    
-                    // Create or update error message
-                    if ($('.rental-date-error').length) {
-                        $('.rental-date-error').text(errorMsg).show();
-                    } else {
-                        $('<div class="rental-date-error" style="color: red; margin-top: 10px; font-weight: bold;"></div>')
-                            .text(errorMsg)
-                            .insertAfter($(this));
-                    }
+                    showErrorMessage($(this));
                     
                     debugLog('Blocked direct add-to-cart with disabled dates');
                     return false;
                 }
                 
                 // Clear any previous error messages
-                $('.rental-date-error').hide();
+                clearErrorState();
+            }
+        });
+        
+        // Handle checkout page - Place Order button
+        $(document).on('click', '#place_order', function(e) {
+            debugLog('Place Order clicked - checking dates');
+            
+            // Look for rental date items in the checkout order review
+            let hasDisabledDates = false;
+            
+            // Find all rental date items in checkout
+            $('.woocommerce-checkout-review-order-table .cart_item').each(function() {
+                const itemText = $(this).text();
+                
+                // Look for rental date information pattern
+                const dateMatch = itemText.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})\s*-\s*([0-9]{4}-[0-9]{2}-[0-9]{2})/);
+                if (dateMatch && dateMatch.length === 3) {
+                    const startDate = dateMatch[1];
+                    const endDate = dateMatch[2];
+                    
+                    debugLog('Found checkout rental dates:', startDate, endDate);
+                    
+                    // Check if this range has disabled dates
+                    if (hasDisabledDatesInRange(startDate, endDate)) {
+                        hasDisabledDates = true;
+                        debugLog('Blocked checkout - found disabled date in range');
+                        return false; // Break the loop
+                    }
+                }
+            });
+            
+            // If disabled dates found, prevent checkout
+            if (hasDisabledDates) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                showErrorMessage($(this), 'לא ניתן להשלים את ההזמנה - ההזמנה כוללת תאריכים לא זמינים', true);
+                return false;
+            } else {
+                clearErrorState();
             }
         });
     }

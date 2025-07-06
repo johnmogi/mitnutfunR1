@@ -10,7 +10,7 @@
 
 // Execute immediately with self-invoking function
 (function() {
-    console.log('🚀 WEEKEND FIX: Direct patching mode initialized');
+    // console.log('🚀 WEEKEND FIX: Direct patching mode initialized');
     
     // Global state tracking
     let patched = false;
@@ -29,7 +29,7 @@
      * Main initialization function
      */
     function init() {
-        console.log('⚡ Weekend Fix: Starting initialization');
+        // console.log('⚡ Weekend Fix: Starting initialization');
         
         // Try immediate patch if possible
         tryPatch();
@@ -48,11 +48,11 @@
             
             // Try to patch again
             if (!patched) {
-                console.log(`🔄 Weekend Fix: Attempt ${attemptCount}/${MAX_ATTEMPTS}`);
+                // console.log(`🔄 Weekend Fix: Attempt ${attemptCount}/${MAX_ATTEMPTS}`);
                 tryPatch();
             } else {
                 clearInterval(patchInterval);
-                console.log('✅ Weekend Fix: Successfully patched AirDatepicker');
+                // console.log('✅ Weekend Fix: Successfully patched AirDatepicker');
             }
             
             // Give up after max attempts
@@ -81,7 +81,7 @@
         }
                 
                 clearInterval(checkInterval);
-                console.log('✅ AirDatepicker detected, applying weekend detection patch');
+                // console.log('✅ AirDatepicker detected, applying weekend detection patch');
                 
                 // Hook into the onSelect event of all datepickers
                 window.$airDatepickers.forEach(datepicker => {
@@ -98,7 +98,7 @@
                     };
                 });
                 
-                console.log('✅ Weekend detection patch applied to all datepickers');
+                // console.log('✅ Weekend detection patch applied to all datepickers');
             }
         }, 500);
     }
@@ -114,16 +114,16 @@
             return;
         }
         
-        console.log('🔍 Analyzing selected date range for weekend detection');
+        // console.log('🔍 Analyzing selected date range for weekend detection');
         
         // Get all selected cells from the datepicker
         const selectedCells = document.querySelectorAll('.air-datepicker-cell.-day-.-selected-, .air-datepicker-cell.-day-.-in-range-');
         if (!selectedCells.length) {
-            console.log('⚠️ No selected cells found in DOM');
+            // console.log('⚠️ No selected cells found in DOM');
             return;
         }
         
-        console.log(`🔢 Found ${selectedCells.length} selected cells in calendar DOM`);
+        // console.log(`🔢 Found ${selectedCells.length} selected cells in calendar DOM`);
         
         // Map DOM cells to date objects with weekend flags
         const dates = Array.from(selectedCells).map(cell => {
@@ -137,7 +137,7 @@
                               
             const dateStr = `${year}-${month}-${day}`;
             
-            console.log(`📅 ${dateStr}: ${isWeekend ? 'WEEKEND' : 'WEEKDAY'} ${Array.from(cell.classList).join(' ')}`);
+            // console.log(`📅 ${dateStr}: ${isWeekend ? 'WEEKEND' : 'WEEKDAY'} ${Array.from(cell.classList).join(' ')}`);
             
             return {
                 date: dateStr,
@@ -163,7 +163,7 @@
         const shouldBeOneDay = (allWeekends || isThreeDay && hasWeekend);
         
         if (shouldBeOneDay) {
-            console.log('🎯 Weekend-only rental detected! Should be 1 rental day');
+            // console.log('🎯 Weekend-only rental detected! Should be 1 rental day');
             
             // Get rental days display element
             const rentalDaysEl = document.querySelector('.rental-days-result');
@@ -173,7 +173,7 @@
                 // Only update if showing more than 1 day
                 if (currentText.includes('2') || currentText.includes('3')) {
                     rentalDaysEl.textContent = '1';
-                    console.log('✅ Updated rental days display to 1');
+                    // console.log('✅ Updated rental days display to 1');
                     
                     // Trigger price recalculation
                     updatePriceDisplay(1);
@@ -216,7 +216,7 @@
             breakdownEl.innerHTML = breakdown;
         }
         
-        console.log(`💰 Updated price display for ${rentalDays} rental days: ${total.toFixed(2)}₪`);
+        // console.log(`💰 Updated price display for ${rentalDays} rental days: ${total.toFixed(2)}₪`);
     }
     
     // Run the patch

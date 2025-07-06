@@ -5,30 +5,30 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('RENTAL FIXER LOADED');
+    // console.log('RENTAL FIXER LOADED');
     
     // Force rental debug on
     window.rentalDebug = true;
     
     // Create console dump of cart data
     function dumpCartData() {
-        console.log('==== CART DATA DUMP ====');
+        // console.log('==== CART DATA DUMP ====');
         if (typeof wc_cart_data !== 'undefined') {
-            console.log('WooCommerce cart data:', wc_cart_data);
+            // console.log('WooCommerce cart data:', wc_cart_data);
         } else {
-            console.log('No wc_cart_data found');
+            // console.log('No wc_cart_data found');
         }
         
         // Dump cart fragments if available
         if (typeof wc_cart_fragments_params !== 'undefined') {
-            console.log('WooCommerce cart fragments:', wc_cart_fragments_params);
+            // console.log('WooCommerce cart fragments:', wc_cart_fragments_params);
         }
         
         // Iterate over any cart items in the DOM
-        console.log('DOM Cart Items:');
+        // console.log('DOM Cart Items:');
         $('.cart_item, .item').each(function(i) {
             const $item = $(this);
-            console.log('Cart item ' + i + ':', {
+            // console.log('Cart item ' + i + ':', {
                 product_id: $item.data('product-id') || 'unknown',
                 hasRentalDates: $item.find('.rental-dates, .rental-dates-display').length > 0,
                 hasRentalDays: $item.find('.rental-days, .rental-days-display').length > 0,
@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
             const $item = $(this);
             const productId = $item.data('product-id') || 'unknown';
             
-            console.log('Processing item:', productId);
+            // console.log('Processing item:', productId);
             
             // First, check if we can find any rental dates
             let rentalDates = '';
@@ -55,13 +55,13 @@ jQuery(document).ready(function($) {
                 const text = $(this).text().toLowerCase();
                 if (text.includes('rental') || text.includes('date')) {
                     rentalDates = $(this).next('dd').text() || text;
-                    console.log('Found rental dates:', rentalDates);
+                    // console.log('Found rental dates:', rentalDates);
                 }
             });
             
             // If we found dates, create our display
             if (rentalDates) {
-                console.log('Adding rental dates display for item:', productId);
+                // console.log('Adding rental dates display for item:', productId);
                 
                 // Create a rental dates display if it doesn't exist
                 if (!$item.find('.rental-dates-display').length) {
@@ -175,7 +175,7 @@ jQuery(document).ready(function($) {
     
     // Run diagnostic and fix
     function runTests() {
-        console.log('Running rental display tests and fixes...');
+        // console.log('Running rental display tests and fixes...');
         dumpCartData();
         addRentalStyles();
         forceFixRentalPrices();

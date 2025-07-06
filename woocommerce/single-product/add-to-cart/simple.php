@@ -94,7 +94,7 @@ if ( $product->is_in_stock() ) : ?>
                 const quantity = $('input[name="quantity"]').val() || 1;
                 const rentalDates = $('#rental_dates').val();
                 
-                console.log('Direct checkout clicked with:', { productId, quantity, rentalDates });
+                // console.log('Direct checkout clicked with:', { productId, quantity, rentalDates });
                 
                 if (!productId || !rentalDates) {
                     alert('בבקשה בחר תאריכי השכרה לפני ההמשך לתשלום');
@@ -119,7 +119,7 @@ if ( $product->is_in_stock() ) : ?>
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Add to cart response:', data);
+                    // console.log('Add to cart response:', data);
                     if (data.error) {
                         alert(data.message || 'שגיאה בהוספת המוצר לסל. אנא נסה שוב.');
                         $(this).text('להזמנה').css('opacity', '1');

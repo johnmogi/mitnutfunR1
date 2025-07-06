@@ -3,9 +3,9 @@
  * Run this in the browser console to check if rental day calculations are correct
  */
 (function() {
-    console.log('=============================================');
-    console.log('RENTAL CALCULATION HOTFIX TEST');
-    console.log('=============================================');
+    // console.log('=============================================');
+    // console.log('RENTAL CALCULATION HOTFIX TEST');
+    // console.log('=============================================');
     
     // Test cases
     const testCases = [
@@ -29,13 +29,13 @@
     
     // Run tests for both calculation methods
     testCases.forEach(test => {
-        console.log(`\nTest: ${test.name}`);
-        console.log('--------------------------');
+        // console.log(`\nTest: ${test.name}`);
+        // console.log('--------------------------');
         
         // Test DOM-based calculation
         const domResult = calculateRentalDaysFromCalendar(test.start, test.end);
         const domDaysCorrect = domResult.rentalDays === test.expectedRentalDays;
-        console.log(`DOM Calculation: ${domDaysCorrect ? '✅' : '❌'} - ${domResult.rentalDays} rental days (Expected: ${test.expectedRentalDays})`);
+        // console.log(`DOM Calculation: ${domDaysCorrect ? '✅' : '❌'} - ${domResult.rentalDays} rental days (Expected: ${test.expectedRentalDays})`);
         
         // Test Date-based calculation
         const dateResult = calculateRentalChargeDays(
@@ -43,13 +43,13 @@
             new Date(test.end)
         );
         const dateDaysCorrect = dateResult.chargeDays === test.expectedRentalDays;
-        console.log(`Date Calculation: ${dateDaysCorrect ? '✅' : '❌'} - ${dateResult.chargeDays} rental days (Expected: ${test.expectedRentalDays})`);
+        // console.log(`Date Calculation: ${dateDaysCorrect ? '✅' : '❌'} - ${dateResult.chargeDays} rental days (Expected: ${test.expectedRentalDays})`);
         
         // Check price breakdown
         if (domResult.breakdown) {
-            console.log('\nBreakdown:');
+            // console.log('\nBreakdown:');
             domResult.breakdown.forEach(item => {
-                console.log(`- ${item.label}: ${item.amount}₪`);
+                // console.log(`- ${item.label}: ${item.amount}₪`);
             });
             
             // Verify total
@@ -57,15 +57,15 @@
             const discountedPrice = 350;
             const expectedTotal = basePrice + (test.expectedDiscountedDays * discountedPrice);
             const totalCorrect = Math.abs(domResult.total - expectedTotal) < 1; // Allow for tiny float precision
-            console.log(`\nTotal Price: ${totalCorrect ? '✅' : '❌'} - ${domResult.total}₪ (Expected: ${expectedTotal}₪)`);
+            // console.log(`\nTotal Price: ${totalCorrect ? '✅' : '❌'} - ${domResult.total}₪ (Expected: ${expectedTotal}₪)`);
         }
         
         // Overall test result
         const testPassed = domDaysCorrect && dateDaysCorrect;
-        console.log(`\nOverall Result: ${testPassed ? '✅ PASSED' : '❌ FAILED'}`);
+        // console.log(`\nOverall Result: ${testPassed ? '✅ PASSED' : '❌ FAILED'}`);
     });
     
-    console.log('\n=============================================');
-    console.log('TEST COMPLETE');
-    console.log('=============================================');
+    // console.log('\n=============================================');
+    // console.log('TEST COMPLETE');
+    // console.log('=============================================');
 })();

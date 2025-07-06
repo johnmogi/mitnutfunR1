@@ -85,7 +85,7 @@
         
         if (!isCartPage && !isCheckoutPage) return;
         
-        console.log('[Cart Fix] Checking if cart needs to be forced visible on ' + (isCartPage ? 'cart' : 'checkout') + ' page...');
+        // console.log('[Cart Fix] Checking if cart needs to be forced visible on ' + (isCartPage ? 'cart' : 'checkout') + ' page...');
         
         // Check if cart empty message is showing
         const $emptyNotice = $('.cart-empty.woocommerce-info, .woocommerce-info:contains("עגלת הקניות שלך ריקה")');
@@ -95,14 +95,14 @@
         
         // If empty notice is showing but cart fragments exist (meaning cart has items)
         if ($emptyNotice.length > 0 && typeof wc_cart_fragments_params !== 'undefined') {
-            console.log('[Cart Fix] Empty cart showing but fragments exist - fixing visibility');
+            // console.log('[Cart Fix] Empty cart showing but fragments exist - fixing visibility');
             
             // Hide empty cart notice
             $emptyNotice.hide();
             
             // If cart/checkout content is hidden or missing
             if ($cartTable.length === 0 || !$cartTable.is(':visible')) {
-                console.log('[Cart Fix] Cart/checkout content missing or hidden - fixing...');
+                // console.log('[Cart Fix] Cart/checkout content missing or hidden - fixing...');
                 
                 // Show loading message
                 $('<div class="woocommerce-info">טוען את פריטי העגלה שלך...</div>').insertAfter($emptyNotice);
@@ -112,7 +112,7 @@
                 
                 // If completely missing, force reload after updating fragments
                 if ($cartTable.length === 0) {
-                    console.log('[Cart Fix] Content missing completely - will reload page');
+                    // console.log('[Cart Fix] Content missing completely - will reload page');
                     
                     // Store a flag indicating we're fixing the cart
                     sessionStorage.setItem('fixing_cart', 'true');
@@ -131,7 +131,7 @@
             
             // If the cart is still empty after our fix attempt
             if ($('.woocommerce-checkout-review-order-table').length === 0 && isCheckoutPage) {
-                console.log('[Cart Fix] Still empty after reload - redirecting to shop');
+                // console.log('[Cart Fix] Still empty after reload - redirecting to shop');
                 $('<div class="woocommerce-info">העגלה ריקה, מוביל לחנות...</div>').insertAfter($('h1').first());
                 
                 // Redirect to shop after a delay
@@ -144,7 +144,7 @@
     
     // Debug logging helper
     function debugLog(...args) {
-        console.log('[Cart Rental Fix]', ...args);
+        // console.log('[Cart Rental Fix]', ...args);
     }
     
     // Configuration
@@ -664,11 +664,11 @@
                 $item.css('position', 'relative').append($loader);
                 
                 // Debug current state
-                console.log('Removing item with cart_item_key:', cartItemKey, 'nonce:', nonce, 'href:', href);
+                // console.log('Removing item with cart_item_key:', cartItemKey, 'nonce:', nonce, 'href:', href);
                 
                 // Try direct WC API approach first
                 if (typeof wc_add_to_cart_params !== 'undefined') {
-                    console.log('Using WC API for removal');
+                    // console.log('Using WC API for removal');
                     
                     // Use WooCommerce's own AJAX endpoint for cart removal
                     $.ajax({
@@ -681,11 +681,11 @@
                         },
                         dataType: 'json',
                         success: function(response) {
-                            console.log('AJAX removal response:', response);
+                            // console.log('AJAX removal response:', response);
                             
                             // Check if we got a successful response with fragments
                             if (response && response.fragments) {
-                                console.log('Got fragments, updating cart');  
+                                // console.log('Got fragments, updating cart');  
                                 
                                 // Update each fragment
                                 $.each(response.fragments, function(key, value) {
@@ -701,7 +701,7 @@
                                 if (response.cart_hash !== undefined) {
                                     // If empty cart now, show empty message
                                     if ($('.item').length <= 1) { // This item is about to be removed
-                                        console.log('Cart now empty, showing empty message');
+                                        // console.log('Cart now empty, showing empty message');
                                         $('.basket-wrap .woocommerce').addClass('cart-empty');
                                     }
                                 }
@@ -713,7 +713,7 @@
                                     fixRentalDateDisplay();
                                 }, 300);
                             } else {
-                                console.log('Invalid response from server:', response);
+                                // console.log('Invalid response from server:', response);
                                 // Fallback to href navigation
                                 if (href) {
                                     window.location.href = href;
@@ -724,10 +724,10 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.log('AJAX removal error:', error, xhr.responseText);
+                            // console.log('AJAX removal error:', error, xhr.responseText);
                             
                             // Try a second approach with different parameters
-                            console.log('Trying second AJAX approach');
+                            // console.log('Trying second AJAX approach');
                             $.ajax({
                                 type: 'POST',
                                 url: wc_add_to_cart_params.ajax_url,
@@ -744,7 +744,7 @@
                                 },
                                 error: function() {
                                     // All AJAX approaches failed, use direct URL
-                                    console.log('Both AJAX approaches failed, using direct URL');
+                                    // console.log('Both AJAX approaches failed, using direct URL');
                                     if (href) {
                                         window.location.href = href;
                                     } else {
@@ -765,7 +765,7 @@
                     });
                 } else {
                     // WC params not defined, use direct URL navigation
-                    console.log('WC params not available, using direct URL');
+                    // console.log('WC params not available, using direct URL');
                     if (href) {
                         window.location.href = href;
                     } else {
@@ -895,7 +895,7 @@
             
             if (!rentalDatesText || rentalDatesText.indexOf(' - ') === -1) return;
             
-            console.log('Found rental dates in checkout item:', rentalDatesText);
+            // console.log('Found rental dates in checkout item:', rentalDatesText);
             
             // Calculate correct rental days using our standard logic
             const dateParts = rentalDatesText.split(' - ');
@@ -922,11 +922,11 @@
                 // Apply special Friday-Sunday = 1 day rule
                 if (startDay === 5 && endDay === 0 && diffDays <= 3) {
                     rentalDays = 1;
-                    console.log('Applied Friday-Sunday special rule to checkout item:', dateParts, 'days:', rentalDays);
+                    // console.log('Applied Friday-Sunday special rule to checkout item:', dateParts, 'days:', rentalDays);
                 } else {
                     // Apply standard rental day counting logic (day count is reduced by one)
                     rentalDays = Math.max(1, diffDays - 1);
-                    console.log('Applied standard rental day counting to checkout item:', dateParts, 'days:', rentalDays);
+                    // console.log('Applied standard rental day counting to checkout item:', dateParts, 'days:', rentalDays);
                 }
                 
                 // Update any displayed rental days text
@@ -969,7 +969,7 @@
                     // Format the currency symbol
                     const currency = '₪';
                     
-                    console.log('Updating checkout item price:', {
+                    // console.log('Updating checkout item price:', {
                         rentalDays: rentalDays,
                         basePrice: basePrice,
                         totalPrice: totalPrice.toFixed(2)
@@ -1016,7 +1016,7 @@
                     $priceContainer.after(breakdownHtml);
                 }
             } catch (err) {
-                console.error('Error processing checkout review dates:', err);
+                logger.error('Error processing checkout review dates:', err);
             }
         }
         
@@ -1158,21 +1158,33 @@
                             </div>
                         </div>`;
                     
-                    // Insert the breakdown after the cost div
-                    $priceContainer.after(breakdownHtml);
+// Insert the breakdown after the cost div
+$priceContainer.after(breakdownHtml);
                     
-                    // Add class to indicate we've fixed this item
-                    $item.addClass('rental-price-fixed');
-                }
+// Add class to indicate we've fixed this item
+$item.addClass('rental-price-fixed');
+}
+}
+    }
+}
+
+    // Initialize functionality when document is ready
+    jQuery(document).ready(function($) {
+        'use strict';
+        
+        // Check if we're using the new modular system
+        if (window.CartIntegration) {
+            logger.info('Using CartIntegration module for date recovery and cart functionality');
+            // Let the CartIntegration module handle this
+        } else {
+            logger.info('Using legacy date recovery implementation');
+            try {
+                setupDateRecovery();
             } catch (err) {
-                debugLog('Error calculating rental days:', err);
+                logger.error('Error in date recovery setup:', err);
             }
         }
-    }
-    
-    // Initialize date recovery
-    $(document).ready(function() {
-        setupDateRecovery();
     });
+})(jQuery);
 
 })(jQuery);

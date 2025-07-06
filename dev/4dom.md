@@ -490,7 +490,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </style>
                 <script>
                 jQuery(document).ready(function($) {
-                    console.log('Initializing rental calendar...');
+                    // console.log('Initializing rental calendar...');
                     
                     // Check if AirDatepicker is available
                     if (typeof AirDatepicker === 'undefined') {
@@ -500,8 +500,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                     const initialStock = 8;
                     const bookedDates = [];
-                    console.log('Loaded booked dates:', bookedDates);
-                    console.log('Initial stock:', initialStock);
+                    // console.log('Loaded booked dates:', bookedDates);
+                    // console.log('Initial stock:', initialStock);
 
                     // Track reservation counts per date
                     const reservationCounts = {};
@@ -559,13 +559,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         return dates;
                     });
                     
-                    console.log('Formatted booked dates:', formattedBookedDates);
+                    // console.log('Formatted booked dates:', formattedBookedDates);
 
                     const tomorrow = new Date();
                     tomorrow.setDate(tomorrow.getDate() + 1);
                     tomorrow.setHours(0, 0, 0, 0);
                     
-                    console.log('Initializing datepicker with min date:', tomorrow);
+                    // console.log('Initializing datepicker with min date:', tomorrow);
                     
                     try {
                         const datepicker = new AirDatepicker('#datepicker-container', {
@@ -587,7 +587,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             },
                             onSelect({date, formattedDate}) {
                                 try {
-                                    console.log('Date selected:', { date, formattedDate });
+                                    // console.log('Date selected:', { date, formattedDate });
                                     
                                     if (date) {
                                         // Check if any date in the range is fully booked
@@ -620,7 +620,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                                 $('#rental_dates').val(dateRange);
                                                 $('[name="quantity"]').val(diffDays);
                                                 $('.btn-wrap button').prop('disabled', false);
-                                                console.log('Date range selected:', dateRange, 'Days:', diffDays);
+                                                // console.log('Date range selected:', dateRange, 'Days:', diffDays);
                                             }
                                         } 
                                         // For single day selection
@@ -636,10 +636,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                             $('#rental_dates').val(formattedDate);
                                             $('[name="quantity"]').val(1);
                                             $('.btn-wrap button').prop('disabled', false);
-                                            console.log('Single day selected:', formattedDate);
+                                            // console.log('Single day selected:', formattedDate);
                                         }
                                     } else {
-                                        console.log('No date selected');
+                                        // console.log('No date selected');
                                         $('.btn-wrap button').prop('disabled', true);
                                     }
                                 } catch (error) {
@@ -655,14 +655,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         const isPartiallyBooked = reservationCount > 0 && !isFullyBooked;
                                         
                                         if (isFullyBooked) {
-                                            console.log('Date is fully booked:', formattedDate, 'Reservations:', reservationCount);
+                                            // console.log('Date is fully booked:', formattedDate, 'Reservations:', reservationCount);
                                             return {
                                                 disabled: true,
                                                 classes: 'is-fully-booked',
                                                 title: 'No availability - fully booked'
                                             };
                                         } else if (isPartiallyBooked) {
-                                            console.log('Date is partially booked:', formattedDate, 'Reservations:', reservationCount, 'of', initialStock);
+                                            // console.log('Date is partially booked:', formattedDate, 'Reservations:', reservationCount, 'of', initialStock);
                                             return {
                                                 disabled: false,
                                                 classes: 'is-partially-booked',
@@ -678,17 +678,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             },
                             onShow(isFinished) {
                                 if (isFinished) {
-                                    console.log('Datepicker shown');
+                                    // console.log('Datepicker shown');
                                 }
                             },
                             onHide(isFinished) {
                                 if (isFinished) {
-                                    console.log('Datepicker hidden');
+                                    // console.log('Datepicker hidden');
                                 }
                             }
                         });
                         
-                        console.log('Datepicker initialized successfully');
+                        // console.log('Datepicker initialized successfully');
                         
                         // Store datepicker instance for debugging
                         window.rentalDatepicker = datepicker;
@@ -1030,31 +1030,31 @@ var the_lmp_js_data = {"type":"more_button","update_url":"1","use_mobile":"","mo
         jQuery(document).ready(function($) {
             // Wait for calendar to be fully loaded
             setTimeout(function() {
-                console.log('🛠 Stock Debugger - Calendar Loaded');
+                // console.log('🛠 Stock Debugger - Calendar Loaded');
                 
                 // Extract initial stock from global variable
                 if (window.initialStock !== undefined) {
-                    console.log('🛠 Stock Debugger - Initial Stock from global:', window.initialStock);
+                    // console.log('🛠 Stock Debugger - Initial Stock from global:', window.initialStock);
                 }
                 
                 // Extract stock quantity from global variable
                 if (window.stockQuantity !== undefined) {
-                    console.log('🛠 Stock Debugger - Stock Quantity from global:', window.stockQuantity);
+                    // console.log('🛠 Stock Debugger - Stock Quantity from global:', window.stockQuantity);
                 }
                 
                 // Extract reserved dates from global variable
                 if (window.reservedDates !== undefined) {
-                    console.log('🛠 Stock Debugger - Reserved Dates from global:', window.reservedDates);
+                    // console.log('🛠 Stock Debugger - Reserved Dates from global:', window.reservedDates);
                 }
                 
                 // Extract reserved dates counts from global variable
                 if (window.reservedDatesCounts !== undefined) {
-                    console.log('🛠 Stock Debugger - Reserved Dates Counts from global:', window.reservedDatesCounts);
+                    // console.log('🛠 Stock Debugger - Reserved Dates Counts from global:', window.reservedDatesCounts);
                 }
                 
                 // Extract buffer dates from global variable
                 if (window.bufferDates !== undefined) {
-                    console.log('🛠 Stock Debugger - Buffer Dates from global:', window.bufferDates);
+                    // console.log('🛠 Stock Debugger - Buffer Dates from global:', window.bufferDates);
                 }
                 
                 // Add click handler to calendar cells to show debug info

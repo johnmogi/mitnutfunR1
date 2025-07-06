@@ -22,7 +22,7 @@ function getSelectedRentalMetadata() {
                       cell.classList.contains('air-datepicker-cell--weekend');
 
     // Log each detected cell for debugging
-    console.log(`Calendar Cell: ${year}-${month}-${day}, Weekend: ${isWeekend}`, cell.className);
+    // console.log(`Calendar Cell: ${year}-${month}-${day}, Weekend: ${isWeekend}`, cell.className);
 
     return {
       date: `${year}-${month}-${day}`,
@@ -78,9 +78,9 @@ function calculateRentalDaysFromDOM() {
   let weekendFound = false;
   
   // Log the selected dates
-  console.log("=== DOM-BASED RENTAL CALCULATION ===");
-  console.log(`Date Range: ${metadata.startDate} to ${metadata.endDate}`);
-  console.log("Selected dates:", selectedDates.map(d => 
+  // console.log("=== DOM-BASED RENTAL CALCULATION ===");
+  // console.log(`Date Range: ${metadata.startDate} to ${metadata.endDate}`);
+  // console.log("Selected dates:", selectedDates.map(d => 
     `${d.date}${d.isFirst ? ' (first)' : ''}: ${d.isWeekend ? 'WEEKEND' : 'WEEKDAY'}`
   ));
   
@@ -88,17 +88,17 @@ function calculateRentalDaysFromDOM() {
   restDays.forEach(day => {
     if (day.isWeekend) {
       weekendFound = true;
-      console.log(`${day.date}: Weekend day detected`);
+      // console.log(`${day.date}: Weekend day detected`);
     } else {
       weekdayCount++;
-      console.log(`${day.date}: Weekday detected`);
+      // console.log(`${day.date}: Weekday detected`);
     }
   });
   
   // Calculate weekday blocks (every 2 weekdays = 1 rental day)
   const weekdayBlocks = Math.floor(weekdayCount / 2);
-  console.log(`Weekday count: ${weekdayCount}, Weekday blocks: ${weekdayBlocks}`);
-  console.log(`Weekend found: ${weekendFound}`);
+  // console.log(`Weekday count: ${weekdayCount}, Weekday blocks: ${weekdayBlocks}`);
+  // console.log(`Weekend found: ${weekendFound}`);
   
   // Calculate total rental days
   // 1 for first day + weekday blocks + 1 if weekend included

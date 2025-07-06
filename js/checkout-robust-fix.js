@@ -3,23 +3,30 @@
  * Addresses critical checkout issues:
  * 1. Prevents broken UI when cart is cleared
  * 2. Ensures consistent pricing after page refreshes
+ * 
+ * UPDATED: Now integrates with the modular JS system
  */
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('CHECKOUT ROBUST FIX LOADED');
+    // Use the centralized logger if available
+    const logger = window.MitnaFunLogger || {
+        debug: function() {},
+        info: function() {},
+        warn: console.warn.bind(console, '[CHECKOUT-ROBUST-FIX]'),
+        error: console.error.bind(console, '[CHECKOUT-ROBUST-FIX]')
+    };
+    
+    logger.info('CHECKOUT ROBUST FIX LOADED');
     
     // Configuration
     const EXCLUDED_PRODUCT_IDS = [150, 153]; // Products excluded from the discount
-    const DEBUG = true; // Enable console logging
     
     /**
-     * Debug logger
+     * Debug logger (legacy compatibility wrapper)
      */
     function log(...args) {
-        if (DEBUG) {
-            console.log('[CHECKOUT-FIX]', ...args);
-        }
+        logger.debug(...args);
     }
     
     /**
@@ -370,13 +377,22 @@ jQuery(document).ready(function($) {
     
     // Initialize all fixes
     function init() {
-        // Handle empty cart scenarios
+        // Check if we're using the new modular system
+        if (window.CheckoutValidator) {
+            logger.info('Using CheckoutValidator module - some fixes may be handled by the module');
+        }
+        
+        if (window.CartIntegration) {
+            logger.info('Using CartIntegration module - some fixes may be handled by the module');
+        }
+        
+        // Handle empty cart scenarios (still needed as a fallback)
         handleEmptyCart();
         
         // Fix price inconsistencies
         fixPriceInconsistencies();
         
-        log('All checkout fixes initialized');
+        logger.info('All checkout fixes initialized');
     }
     
     // Initialize when ready

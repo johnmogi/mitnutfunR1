@@ -5,7 +5,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('CALENDAR RANGE VALIDATOR LOADED');
+    // console.log('CALENDAR RANGE VALIDATOR LOADED');
     
     /**
      * Initialize range validation for AirDatepicker
@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
         
         // Listen for AirDatepicker init
         $(document).on('airDatepickerInitialized', function(e, instance) {
-            console.log('Range Validator: AirDatepicker initialized');
+            // console.log('Range Validator: AirDatepicker initialized');
             datepickerInstance = instance;
             
             // Add custom validation to onSelect
@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
         
         // Listen for rental dates loaded event
         $(document).on('rentalDatesLoaded', function(e, data) {
-            console.log('Range Validator: Rental dates loaded event received', data);
+            // console.log('Range Validator: Rental dates loaded event received', data);
             
             if (!data || !data.bookedDates) {
                 return;
@@ -59,7 +59,7 @@ jQuery(document).ready(function($) {
                 }
             }
             
-            console.log('Range Validator: Fully booked dates:', fullyBookedDates);
+            // console.log('Range Validator: Fully booked dates:', fullyBookedDates);
         });
         
         /**
@@ -70,7 +70,7 @@ jQuery(document).ready(function($) {
                 return;
             }
             
-            console.log('Range Validator: Validating range', startDate, endDate);
+            // console.log('Range Validator: Validating range', startDate, endDate);
             
             let containsFullyBookedDays = false;
             let currentDate = new Date(startDate);
@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
                 
                 if (fullyBookedDates[dateKey]) {
                     containsFullyBookedDays = true;
-                    console.log('Range Validator: Found fully booked day within range:', dateKey);
+                    // console.log('Range Validator: Found fully booked day within range:', dateKey);
                     break;
                 }
                 
@@ -93,7 +93,7 @@ jQuery(document).ready(function($) {
             
             // If range contains fully booked days, reset the selection
             if (containsFullyBookedDays) {
-                console.log('Range Validator: Preventing invalid range selection');
+                // console.log('Range Validator: Preventing invalid range selection');
                 
                 // Show alert
                 alert('לא ניתן להזמין טווח תאריכים זה מכיוון שהוא מכיל תאריכים מלאים בין תאריך ההתחלה לסיום.');

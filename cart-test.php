@@ -54,7 +54,7 @@ add_shortcode('test_cart_checkout', function() {
             
             if (typeof wc_cart_fragments_params !== 'undefined') {
                 $result.text('PASS: wc_cart_fragments_params is defined').css('background', '#C8E6C9');
-                console.log('Cart fragments params:', wc_cart_fragments_params);
+                // console.log('Cart fragments params:', wc_cart_fragments_params);
             } else {
                 $result.text('FAIL: wc_cart_fragments_params is not defined').css('background', '#FFCDD2');
             }
@@ -70,7 +70,7 @@ add_shortcode('test_cart_checkout', function() {
             
             if (fragments) {
                 $result.text('PASS: Cart fragments found in localStorage').css('background', '#C8E6C9');
-                console.log('Cart fragments:', JSON.parse(fragments));
+                // console.log('Cart fragments:', JSON.parse(fragments));
             } else {
                 $result.text('FAIL: No cart fragments in localStorage').css('background', '#FFCDD2');
             }
@@ -99,7 +99,7 @@ add_shortcode('test_cart_checkout', function() {
             
             if (rentalDays === 1) {
                 $result.text('PASS: Friday-Sunday = 1 rental day').css('background', '#C8E6C9');
-                console.log('Rental days calculation correct:', {
+                // console.log('Rental days calculation correct:', {
                     startDate: fridayDate,
                     endDate: sundayDate,
                     diffDays,
@@ -107,7 +107,7 @@ add_shortcode('test_cart_checkout', function() {
                 });
             } else {
                 $result.text('FAIL: Friday-Sunday is not calculating as 1 day').css('background', '#FFCDD2');
-                console.log('Rental days calculation incorrect:', {
+                // console.log('Rental days calculation incorrect:', {
                     startDate: fridayDate,
                     endDate: sundayDate,
                     diffDays,
@@ -133,7 +133,7 @@ add_shortcode('test_cart_checkout', function() {
                     $result.text('UNKNOWN: Cannot detect mini-cart handlers').css('background', '#FFF9C4');
                 }
                 
-                console.log('Mini-cart test: handleMiniCartRemoval function not found globally');
+                // console.log('Mini-cart test: handleMiniCartRemoval function not found globally');
             }
         });
         

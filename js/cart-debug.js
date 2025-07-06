@@ -6,7 +6,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('%c[CART DEBUG]', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', 'Script loaded');
+    // console.log('%c[CART DEBUG]', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', 'Script loaded');
     
     // Debug cart session and fragments
     function debugCartState() {
@@ -20,10 +20,10 @@ jQuery(document).ready(function($) {
         // CRITICAL: Check if WooCommerce fragments are missing
         if (!hasCartFragments) {
             console.warn('%c[CART DEBUG] CRITICAL ERROR: wc_cart_fragments_params is not defined!', 'background: #721c24; color: #fff; padding: 5px; font-weight: bold;');
-            console.log('%c[CART DEBUG] This is likely why your cart is emptying between pages!', 'background: #721c24; color: #fff; padding: 5px;');
+            // console.log('%c[CART DEBUG] This is likely why your cart is emptying between pages!', 'background: #721c24; color: #fff; padding: 5px;');
             
             // Check if WooCommerce is properly initialized
-            console.log('%c[CART DEBUG] WooCommerce detection:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', {
+            // console.log('%c[CART DEBUG] WooCommerce detection:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', {
                 'jQuery': typeof jQuery !== 'undefined',
                 'wc': typeof wc !== 'undefined',
                 'woocommerce_params': typeof woocommerce_params !== 'undefined',
@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
             });
         }
         
-        console.log('%c[CART DEBUG] Cart State:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', {
+        // console.log('%c[CART DEBUG] Cart State:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', {
             'cart_session_exists': hasCartFragments,
             'cart_fragments': hasCartFragments ? wc_cart_fragments_params : 'NOT DEFINED',
             'cart_hash_key': hasCartFragments ? wc_cart_fragments_params.cart_hash_key : 'NOT DEFINED',
@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
         // Check if we're on cart page and it appears empty
         if (window.location.href.indexOf('/basket/') > -1) {
             const cartIsEmpty = $('.woocommerce-info.cart-empty').length > 0;
-            console.log('%c[CART DEBUG] On cart page. Cart is empty:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', cartIsEmpty);
+            // console.log('%c[CART DEBUG] On cart page. Cart is empty:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;', cartIsEmpty);
             
             if (cartIsEmpty && localStorage.getItem('mit_last_cart_action') === 'forward_button_clicked') {
                 console.warn('%c[CART DEBUG] DETECTED ISSUE: Cart was emptied after clicking forward button!', 'background: #721c24; color: #fff; padding: 5px; font-weight: bold;');
@@ -62,7 +62,7 @@ jQuery(document).ready(function($) {
     function setupCartActionTracking() {
         // Track proceed to cart button clicks
         $(document).on('click', '.button.wc-forward', function(e) {
-            console.log('%c[CART DEBUG] Cart forward button clicked - saving cart state', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Cart forward button clicked - saving cart state', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             localStorage.setItem('mit_last_cart_action', 'forward_button_clicked');
             localStorage.setItem('mit_cart_action_time', Date.now());
             // Store current cart hash if available
@@ -73,27 +73,27 @@ jQuery(document).ready(function($) {
         
         // Track add to cart button clicks
         $(document).on('click', '.add_to_cart_button, .single_add_to_cart_button', function(e) {
-            console.log('%c[CART DEBUG] Add to cart button clicked', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Add to cart button clicked', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             localStorage.setItem('mit_last_cart_action', 'add_to_cart_clicked');
             localStorage.setItem('mit_cart_action_time', Date.now());
         });
         
         // Track remove from cart actions
         $(document).on('click', '.remove_from_cart_button', function(e) {
-            console.log('%c[CART DEBUG] Remove from cart button clicked', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Remove from cart button clicked', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             localStorage.setItem('mit_last_cart_action', 'remove_from_cart_clicked');
             localStorage.setItem('mit_cart_action_time', Date.now());
         });
         
         // Listen for cart fragment refresh events
         $(document.body).on('wc_fragments_refreshed', function() {
-            console.log('%c[CART DEBUG] Cart fragments refreshed', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Cart fragments refreshed', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             debugCartState();
         });
         
         // Listen for cart fragment load events
         $(document.body).on('wc_fragments_loaded', function() {
-            console.log('%c[CART DEBUG] Cart fragments loaded', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Cart fragments loaded', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             debugCartState();
         });
     }
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
     function debugCartContents() {
         // Check if we're on a cart/checkout page where we can access cart contents
         if ($('.woocommerce-cart-form').length > 0 || $('.cart_item').length > 0) {
-            console.log('%c[CART DEBUG] Cart Contents:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
+            // console.log('%c[CART DEBUG] Cart Contents:', 'background: #f8d7da; color: #721c24; padding: 3px 5px; border-radius: 3px;');
             
             // Log cart items
             const cartItems = [];
@@ -119,18 +119,18 @@ jQuery(document).ready(function($) {
                 });
             });
             
-            console.log('Cart Items:', cartItems);
+            // console.log('Cart Items:', cartItems);
             
             // Check for WooCommerce fragments in session storage
             try {
                 const fragments = sessionStorage.getItem('wc_fragments');
                 if (fragments) {
-                    console.log('WC Fragments found in session storage:', JSON.parse(fragments));
+                    // console.log('WC Fragments found in session storage:', JSON.parse(fragments));
                 } else {
-                    console.log('No WC Fragments found in session storage');
+                    // console.log('No WC Fragments found in session storage');
                 }
             } catch (e) {
-                console.log('Error parsing WC Fragments:', e);
+                // console.log('Error parsing WC Fragments:', e);
             }
         }
     }

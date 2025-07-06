@@ -20,8 +20,8 @@
     };
 
     // Print header
-    console.log('%c=== RENTAL CALCULATION TEST SUITE ===', styles.header);
-    console.log('%cTesting DOM-based rental day calculations', styles.subheader);
+    // console.log('%c=== RENTAL CALCULATION TEST SUITE ===', styles.header);
+    // console.log('%cTesting DOM-based rental day calculations', styles.subheader);
     
     // Test cases
     const testCases = [
@@ -56,48 +56,48 @@
     
     // Function to run one test
     function runTest(test) {
-        console.log(`\n%c${test.name}`, styles.subheader);
-        console.log(`Date range: ${test.start} to ${test.end}`);
-        console.log(`${test.description}`);
+        // console.log(`\n%c${test.name}`, styles.subheader);
+        // console.log(`Date range: ${test.start} to ${test.end}`);
+        // console.log(`${test.description}`);
 
         // Test DOM-based calculation
-        console.log('\n%cDOM-based Calculation:', styles.info);
+        // console.log('\n%cDOM-based Calculation:', styles.info);
         try {
             const domResult = calculateRentalDaysFromCalendar(test.start, test.end);
             
             // Check rental days
             const daysCorrect = domResult.rentalDays === test.expectedRentalDays;
-            console.log(`Rental days: ${daysCorrect ? '%c✓' : '%c✗'} ${domResult.rentalDays} ${daysCorrect ? '(correct)' : `(expected ${test.expectedRentalDays})`}`, 
+            // console.log(`Rental days: ${daysCorrect ? '%c✓' : '%c✗'} ${domResult.rentalDays} ${daysCorrect ? '(correct)' : `(expected ${test.expectedRentalDays})`}`, 
                         daysCorrect ? styles.success : styles.error);
             
             // Check total price
             const totalCorrect = Math.abs(domResult.total - test.expectedTotal) < 1; // Allow for tiny float precision
-            console.log(`Total price: ${totalCorrect ? '%c✓' : '%c✗'} ${domResult.total}₪ ${totalCorrect ? '(correct)' : `(expected ${test.expectedTotal}₪)`}`, 
+            // console.log(`Total price: ${totalCorrect ? '%c✓' : '%c✗'} ${domResult.total}₪ ${totalCorrect ? '(correct)' : `(expected ${test.expectedTotal}₪)`}`, 
                         totalCorrect ? styles.success : styles.error);
             
             // Show breakdown
-            console.log('Price breakdown:');
+            // console.log('Price breakdown:');
             domResult.breakdown.forEach(item => {
-                console.log(`- ${item.label}: ${item.amount}₪`);
+                // console.log(`- ${item.label}: ${item.amount}₪`);
             });
             
             // Show debug info
-            console.log('\nDebug info:');
-            console.log('Weekend days:', domResult.debug.weekendDays);
-            console.log('Weekday count:', domResult.debug.weekdayCount);
-            console.log('Weekday blocks:', domResult.debug.weekdayBlocks);
-            console.log('Special adjustment:', domResult.debug.specialRangeAdj);
+            // console.log('\nDebug info:');
+            // console.log('Weekend days:', domResult.debug.weekendDays);
+            // console.log('Weekday count:', domResult.debug.weekdayCount);
+            // console.log('Weekday blocks:', domResult.debug.weekdayBlocks);
+            // console.log('Special adjustment:', domResult.debug.specialRangeAdj);
             
             // Overall test result
             const testPassed = daysCorrect && totalCorrect;
-            console.log(`\nTest result: ${testPassed ? '%cPASSED' : '%cFAILED'}`, testPassed ? styles.success : styles.error);
+            // console.log(`\nTest result: ${testPassed ? '%cPASSED' : '%cFAILED'}`, testPassed ? styles.success : styles.error);
             
             return {
                 passed: testPassed,
                 result: domResult
             };
         } catch (error) {
-            console.log(`%cERROR: ${error.message}`, styles.error);
+            // console.log(`%cERROR: ${error.message}`, styles.error);
             console.error(error);
             return {
                 passed: false,
@@ -114,42 +114,42 @@
 
     // Check if calendar is available
     if (!isCalendarAvailable()) {
-        console.log('%c⚠️ Calendar DOM elements not found! This test must be run on a product page with AirCalendar loaded.', styles.warning);
-        console.log('Please navigate to a product page with the datepicker loaded and try again.');
+        // console.log('%c⚠️ Calendar DOM elements not found! This test must be run on a product page with AirCalendar loaded.', styles.warning);
+        // console.log('Please navigate to a product page with the datepicker loaded and try again.');
         return;
     }
     
     // Run all tests
-    console.log('%cRunning all tests...', styles.info);
+    // console.log('%cRunning all tests...', styles.info);
     const results = testCases.map(runTest);
     
     // Summary
     const passed = results.filter(r => r.passed).length;
     const total = testCases.length;
     
-    console.log('\n%c=== TEST SUMMARY ===', styles.header);
-    console.log(`Tests: ${total}, Passed: %c${passed}%c, Failed: %c${total - passed}`, 
+    // console.log('\n%c=== TEST SUMMARY ===', styles.header);
+    // console.log(`Tests: ${total}, Passed: %c${passed}%c, Failed: %c${total - passed}`, 
                 passed === total ? styles.success : styles.info, 
                 '', 
                 total - passed > 0 ? styles.error : styles.info);
     
     if (passed === total) {
-        console.log('%c✅ All tests passed! The rental calculation is working correctly.', styles.success);
+        // console.log('%c✅ All tests passed! The rental calculation is working correctly.', styles.success);
     } else {
-        console.log('%c❌ Some tests failed. Please check the results above for details.', styles.error);
+        // console.log('%c❌ Some tests failed. Please check the results above for details.', styles.error);
     }
     
     // DOM inspection helper
-    console.log('\n%cCalendar DOM inspection:', styles.subheader);
+    // console.log('\n%cCalendar DOM inspection:', styles.subheader);
     
     // Show calendar metadata
     const calendarMap = getCalendarDateMetadata();
     const metadataCount = Object.keys(calendarMap).length;
-    console.log(`Found ${metadataCount} calendar cells in the DOM`);
+    // console.log(`Found ${metadataCount} calendar cells in the DOM`);
     
     // Check specific dates
     for (const test of testCases) {
-        console.log(`\nInspecting calendar cells for ${test.start} to ${test.end}:`);
+        // console.log(`\nInspecting calendar cells for ${test.start} to ${test.end}:`);
         
         const start = new Date(test.start);
         const end = new Date(test.end);
@@ -160,10 +160,10 @@
             const metadata = calendarMap[dateStr];
             
             if (metadata) {
-                console.log(`${dateStr}: %c${metadata.isWeekend ? 'WEEKEND' : 'WEEKDAY'}%c ${metadata.isSelected ? '(selected)' : ''}`, 
+                // console.log(`${dateStr}: %c${metadata.isWeekend ? 'WEEKEND' : 'WEEKDAY'}%c ${metadata.isSelected ? '(selected)' : ''}`, 
                             metadata.isWeekend ? styles.highlight : '', '');
             } else {
-                console.log(`${dateStr}: %cNOT IN VISIBLE CALENDAR`, styles.warning);
+                // console.log(`${dateStr}: %cNOT IN VISIBLE CALENDAR`, styles.warning);
             }
             
             current.setDate(current.getDate() + 1);

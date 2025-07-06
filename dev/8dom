@@ -539,7 +539,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const quantity = $('input[name="quantity"]').val() || 1;
                 const rentalDates = $('#rental_dates').val();
                 
-                console.log('Direct checkout clicked with:', { productId, quantity, rentalDates });
+                // console.log('Direct checkout clicked with:', { productId, quantity, rentalDates });
                 
                 if (!productId || !rentalDates) {
                     alert('בבקשה בחר תאריכי השכרה לפני ההמשך לתשלום');
@@ -564,7 +564,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Add to cart response:', data);
+                    // console.log('Add to cart response:', data);
                     if (data.error) {
                         alert(data.message || 'שגיאה בהוספת המוצר לסל. אנא נסה שוב.');
                         $(this).text('להזמנה').css('opacity', '1');
@@ -809,7 +809,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div style="display: none;" bis_skin_checked="1"></div>
 
-<script>//<![CDATA[\nwindow.rentalReservedData = {"product_id":469,"product_name":"\u05d0\u05e0\u05d4 \u05d5\u05d0\u05dc\u05d6\u05d4 5X5","initial_stock":1,"current_stock":9,"current_date":"2025-07-06 07:44:15","reservations":[],"date_availability":[],"summary":{"total_reserved_dates":0,"fully_booked_dates":0,"available_dates":0}};\nconsole.groupCollapsed("Stock Debugger: Reservation Data");\nconsole.log({
+<script>//<![CDATA[\nwindow.rentalReservedData = {"product_id":469,"product_name":"\u05d0\u05e0\u05d4 \u05d5\u05d0\u05dc\u05d6\u05d4 5X5","initial_stock":1,"current_stock":9,"current_date":"2025-07-06 07:44:15","reservations":[],"date_availability":[],"summary":{"total_reserved_dates":0,"fully_booked_dates":0,"available_dates":0}};\nconsole.groupCollapsed("Stock Debugger: Reservation Data");\n// console.log({
     "product_id": 469,
     "product_name": "\u05d0\u05e0\u05d4 \u05d5\u05d0\u05dc\u05d6\u05d4 5X5",
     "initial_stock": 1,
@@ -914,31 +914,31 @@ var the_lmp_js_data = {"type":"more_button","update_url":"1","use_mobile":"","mo
         jQuery(document).ready(function($) {
             // Wait for calendar to be fully loaded
             setTimeout(function() {
-                console.log('🛠 Stock Debugger - Calendar Loaded');
+                // console.log('🛠 Stock Debugger - Calendar Loaded');
                 
                 // Extract initial stock from global variable
                 if (window.initialStock !== undefined) {
-                    console.log('🛠 Stock Debugger - Initial Stock from global:', window.initialStock);
+                    // console.log('🛠 Stock Debugger - Initial Stock from global:', window.initialStock);
                 }
                 
                 // Extract stock quantity from global variable
                 if (window.stockQuantity !== undefined) {
-                    console.log('🛠 Stock Debugger - Stock Quantity from global:', window.stockQuantity);
+                    // console.log('🛠 Stock Debugger - Stock Quantity from global:', window.stockQuantity);
                 }
                 
                 // Extract reserved dates from global variable
                 if (window.reservedDates !== undefined) {
-                    console.log('🛠 Stock Debugger - Reserved Dates from global:', window.reservedDates);
+                    // console.log('🛠 Stock Debugger - Reserved Dates from global:', window.reservedDates);
                 }
                 
                 // Extract reserved dates counts from global variable
                 if (window.reservedDatesCounts !== undefined) {
-                    console.log('🛠 Stock Debugger - Reserved Dates Counts from global:', window.reservedDatesCounts);
+                    // console.log('🛠 Stock Debugger - Reserved Dates Counts from global:', window.reservedDatesCounts);
                 }
                 
                 // Extract buffer dates from global variable
                 if (window.bufferDates !== undefined) {
-                    console.log('🛠 Stock Debugger - Buffer Dates from global:', window.bufferDates);
+                    // console.log('🛠 Stock Debugger - Buffer Dates from global:', window.bufferDates);
                 }
                 
                 // Add click handler to calendar cells to show debug info

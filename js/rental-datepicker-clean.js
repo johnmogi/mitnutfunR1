@@ -8,8 +8,8 @@
 
     // Debug logging helper
     function debugLog(...args) {
-        if (window.console && window.console.log) {
-            console.log('[Rental Datepicker]', ...args);
+        if (window.console && window.// console.log) {
+            // console.log('[Rental Datepicker]', ...args);
         }
     }
 

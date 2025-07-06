@@ -6,7 +6,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    console.log('CALENDAR JOIN BOOKINGS LOGIC LOADED');
+    // console.log('CALENDAR JOIN BOOKINGS LOGIC LOADED');
     
     // Configuration
     const DEBUG = true;
@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
      */
     function log(...args) {
         if (DEBUG) {
-            console.log('[CALENDAR-JOIN]', ...args);
+            // console.log('[CALENDAR-JOIN]', ...args);
         }
     }
     
